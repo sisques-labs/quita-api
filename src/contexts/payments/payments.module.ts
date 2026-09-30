@@ -13,6 +13,9 @@ import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typ
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
 import { PaymentTypeormReadRepository } from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-typeorm-read.repository';
 import { PaymentTypeormWriteRepository } from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-typeorm-write.repository';
+import '@contexts/payments/transport/graphql/enums/payments-registered-enums.graphql';
+import { PaymentGraphQLMapper } from '@contexts/payments/transport/graphql/mappers/payment-graphql.mapper';
+import { PaymentsResolver } from '@contexts/payments/transport/graphql/resolvers/payments.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -52,6 +55,8 @@ const INFRASTRUCTURE_ADAPTERS = [
   { provide: GROUP_MEMBERS_PORT, useClass: GroupMembersBusAdapter },
 ];
 
+const TRANSPORT_PROVIDERS = [PaymentsResolver, PaymentGraphQLMapper];
+
 /**
  * Reaches group-members only through the bus (see `GroupMembersBusAdapter`),
  * so it does not import that module: both are registered in `ContextsModule`.
@@ -66,6 +71,7 @@ const INFRASTRUCTURE_ADAPTERS = [
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...INFRASTRUCTURE_ADAPTERS,
+    ...TRANSPORT_PROVIDERS,
   ],
 })
 export class PaymentsModule {}
