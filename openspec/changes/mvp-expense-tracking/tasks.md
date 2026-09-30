@@ -69,8 +69,8 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 ## Phase 6: payments (PR6)
 
-- [x] 6.1 RED/GREEN: `PaymentDateValueObject`, `PaymentAggregate` (`from != to`, members only), create/edit/soft delete handlers, migration `payments`. _(Domain, application and migration done; PR6a-infra.)_
-- [ ] 6.2 `PaymentsFindActiveByGroupQuery`, ports/adapters, Criteria six steps, registered enums, resolvers, `README.md`, `pnpm gen:topics`, e2e. _(PR6a-infra done: port/adapter, repos, `PaymentsFindActiveByGroupQuery`, migration, module; Criteria steps, enums, resolvers, README and e2e pending in PR6b.)_
+- [x] 6.1 RED/GREEN: `PaymentDateValueObject`, `PaymentAggregate` (`from != to`, members only), create/edit/soft delete handlers, migration `payments`.
+- [x] 6.2 `PaymentsFindActiveByGroupQuery`, ports/adapters, Criteria six steps, registered enums, resolvers, `README.md`, `pnpm gen:topics`, e2e.
 
 ## Phase 7: balances (PR7)
 
