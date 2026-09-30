@@ -1,13 +1,13 @@
 {
-  "name": "sisqueslabs/nestjs-template",
-  "version": "0.5.0",
-  "description": "Sisques Labs NestJS service template — DDD+CQRS+Hexagonal, TypeORM/Postgres, Kafka, GraphQL+REST, OpenTelemetry, MCP.",
+  "name": "sisqueslabs/quita-api",
+  "version": "0.0.0",
+  "description": "Quita API — expense-sharing backend (Splitwise-style): groups, shared expenses and balances. DDD+CQRS+Hexagonal, TypeORM/Postgres, Kafka, GraphQL+REST, OpenTelemetry, MCP.",
   "author": "Sisques Labs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sisques-labs/nestjs-template.git"
+    "url": "https://github.com/sisques-labs/quita-api.git"
   },
-  "homepage": "https://github.com/sisques-labs/nestjs-template",
+  "homepage": "https://github.com/sisques-labs/quita-api",
   "private": true,
   "license": "UNLICENSED",
   "packageManager": "pnpm@12.6.0",

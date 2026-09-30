@@ -20,8 +20,8 @@ jobs:
   pipeline:
     uses: sisques-labs/workflows/.github/workflows/trunk-ci-cd.yml@main
     with:
-      image_name: sisqueslabs/nestjs-template
-      ghcr_image_name: ghcr.io/sisques-labs/nestjs-template
+      image_name: sisqueslabs/quita-api
+      ghcr_image_name: ghcr.io/sisques-labs/quita-api
       push_ghcr: true
       node_version: "22"
       run_lint: true

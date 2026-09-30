@@ -10,7 +10,7 @@ function validEnv(
     DATABASE_PORT: '5432',
     DATABASE_USERNAME: 'postgres',
     DATABASE_PASSWORD: 'secret',
-    DATABASE_DATABASE: 'nestjs_template_db',
+    DATABASE_DATABASE: 'quita_api_db',
     ...overrides,
   };
 }

@@ -26,13 +26,13 @@ jobs:
       postgres:
         image: postgres:18-alpine
         env:
-          POSTGRES_DB: nestjs_template_test
+          POSTGRES_DB: quita_api_test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5433:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d nestjs_template_test"
+          --health-cmd "pg_isready -U postgres -d quita_api_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
@@ -41,7 +41,7 @@ jobs:
       DATABASE_DRIVER: postgres
       DATABASE_HOST: localhost
       DATABASE_PORT: 5433
-      DATABASE_DATABASE: nestjs_template_test
+      DATABASE_DATABASE: quita_api_test
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       FRONTEND_URL: http://localhost:3001
@@ -73,13 +73,13 @@ jobs:
       postgres:
         image: postgres:18-alpine
         env:
-          POSTGRES_DB: nestjs_template_test
+          POSTGRES_DB: quita_api_test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5433:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d nestjs_template_test"
+          --health-cmd "pg_isready -U postgres -d quita_api_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
@@ -88,7 +88,7 @@ jobs:
       DATABASE_DRIVER: postgres
       DATABASE_HOST: localhost
       DATABASE_PORT: 5433
-      DATABASE_DATABASE: nestjs_template_test
+      DATABASE_DATABASE: quita_api_test
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       FRONTEND_URL: http://localhost:3001

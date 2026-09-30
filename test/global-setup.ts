@@ -19,7 +19,7 @@ export default async function globalSetup(): Promise<
   const container: StartedPostgreSqlContainer = await new PostgreSqlContainer(
     'postgres:16-alpine',
   )
-    .withDatabase('nestjs_template_test')
+    .withDatabase('quita_api_test')
     .withUsername('postgres')
     .withPassword('postgres')
     .start();

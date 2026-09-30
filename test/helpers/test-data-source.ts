@@ -9,7 +9,7 @@ export function getTestDataSourceOptions(): DataSourceOptions {
     type: 'postgres',
     host: process.env.DATABASE_HOST ?? 'localhost',
     port: parseInt(process.env.DATABASE_PORT ?? '5433', 10),
-    database: process.env.DATABASE_DATABASE ?? 'nestjs_template_test',
+    database: process.env.DATABASE_DATABASE ?? 'quita_api_test',
     username: process.env.DATABASE_USERNAME ?? 'postgres',
     password: process.env.DATABASE_PASSWORD ?? 'postgres',
     entities: [],
@@ -40,7 +40,7 @@ export async function bootstrapTestDataSource(): Promise<void> {
     migrationsApplied = true;
   } catch (error) {
     const hint =
-      'If the test DB was previously created with synchronize:true, reset it with: pnpm test:db:down && docker volume rm nestjs-template_postgres_data 2>/dev/null; pnpm test:db:up';
+      'If the test DB was previously created with synchronize:true, reset it with: pnpm test:db:down && docker volume rm quita-api_postgres_data 2>/dev/null; pnpm test:db:up';
 
     throw new Error(
       `Failed to apply test database migrations. ${hint}\n\nOriginal error: ${error instanceof Error ? error.message : String(error)}`,

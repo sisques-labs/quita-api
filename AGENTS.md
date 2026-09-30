@@ -1,12 +1,10 @@
-# Agent Skills — nestjs-template
+# Agent Skills — quita-api
 
 Project-specific skills injected into code agents working on this repo.
 
-This repository is a **service template**: it ships with the cross-cutting
-infrastructure (`src/core/`, `src/support/`) already wired, but **no bounded
-contexts** (`src/contexts/`) yet. The first context added to a service cloned
-from this template defines the pattern every subsequent one follows — see the
-`architecture` skill below.
+Quita API is an expense-sharing (Splitwise-style) backend. The cross-cutting
+infrastructure (`src/core/`, `src/support/`) is wired; business logic lives in
+bounded contexts under `src/contexts/` — see the `architecture` skill below.
 
 ## Code Conventions
 

@@ -6,11 +6,11 @@ services:
     ports:
       - '5433:5432'
     environment:
-      POSTGRES_DB: nestjs_template_test
+      POSTGRES_DB: quita_api_test
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d nestjs_template_test']
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d quita_api_test']
       interval: 5s
       timeout: 5s
       retries: 5
