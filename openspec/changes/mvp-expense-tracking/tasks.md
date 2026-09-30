@@ -56,9 +56,9 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 ## Phase 4: group-invitation-codes (PR4)
 
-- [ ] 4.1 RED/GREEN: aggregate, 8-char Crockford code VO, migration with partial UNIQUE index.
-- [ ] 4.2 RED/GREEN: Generate (reuse active), Regenerate (transactional), `RedeemInvitationCodeCommand` (unknown/revoked -> `InvitationCodeInvalidException`, already member, full).
-- [ ] 4.3 Ports/adapters to members, resolvers, `README.md`, `pnpm gen:topics`, e2e (join, third rejected, old code invalid).
+- [ ] 4.1 RED/GREEN: aggregate, 8-char Crockford code VO, migration with partial UNIQUE index. _(PR4a done: aggregate, builder, code VO, events, exceptions, repository interfaces. PR4b pending: TypeORM entity/mapper/repos, migration with partial UNIQUE index.)_
+- [ ] 4.2 RED/GREEN: Generate (reuse active), Regenerate (transactional), `RedeemInvitationCodeCommand` (unknown/revoked -> `InvitationCodeInvalidException`, already member, full). _(PR4a done: handlers, services, ports, validate query, crypto code generator, unit-tested; already member is idempotent success via the port result. PR4b pending: transactional `replaceActive` in the TypeORM repo.)_
+- [ ] 4.3 Ports/adapters to members, resolvers, `README.md`, `pnpm gen:topics`, e2e (join, third rejected, old code invalid). _(PR4b pending: all of it; gen:topics already run in PR4a.)_
 
 ## Phase 5: expenses (PR5)
 
