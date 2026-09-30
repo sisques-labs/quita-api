@@ -1,16 +1,15 @@
-# NestJS Template
+# Quita API
 
-Sisques Labs' base template for new NestJS services: **DDD + CQRS + Hexagonal**
-architecture, TypeORM/PostgreSQL, optional Kafka event forwarding, REST
-(Swagger) + GraphQL (Apollo) transports, structured logging
+Backend for **Quita**, an expense-sharing app in the style of Splitwise:
+groups, shared expenses, balances and settlements. Built with **DDD + CQRS +
+Hexagonal** architecture, TypeORM/PostgreSQL, optional Kafka event forwarding,
+REST (Swagger) + GraphQL (Apollo) transports, structured logging
 (`@sisques-labs/nestjs-kit` + Winston), OpenTelemetry traces + metrics + logs, an MCP
-endpoint, health checks, and the CI/CD workflows this org uses in production —
-all wired and ready to clone into a new service.
+endpoint, health checks, and the Sisques Labs CI/CD workflows.
 
-It ships with **zero bounded contexts** (`src/contexts/`) on purpose: the
-cross-cutting infrastructure (`src/core/`, `src/support/`) is the whole point
-of this repo, and the first context your new service adds defines the pattern
-every subsequent one follows (see the `architecture` skill in
+Bootstrapped from the Sisques Labs `nestjs-template`. Bounded contexts live
+under `src/contexts/`; the cross-cutting infrastructure is in `src/core/` and
+`src/support/` (see the `architecture` skill in
 `.claude/skills/architecture/SKILL.md`).
 
 The org standard is trunk-based development: `main` is the only long-lived
@@ -18,25 +17,13 @@ branch. Every merge to `main` triggers `trunk-ci-cd.yml` (build +
 `dev`/`pre` deploy); cutting a `prod` release is a separate, manual step via
 `release.yml`. See `sisques-labs/workflows`' README for the full model.
 
-## Using this template for a new service
+## Getting started
 
-1. Create the new repo from this template (GitHub "Use this template", or
-   clone + re-init git).
-2. Rename the placeholder identifiers in one shot:
-   ```bash
-   scripts/rename-service.sh orders-api "Orders API"
-   pnpm install
-   ```
-   This rewrites every occurrence of `nestjs-template` / `NestJS Template` —
-   `package.json`, Docker image names in `.github/workflows/`, the Kafka
-   client id/topic prefix defaults, the default `OTEL_SERVICE_NAME`, the MCP
-   server name, docker-compose database names, and this README.
-3. Copy `.env.example` to `.env` and fill in real values.
-4. `pnpm test:db:up` to start a local Postgres, then `pnpm dev`.
-5. Add your first bounded context under `src/contexts/` and register its
-   module in `CONTEXT_MODULES` in `src/contexts/contexts.module.ts` — invoke
-   the `architecture` skill (or read `.claude/skills/architecture/SKILL.md`
-   directly) for the DDD+CQRS+Hexagonal layer rules and file naming.
+1. Copy `.env.example` to `.env` and fill in real values.
+2. `pnpm install`
+3. `pnpm test:db:up` to start a local Postgres, then `pnpm dev`.
+4. Add bounded contexts under `src/contexts/` and register each module in
+   `CONTEXT_MODULES` in `src/contexts/contexts.module.ts`.
 
 ## What's included
 
@@ -57,7 +44,7 @@ branch. Every merge to `main` triggers `trunk-ci-cd.yml` (build +
 ## Deliberately not included
 
 These are common enough that they shouldn't be baked into every service, but
-specific enough that they'd bias the template toward one shape:
+specific enough that they'd bias the service toward one shape:
 
 - **Tenant-scoped authorization** (what each role is allowed to do inside
   *your* domain) — `@sisques-labs/nestjs-kit/rbac`'s `createTenantPermissionGuard()`

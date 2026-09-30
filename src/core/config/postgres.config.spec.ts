@@ -35,7 +35,7 @@ describe('postgresConfig', () => {
       process.env.DATABASE_PORT = '5432';
       process.env.DATABASE_USERNAME = 'postgres';
       process.env.DATABASE_PASSWORD = 'secret';
-      process.env.DATABASE_DATABASE = 'nestjs_template_db';
+      process.env.DATABASE_DATABASE = 'quita_api_db';
     });
 
     it('produces the correct host', () => {
@@ -55,7 +55,7 @@ describe('postgresConfig', () => {
     });
 
     it('produces the correct database name', () => {
-      expect(getConfig().database).toBe('nestjs_template_db');
+      expect(getConfig().database).toBe('quita_api_db');
     });
 
     it('has synchronize set to false', () => {
@@ -80,7 +80,7 @@ describe('postgresConfig', () => {
       delete process.env.DATABASE_PORT;
       process.env.DATABASE_USERNAME = 'postgres';
       process.env.DATABASE_PASSWORD = 'secret';
-      process.env.DATABASE_DATABASE = 'nestjs_template_db';
+      process.env.DATABASE_DATABASE = 'quita_api_db';
     });
 
     it('defaults port to 5432', () => {
@@ -94,7 +94,7 @@ describe('postgresConfig', () => {
       process.env.DATABASE_PORT = '5432';
       process.env.DATABASE_USERNAME = 'postgres';
       process.env.DATABASE_PASSWORD = 'secret';
-      process.env.DATABASE_DATABASE = 'nestjs_template_db';
+      process.env.DATABASE_DATABASE = 'quita_api_db';
     });
 
     it('produces undefined for DATABASE_HOST when not set', () => {
@@ -127,7 +127,7 @@ describe('postgresConfig', () => {
       process.env.DATABASE_PORT = '5432';
       process.env.DATABASE_USERNAME = 'postgres';
       process.env.DATABASE_PASSWORD = 'secret';
-      process.env.DATABASE_DATABASE = 'nestjs_template_db';
+      process.env.DATABASE_DATABASE = 'quita_api_db';
       const config = getConfig();
       expect(config.url).toBeUndefined();
       expect(config.host).toBe('correct-host');

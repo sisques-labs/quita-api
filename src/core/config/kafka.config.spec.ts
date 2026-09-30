@@ -24,9 +24,9 @@ describe('kafkaConfig', () => {
 
     expect(config).toEqual({
       enabled: false,
-      clientId: 'nestjs-template',
+      clientId: 'quita-api',
       brokers: [],
-      topicPrefix: 'nestjs-template',
+      topicPrefix: 'quita-api',
       ssl: false,
       sasl: null,
     });

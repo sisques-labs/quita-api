@@ -32,8 +32,8 @@ async function bootstrap() {
   app.useGlobalFilters(new BaseExceptionFilter());
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('NestJS Template')
-    .setDescription('Sisques Labs NestJS service template')
+    .setTitle('Quita API')
+    .setDescription('Quita API — expense-sharing backend (Splitwise-style)')
     .setVersion('1')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);

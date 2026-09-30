@@ -11,7 +11,7 @@ import { bootstrapTestDataSource } from './test-data-source';
 
 const DB_HOST = process.env.DATABASE_HOST ?? 'localhost';
 const DB_PORT = parseInt(process.env.DATABASE_PORT ?? '5433', 10);
-const DB_DATABASE = process.env.DATABASE_DATABASE ?? 'nestjs_template_test';
+const DB_DATABASE = process.env.DATABASE_DATABASE ?? 'quita_api_test';
 const DB_USERNAME = process.env.DATABASE_USERNAME ?? 'postgres';
 const DB_PASSWORD = process.env.DATABASE_PASSWORD ?? 'postgres';
 

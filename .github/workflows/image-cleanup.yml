@@ -22,8 +22,8 @@ jobs:
   cleanup:
     uses: sisques-labs/workflows/.github/workflows/image-cleanup.yml@main
     with:
-      image_name: sisqueslabs/nestjs-template
-      ghcr_image_name: ghcr.io/sisques-labs/nestjs-template
+      image_name: sisqueslabs/quita-api
+      ghcr_image_name: ghcr.io/sisques-labs/quita-api
       push_ghcr: true
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

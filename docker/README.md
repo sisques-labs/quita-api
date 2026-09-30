@@ -1,6 +1,6 @@
-# NestJS Template
+# Quita API
 
-Sisques Labs' base template for new NestJS services: DDD + CQRS + Hexagonal
+Quita API, an expense-sharing backend: DDD + CQRS + Hexagonal
 architecture, TypeORM/PostgreSQL, optional Kafka event forwarding, REST
 (Swagger) + GraphQL (Apollo) transports, structured logging, OpenTelemetry
 traces + metrics + logs, and an MCP endpoint.
@@ -16,8 +16,8 @@ docker run -p 3000:3000 \
   -e DATABASE_PORT=5432 \
   -e DATABASE_USERNAME=postgres \
   -e DATABASE_PASSWORD=secret \
-  -e DATABASE_DATABASE=nestjs_template_db \
-  sisqueslabs/nestjs-template:latest
+  -e DATABASE_DATABASE=quita_api_db \
+  sisqueslabs/quita-api:latest
 ```
 
 The container needs a reachable PostgreSQL instance — it does not bundle one.
@@ -72,4 +72,4 @@ See the project's `.env.example` for the full list.
 
 ## Source
 
-https://github.com/sisques-labs/nestjs-template
+https://github.com/sisques-labs/quita-api

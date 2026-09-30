@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       source_digest:
-        description: "Optional: exact digest to promote (e.g. sisqueslabs/nestjs-template@sha256:...) — copy this from a trunk-ci-cd.yml run's image_digest output. Leave empty to auto-promote the latest validated build on main (:edge)."
+        description: "Optional: exact digest to promote (e.g. sisqueslabs/quita-api@sha256:...) — copy this from a trunk-ci-cd.yml run's image_digest output. Leave empty to auto-promote the latest validated build on main (:edge)."
         required: false
         type: string
 
@@ -40,8 +40,8 @@ jobs:
   release:
     uses: sisques-labs/workflows/.github/workflows/docker-release.yml@main
     with:
-      image_name: sisqueslabs/nestjs-template
-      ghcr_image_name: ghcr.io/sisques-labs/nestjs-template
+      image_name: sisqueslabs/quita-api
+      ghcr_image_name: ghcr.io/sisques-labs/quita-api
       push_ghcr: true
       release_type: stable
       bump_mode: promote

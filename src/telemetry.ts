@@ -70,7 +70,7 @@ if (endpoint) {
   const serviceName =
     process.env.OTEL_SERVICE_NAME?.trim() ||
     process.env.SERVICE_NAME?.trim() ||
-    'nestjs-template';
+    'quita-api';
 
   const sdk = new NodeSDK({
     resource: resourceFromAttributes({

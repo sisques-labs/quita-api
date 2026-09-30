@@ -17,8 +17,7 @@ export const eventStoreConfig = registerAs(
       connectionString:
         process.env.EVENTSTORE_CONNECTION_STRING?.trim() ||
         'kurrentdb://localhost:2113?tls=false',
-      streamPrefix:
-        process.env.EVENTSTORE_STREAM_PREFIX?.trim() || 'nestjs-template',
+      streamPrefix: process.env.EVENTSTORE_STREAM_PREFIX?.trim() || 'quita-api',
     };
   },
 );
