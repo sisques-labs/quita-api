@@ -76,4 +76,4 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 - [x] 7.1 RED: balance calculator specs (equal, odd cent payer absorbs, other-owes-all, payment, deleted ignored; property `sum(net)==0`). GREEN: calculator.
 - [x] 7.2 RED/GREEN: `GroupBalanceViewModel`, query handler with ports to expenses/payments/members (non-member rejected), adapters, resolver, `README.md`, `pnpm gen:topics`.
-- [ ] 7.3 Final e2e (full flow, isolation, future date); register all contexts in `contexts.module.ts`; `pnpm test:cov` >= 80%.
+- [x] 7.3 Final e2e (full flow, isolation, future date); register all contexts in `contexts.module.ts`; `pnpm test:cov` >= 80%.
