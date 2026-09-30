@@ -50,9 +50,9 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 ## Phase 3: groups (PR3)
 
-- [ ] 3.1 RED/GREEN: `GroupAggregate`, name VO (missing name rejected), repos, migration `groups`. _(PR3a done: aggregate, builder, name VO, event, exceptions, repository interfaces. PR3b pending: TypeORM repos, migration `groups`.)_
-- [ ] 3.2 RED: `CreateGroupHandler` (saves, `createMembership`; compensation delete on failure). GREEN with membership port and adapter (integration over real buses). _(PR3a done: handler + membership port, unit-tested. PR3b pending: adapter + integration over real buses.)_
-- [ ] 3.3 RED/GREEN: read-group (non-member rejected) and list-own-groups queries; resolvers; `README.md`; `pnpm gen:topics`; e2e. _(PR3a done: both query handlers, `pnpm gen:topics`. PR3b pending: resolvers, README, e2e.)_
+- [x] 3.1 RED/GREEN: `GroupAggregate`, name VO (missing name rejected), repos, migration `groups`. _(PR3a: aggregate, builder, name VO, event, exceptions, repository interfaces. PR3b: TypeORM entity/mapper/repos, migration `groups`.)_
+- [x] 3.2 RED: `CreateGroupHandler` (saves, `createMembership`; compensation delete on failure). GREEN with membership port and adapter (integration over real buses). _(PR3a done: handler + membership port, unit-tested. PR3b: bus adapter + integration over real buses.)_
+- [x] 3.3 RED/GREEN: read-group (non-member rejected) and list-own-groups queries; resolvers; `README.md`; `pnpm gen:topics`; e2e. _(PR3a done: both query handlers, `pnpm gen:topics`. PR3b: resolvers, README, e2e.)_
 
 ## Phase 4: group-invitation-codes (PR4)
 
