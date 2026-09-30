@@ -1,27 +1,36 @@
 import { CreateGroupCommand } from '@contexts/groups/application/commands/create-group/create-group.command';
 import { CreateGroupHandler } from '@contexts/groups/application/commands/create-group/create-group.handler';
+import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
 import { GroupMembershipPort } from '@contexts/groups/application/ports/group-membership.port';
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
 import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
-import { EventBus } from '@nestjs/cqrs';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 describe('CreateGroupHandler', () => {
   let repository: Mocked<GroupWriteRepository>;
   let membershipPort: Mocked<GroupMembershipPort>;
+  let commandBus: Mocked<CommandBus>;
   let eventBus: Mocked<EventBus>;
   let handler: CreateGroupHandler;
 
   beforeEach(() => {
     repository = {
       save: vi.fn(),
-      delete: vi.fn(),
     } as unknown as Mocked<GroupWriteRepository>;
     membershipPort = {
       createMembership: vi.fn(),
     } as unknown as Mocked<GroupMembershipPort>;
+    commandBus = {
+      execute: vi.fn(),
+    } as unknown as Mocked<CommandBus>;
     eventBus = { publishAll: vi.fn() } as unknown as Mocked<EventBus>;
-    handler = new CreateGroupHandler(repository, membershipPort, eventBus);
+    handler = new CreateGroupHandler(
+      repository,
+      membershipPort,
+      commandBus,
+      eventBus,
+    );
   });
 
   it('saves the group, makes the creator a member and publishes the event', async () => {
@@ -40,7 +49,7 @@ describe('CreateGroupHandler', () => {
       'user_owner',
     );
     expect(eventBus.publishAll).toHaveBeenCalledTimes(1);
-    expect(repository.delete).not.toHaveBeenCalled();
+    expect(commandBus.execute).not.toHaveBeenCalled();
   });
 
   it('generates a different group id on every call', async () => {
@@ -65,21 +74,26 @@ describe('CreateGroupHandler', () => {
     ).rejects.toBe(failure);
 
     const saved = repository.save.mock.calls[0][0] as GroupAggregate;
-    expect(repository.delete).toHaveBeenCalledWith(saved.id.value);
+    expect(commandBus.execute).toHaveBeenCalledWith(
+      expect.any(DeleteGroupCommand),
+    );
+    expect(
+      (commandBus.execute.mock.calls[0][0] as DeleteGroupCommand).groupId.value,
+    ).toBe(saved.id.value);
     expect(eventBus.publishAll).not.toHaveBeenCalled();
   });
 
   it('still rethrows the original failure when the compensation fails', async () => {
     const failure = new Error('membership unavailable');
     membershipPort.createMembership.mockRejectedValue(failure);
-    repository.delete.mockRejectedValue(new Error('delete failed'));
+    commandBus.execute.mockRejectedValue(new Error('delete failed'));
 
     await expect(
       handler.execute(
         new CreateGroupCommand({ name: 'Home', ownerId: 'user_owner' }),
       ),
     ).rejects.toBe(failure);
-    expect(repository.delete).toHaveBeenCalledTimes(1);
+    expect(commandBus.execute).toHaveBeenCalledTimes(1);
   });
 
   it('rejects a missing name at command construction, before any write', () => {

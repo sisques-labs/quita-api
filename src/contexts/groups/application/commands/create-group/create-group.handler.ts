@@ -72,7 +72,7 @@ export class CreateGroupHandler
 
   private async compensate(groupId: string): Promise<void> {
     try {
-      this.commandBus.execute(new DeleteGroupCommand({ groupId }));
+      await this.commandBus.execute(new DeleteGroupCommand({ groupId }));
     } catch (error) {
       this.logger.error(
         `Could not delete group ${groupId} after a failed membership creation`,
