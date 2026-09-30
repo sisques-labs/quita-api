@@ -3,9 +3,11 @@ import {
   INVITATION_CODE_GENERATOR,
   InvitationCodeGeneratorPort,
 } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
+import { withCodeCollisionRetry } from '@contexts/group-invitation-codes/application/helpers/with-code-collision-retry';
 import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
+import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
 import {
   GROUP_INVITATION_CODE_WRITE_REPOSITORY,
   GroupInvitationCodeWriteRepository,
@@ -49,6 +51,33 @@ export class GenerateInvitationCodeHandler
       return active.code.value;
     }
 
+    try {
+      const created = await withCodeCollisionRetry(() =>
+        this.createAndSave(command),
+      );
+      await this.publishEvents(created);
+      this.logger.log(
+        `Invitation code created for group ${command.groupId.value}`,
+      );
+      return created.code.value;
+    } catch (error) {
+      if (!(error instanceof ActiveInvitationCodeConflictException)) {
+        throw error;
+      }
+      // A concurrent request created the group's code first: share it.
+      const winner = await this.repository.findActiveByGroupId(
+        command.groupId.value,
+      );
+      if (!winner) {
+        throw error;
+      }
+      return winner.code.value;
+    }
+  }
+
+  private async createAndSave(
+    command: GenerateInvitationCodeCommand,
+  ): Promise<GroupInvitationCodeAggregate> {
     const created = new GroupInvitationCodeBuilder()
       .withId(UuidValueObject.generate().value)
       .withGroupId(command.groupId.value)
@@ -58,11 +87,6 @@ export class GenerateInvitationCodeHandler
     created.create();
 
     await this.repository.save(created);
-    await this.publishEvents(created);
-
-    this.logger.log(
-      `Invitation code created for group ${command.groupId.value}`,
-    );
-    return created.code.value;
+    return created;
   }
 }

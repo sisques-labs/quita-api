@@ -4,6 +4,8 @@ import { InvitationCodeGeneratorPort } from '@contexts/group-invitation-codes/ap
 import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
+import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
+import { InvitationCodeCollisionException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
 import { GroupInvitationAccessDeniedException } from '@contexts/group-invitation-codes/domain/exceptions/group-invitation-access-denied.exception';
 import { GroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { EventBus } from '@nestjs/cqrs';
@@ -99,6 +101,45 @@ describe('RegenerateInvitationCodeHandler', () => {
         }),
       ),
     ).rejects.toThrow('db down');
+    expect(eventBus.publishAll).not.toHaveBeenCalled();
+  });
+
+  it('retries with a fresh code when the generated one collides', async () => {
+    repository.findActiveByGroupId.mockResolvedValue(activeCode());
+    generator.generate
+      .mockReturnValueOnce('AAAA2222')
+      .mockReturnValueOnce('7KQ2M9XZ');
+    repository.replaceActive
+      .mockRejectedValueOnce(new InvitationCodeCollisionException())
+      .mockResolvedValueOnce(undefined);
+
+    const code = await handler.execute(
+      new RegenerateInvitationCodeCommand({
+        groupId: GROUP_ID,
+        requesterId: 'user_a',
+      }),
+    );
+
+    expect(code).toBe('7KQ2M9XZ');
+    expect(repository.replaceActive).toHaveBeenCalledTimes(2);
+    expect(eventBus.publishAll).toHaveBeenCalledTimes(2);
+  });
+
+  it('propagates a concurrent-regeneration conflict without publishing events', async () => {
+    repository.findActiveByGroupId.mockResolvedValue(activeCode());
+    repository.replaceActive.mockRejectedValue(
+      new ActiveInvitationCodeConflictException(GROUP_ID),
+    );
+
+    await expect(
+      handler.execute(
+        new RegenerateInvitationCodeCommand({
+          groupId: GROUP_ID,
+          requesterId: 'user_a',
+        }),
+      ),
+    ).rejects.toThrow(ActiveInvitationCodeConflictException);
+    expect(repository.replaceActive).toHaveBeenCalledTimes(1);
     expect(eventBus.publishAll).not.toHaveBeenCalled();
   });
 

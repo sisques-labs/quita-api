@@ -3,6 +3,7 @@ import {
   INVITATION_CODE_GENERATOR,
   InvitationCodeGeneratorPort,
 } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
+import { withCodeCollisionRetry } from '@contexts/group-invitation-codes/application/helpers/with-code-collision-retry';
 import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
@@ -50,15 +51,17 @@ export class RegenerateInvitationCodeHandler
     );
     previous?.revoke(new Date());
 
-    const created = new GroupInvitationCodeBuilder()
-      .withId(UuidValueObject.generate().value)
-      .withGroupId(command.groupId.value)
-      .withCode(this.generator.generate())
-      .withCreatedBy(command.requesterId.value)
-      .build();
-    created.create();
-
-    await this.repository.replaceActive(previous, created);
+    const created = await withCodeCollisionRetry(async () => {
+      const candidate = new GroupInvitationCodeBuilder()
+        .withId(UuidValueObject.generate().value)
+        .withGroupId(command.groupId.value)
+        .withCode(this.generator.generate())
+        .withCreatedBy(command.requesterId.value)
+        .build();
+      candidate.create();
+      await this.repository.replaceActive(previous, candidate);
+      return candidate;
+    });
     if (previous) {
       await this.publishEvents(previous);
     }
