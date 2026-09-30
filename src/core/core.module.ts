@@ -1,5 +1,8 @@
 import { appConfig } from '@core/config/app.config';
+import { ClerkAuthModule } from '@core/auth/infrastructure/clerk/clerk-auth.module';
+import { ClockModule } from '@core/clock/clock.module';
 import { authConfig } from '@core/config/auth.config';
+import { clerkConfig } from '@core/config/clerk.config';
 import { eventStoreConfig } from '@core/config/event-store.config';
 import { validateEnv } from '@core/config/env.validation';
 import { kafkaConfig } from '@core/config/kafka.config';
@@ -41,6 +44,7 @@ const CORE_MODULES = [
       kafkaConfig,
       eventStoreConfig,
       authConfig,
+      clerkConfig,
     ],
     cache: true,
   }),
@@ -64,6 +68,11 @@ const CORE_MODULES = [
   MessagingModule.forRoot({ aggregateModuleMap: AGGREGATE_MODULE_MAP }),
   EventStoreModule.forRoot(),
   HealthModule,
+  // "Today" for date rules, in the configured APP_TIMEZONE.
+  ClockModule,
+  // Verifies Clerk RS256 tokens (JWKS) for GraphQL resolvers via
+  // `ClerkAuthGuard` / `@AuthUser()`. Independent of the kit module below.
+  ClerkAuthModule,
   // Verifies Sisques Account access tokens (the platform's shared
   // identity/tenancy service) — opt-in per this service's choice: set
   // AUTH_ENABLED=true + AUTH_JWT_SECRET to actually use `JwtAuthGuard` /

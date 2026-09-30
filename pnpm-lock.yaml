@@ -113,6 +113,9 @@ importers:
       graphql-type-json:
         specifier: 0.3.2
         version: 0.3.2(graphql@17.0.2)
+      jose:
+        specifier: ^6.2.12
+        version: 6.2.12
       kafkajs:
         specifier: 2.2.4
         version: 2.2.4

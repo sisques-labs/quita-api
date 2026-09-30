@@ -11,6 +11,15 @@ function formatZodIssues(issues: z.ZodIssue[]): string {
     .join('\n');
 }
 
+function isValidTimeZone(value: string): boolean {
+  try {
+    new Intl.DateTimeFormat('en-CA', { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const baseEnvSchema = z
   .object({
     NODE_ENV: z.string().optional(),
@@ -45,6 +54,18 @@ const baseEnvSchema = z
     EVENTSTORE_STREAM_PREFIX: z.string().optional(),
     AUTH_ENABLED: z.enum(['true', 'false']).optional(),
     AUTH_JWT_SECRET: z.string().optional(),
+    APP_TIMEZONE: z
+      .string()
+      .trim()
+      .refine(isValidTimeZone, 'APP_TIMEZONE must be a valid IANA time zone')
+      .optional(),
+    CLERK_JWKS_URL: z.string().trim().url().optional(),
+    CLERK_ISSUER: z
+      .string()
+      .trim()
+      .min(1, 'CLERK_ISSUER must not be empty')
+      .optional(),
+    CLERK_AUTHORIZED_PARTIES: z.string().optional(),
   })
   .superRefine((env, ctx) => {
     if (env.KAFKA_ENABLED === 'true' && !env.KAFKA_BROKERS?.trim()) {
