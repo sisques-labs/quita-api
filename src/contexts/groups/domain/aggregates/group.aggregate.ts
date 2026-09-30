@@ -1,4 +1,5 @@
 import { GroupCreatedEvent } from '@contexts/groups/domain/events/group-created/group-created.event';
+import { GroupDeletedEvent } from '@contexts/groups/domain/events/group-deleted/group-deleted.event';
 import { IGroup } from '@contexts/groups/domain/interfaces/group.interface';
 import { GroupPrimitives } from '@contexts/groups/domain/primitives/group.primitives';
 import { GroupCreatedByValueObject } from '@contexts/groups/domain/value-objects/group-created-by/group-created-by.value-object';
@@ -16,10 +17,19 @@ export class GroupAggregate extends BaseAggregate {
     this._createdBy = props.createdBy;
   }
 
-  create(): void {
+  public create(): void {
     this.apply(
       new GroupCreatedEvent(
         this.generateEventMetadata(GroupCreatedEvent),
+        this.toPrimitives(),
+      ),
+    );
+  }
+
+  public delete(): void {
+    this.apply(
+      new GroupDeletedEvent(
+        this.generateEventMetadata(GroupDeletedEvent),
         this.toPrimitives(),
       ),
     );

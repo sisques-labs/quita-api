@@ -9,4 +9,5 @@ export interface GroupMembershipPort {
   createMembership(groupId: string, ownerId: string): Promise<void>;
   isMember(groupId: string, userId: string): Promise<boolean>;
   listGroupIdsForUser(userId: string): Promise<string[]>;
+  deleteMemberships(groupId: string): Promise<void>;
 }

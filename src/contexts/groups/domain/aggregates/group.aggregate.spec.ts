@@ -1,5 +1,6 @@
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupCreatedEvent } from '@contexts/groups/domain/events/group-created/group-created.event';
+import { GroupDeletedEvent } from '@contexts/groups/domain/events/group-deleted/group-deleted.event';
 
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
@@ -43,6 +44,24 @@ describe('GroupAggregate', () => {
     const events = group.getUncommittedEvents();
     expect(events).toHaveLength(1);
     expect(events[0]).toBeInstanceOf(GroupCreatedEvent);
+    expect(events[0]).toMatchObject({
+      aggregateRootId: GROUP_ID,
+      aggregateRootType: 'GroupAggregate',
+    });
+  });
+
+  it('emits GroupDeletedEvent for the group on delete()', () => {
+    const group = new GroupBuilder()
+      .withId(GROUP_ID)
+      .withName('Home')
+      .withCreatedBy('user_owner')
+      .build();
+
+    group.delete();
+
+    const events = group.getUncommittedEvents();
+    expect(events).toHaveLength(1);
+    expect(events[0]).toBeInstanceOf(GroupDeletedEvent);
     expect(events[0]).toMatchObject({
       aggregateRootId: GROUP_ID,
       aggregateRootType: 'GroupAggregate',
