@@ -36,10 +36,10 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 ## Phase 1: Core (PR1)
 
-- [ ] 1.1 RED: `env.validation.spec.ts`, `app.config.spec.ts`: `APP_TIMEZONE` default `Europe/Madrid`, invalid zone rejected, `CLERK_*` vars. GREEN: edit `env.validation.ts`, `app.config.ts`, create `clerk.config.ts`.
-- [ ] 1.2 RED: `system-clock.spec.ts` (3 Madrid cases from design). GREEN: `clock.port.ts`, `system-clock.ts`, `clock.module.ts`; import in `core.module.ts`.
-- [ ] 1.3 RED: `clerk-auth.guard.spec.ts` (valid; bad signature, wrong issuer, expired, missing header) and `auth-user.decorator` spec. GREEN: add `jose`; `clerk-auth.module.ts`, `clerk-auth.guard.ts`, `auth-user.decorator.ts`, `user-id-resolver.ts`.
-- [ ] 1.4 Update `test/helpers/integration-bootstrap.ts`, `app-bootstrap.ts` with a JWKS test signer. REFACTOR.
+- [x] 1.1 RED: `env.validation.spec.ts`, `app.config.spec.ts`: `APP_TIMEZONE` default `Europe/Madrid`, invalid zone rejected, `CLERK_*` vars. GREEN: edit `env.validation.ts`, `app.config.ts`, create `clerk.config.ts`.
+- [x] 1.2 RED: `system-clock.spec.ts` (3 Madrid cases from design). GREEN: `clock.port.ts`, `system-clock.ts`, `clock.module.ts`; import in `core.module.ts`.
+- [x] 1.3 RED: `clerk-auth.guard.spec.ts` (valid; bad signature, wrong issuer, expired, missing header) and `auth-user.decorator` spec. GREEN: add `jose`; `clerk-auth.module.ts`, `clerk-auth.guard.ts`, `auth-user.decorator.ts`, `user-id-resolver.ts`.
+- [x] 1.4 Update `test/helpers/integration-bootstrap.ts`, `app-bootstrap.ts` with a JWKS test signer. REFACTOR.
 
 ## Phase 2: group-members (PR2)
 
