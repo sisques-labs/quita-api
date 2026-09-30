@@ -1,10 +1,12 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 import { CreateGroupMemberships1780000000000 } from '../../src/database/migrations/1780000000000-CreateGroupMemberships';
+import { CreateGroups1780000000001 } from '../../src/database/migrations/1780000000001-CreateGroups';
 
 // Add migration imports here as each bounded context introduces them.
 const TEST_MIGRATIONS: DataSourceOptions['migrations'] = [
   CreateGroupMemberships1780000000000,
+  CreateGroups1780000000001,
 ];
 
 export function getTestDataSourceOptions(): DataSourceOptions {

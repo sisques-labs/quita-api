@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
  * tests.
  */
 export const TRUNCATE_TABLES: readonly string[] = [
+  'groups',
   'group_members',
   'group_memberships',
 ];
