@@ -2,6 +2,8 @@ import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-m
 
 export const GROUP_READ_REPOSITORY = Symbol('GROUP_READ_REPOSITORY');
 
+// TODO: Review if this needs to extend IBaseReadRepository
+
 /**
  * Query-only view over the `groups` table. It deliberately does not extend
  * `IBaseReadRepository`: there is no separate projection store, so the base
