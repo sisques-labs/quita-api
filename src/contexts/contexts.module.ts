@@ -1,3 +1,4 @@
+import { ExpensesModule } from '@contexts/expenses/expenses.module';
 import { GroupInvitationCodesModule } from '@contexts/group-invitation-codes/group-invitation-codes.module';
 import { GroupMembersModule } from '@contexts/group-members/group-members.module';
 import { GroupsModule } from '@contexts/groups/groups.module';
@@ -8,6 +9,7 @@ const CONTEXT_MODULES: (DynamicModule | Type<unknown>)[] = [
   GroupMembersModule,
   GroupsModule,
   GroupInvitationCodesModule,
+  ExpensesModule,
 ];
 
 @Module({
