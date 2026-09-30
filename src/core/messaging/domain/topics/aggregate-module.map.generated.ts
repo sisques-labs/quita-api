@@ -17,4 +17,5 @@ export const AGGREGATE_MODULE_MAP: Readonly<Record<string, string>> = {
   GroupAggregate: 'groups',
   GroupInvitationCodeAggregate: 'group-invitation-codes',
   GroupMembershipAggregate: 'group-members',
+  PaymentAggregate: 'payments',
 };
