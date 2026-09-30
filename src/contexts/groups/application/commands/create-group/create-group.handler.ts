@@ -1,4 +1,5 @@
 import { CreateGroupCommand } from '@contexts/groups/application/commands/create-group/create-group.command';
+import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
 import {
   GROUP_MEMBERSHIP_PORT,
   GroupMembershipPort,
@@ -10,7 +11,12 @@ import {
   GroupWriteRepository,
 } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { Inject, Logger } from '@nestjs/common';
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandBus,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { BaseCommandHandler, UuidValueObject } from '@sisques-labs/nestjs-kit';
 
 /**
@@ -30,6 +36,7 @@ export class CreateGroupHandler
     private readonly repository: GroupWriteRepository,
     @Inject(GROUP_MEMBERSHIP_PORT)
     private readonly membershipPort: GroupMembershipPort,
+    private readonly commandBus: CommandBus,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -65,7 +72,7 @@ export class CreateGroupHandler
 
   private async compensate(groupId: string): Promise<void> {
     try {
-      await this.repository.delete(groupId);
+      this.commandBus.execute(new DeleteGroupCommand({ groupId }));
     } catch (error) {
       this.logger.error(
         `Could not delete group ${groupId} after a failed membership creation`,
