@@ -1,0 +1,37 @@
+name: Trunk CI/CD
+
+# TODO(rename-service): update image_name / ghcr_image_name below once this
+# template becomes a real service (see scripts/rename-service.sh).
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+  # Only exercised when scan_image: true below, but GitHub validates every
+  # caller's granted permissions against the called reusable workflow's
+  # top-level declaration statically — required unconditionally, same trap
+  # documented for docker-release.yml after it broke release.yml for real.
+  security-events: write
+
+jobs:
+  pipeline:
+    uses: sisques-labs/workflows/.github/workflows/trunk-ci-cd.yml@main
+    with:
+      image_name: sisqueslabs/nestjs-template
+      ghcr_image_name: ghcr.io/sisques-labs/nestjs-template
+      push_ghcr: true
+      node_version: "22"
+      run_lint: true
+      run_test: true
+      platforms: linux/amd64,linux/arm64
+      scan_image: true
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
