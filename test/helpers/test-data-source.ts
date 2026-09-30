@@ -4,6 +4,7 @@ import { CreateGroupMemberships1780000000000 } from '../../src/database/migratio
 import { CreateGroups1780000000001 } from '../../src/database/migrations/1780000000001-CreateGroups';
 import { CreateGroupInvitationCodes1780000000002 } from '../../src/database/migrations/1780000000002-CreateGroupInvitationCodes';
 import { CreateExpenses1780000000003 } from '../../src/database/migrations/1780000000003-CreateExpenses';
+import { CreatePayments1780000000004 } from '../../src/database/migrations/1780000000004-CreatePayments';
 
 // Add migration imports here as each bounded context introduces them.
 const TEST_MIGRATIONS: DataSourceOptions['migrations'] = [
@@ -11,6 +12,7 @@ const TEST_MIGRATIONS: DataSourceOptions['migrations'] = [
   CreateGroups1780000000001,
   CreateGroupInvitationCodes1780000000002,
   CreateExpenses1780000000003,
+  CreatePayments1780000000004,
 ];
 
 export function getTestDataSourceOptions(): DataSourceOptions {
