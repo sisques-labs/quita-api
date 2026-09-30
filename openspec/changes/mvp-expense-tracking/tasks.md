@@ -62,10 +62,10 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 ## Phase 5: expenses (PR5)
 
-- [ ] 5.1 RED/GREEN: `ExpenseDateValueObject` (today/past ok, tomorrow and bad format rejected), amount VO, category/split enums, `ExpenseAggregate`.
-- [ ] 5.2 RED/GREEN: create (defaults, <2 members -> `GroupNotReadyException`), edit (future date rejected, deleted rejected), soft delete; any-member edit.
-- [ ] 5.3 Migration `expenses`, repos, `ExpensesFindActiveByGroupQuery`, member port/adapter; integration.
-- [ ] 5.4 RED/GREEN: all six Criteria steps (queryable enum, registry + spec, filter/sort inputs, request DTO, pipe, read repo with 8 operators, deleted rows included); `expense-registered-enums.graphql.ts`; resolvers; `README.md`; `pnpm gen:topics`; e2e.
+- [x] 5.1 RED/GREEN: `ExpenseDateValueObject` (today/past ok, tomorrow and bad format rejected), amount VO, category/split enums, `ExpenseAggregate`. _(PR5a domain: done, unit-tested, `pnpm gen:topics` regenerated.)_
+- [ ] 5.2 RED/GREEN: create (defaults, <2 members -> `GroupNotReadyException`), edit (future date rejected, deleted rejected), soft delete; any-member edit. _(PR5a domain done: aggregate `update`/`delete`, exceptions. Application handlers pending in the next application slice.)_
+- [ ] 5.3 Migration `expenses`, repos, `ExpensesFindActiveByGroupQuery`, member port/adapter; integration. _(PR5a domain done: repository interfaces. Query handler and member port pending in the application slice; TypeORM repos, migration, adapter, integration pending in PR5b.)_
+- [ ] 5.4 RED/GREEN: all six Criteria steps (queryable enum, registry + spec, filter/sort inputs, request DTO, pipe, read repo with 8 operators, deleted rows included); `expense-registered-enums.graphql.ts`; resolvers; `README.md`; `pnpm gen:topics`; e2e. _(`ExpensesFindByCriteriaQuery` handler pending in the application slice; steps 1-6, resolvers, README, e2e pending in PR5b.)_
 
 ## Phase 6: payments (PR6)
 
