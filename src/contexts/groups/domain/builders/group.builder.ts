@@ -37,13 +37,13 @@ export class GroupBuilder extends BaseBuilder<GroupAggregate, GroupViewModel> {
   buildViewModel(): GroupViewModel {
     this.validateWithDefaults();
 
-    return new GroupViewModel(
-      this._id,
-      this._createdAt,
-      this._updatedAt,
-      this._name,
-      this._createdBy,
-    );
+    return new GroupViewModel({
+      id: this._id,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      name: this._name,
+      createdBy: this._createdBy,
+    });
   }
 
   private validateWithDefaults(): void {
