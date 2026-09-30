@@ -26,13 +26,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: './coverage',
-      include: ['src/**'],
+      include: ['src/**/*.ts'],
       exclude: [
         ...coverageConfigDefaults.exclude,
         'src/main.ts',
         'src/telemetry.ts',
         'src/**/*.module.ts',
         'src/database/data-source.ts',
+        'src/database/migrations/**',
         'src/**/*.interface.ts',
         'src/**/*.primitives.ts',
         'src/**/*.entity.ts',

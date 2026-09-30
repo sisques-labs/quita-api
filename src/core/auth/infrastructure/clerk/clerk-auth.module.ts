@@ -36,6 +36,8 @@ import {
     { provide: USER_ID_RESOLVER, useClass: IdentityUserIdResolver },
     ClerkAuthGuard,
   ],
-  exports: [ClerkAuthGuard, USER_ID_RESOLVER],
+  // The guard's own dependencies are exported too: `@UseGuards(ClerkAuthGuard)`
+  // in a context module instantiates the guard in that module's scope.
+  exports: [ClerkAuthGuard, CLERK_AUTH_OPTIONS, CLERK_JWKS, USER_ID_RESOLVER],
 })
 export class ClerkAuthModule {}

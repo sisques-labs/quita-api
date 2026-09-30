@@ -45,8 +45,8 @@ Delivery strategy: ask-on-risk. Units 5 and 6 likely exceed 400; split each in t
 
 - [x] 2.1 RED/GREEN: `GroupMembershipAggregate` (builder; `addMember` capacity, duplicate), role enum, VOs, exceptions (`GroupMembershipFullException`).
 - [x] 2.2 RED/GREEN: `CreateGroupMembershipCommand`, `AddGroupMemberCommand` handlers; `GroupMemberIsMemberQuery`, `GroupMembersFindByGroupIdQuery`, `GroupMembershipFindGroupIdsByUserQuery` handlers.
-- [ ] 2.3 Integration: TypeORM repo, concurrent-join optimistic lock. Migration `group_memberships`, `group_members`.
-- [ ] 2.4 Module, `group-member-registered-enums.graphql.ts`, transport list-members resolver, `README.md`, `pnpm gen:topics`.
+- [x] 2.3 Integration: TypeORM repo, concurrent-join optimistic lock. Migration `group_memberships`, `group_members`.
+- [x] 2.4 Module, `group-member-registered-enums.graphql.ts`, transport list-members resolver, `README.md`, `pnpm gen:topics`.
 
 ## Phase 3: groups (PR3)
 

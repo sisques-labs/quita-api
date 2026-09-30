@@ -63,7 +63,7 @@ export async function createIntegrationModule(
         synchronize: false,
         logging: false,
       }),
-      CqrsModule,
+      CqrsModule.forRoot(),
       SharedGraphQLModule,
       ClockModule,
       ClerkAuthModule,
@@ -75,6 +75,8 @@ export async function createIntegrationModule(
     builder = builder.overrideProvider(token).useValue(value);
   }
   const moduleFixture = await builder.compile();
+  // CQRS registers command/query/event handlers on application bootstrap.
+  await moduleFixture.init();
 
   const dataSource = moduleFixture.get<DataSource>(getDataSourceToken());
 
