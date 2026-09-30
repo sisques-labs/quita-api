@@ -231,4 +231,26 @@ describe('ExpenseAggregate', () => {
       expect(aggregate.isDeleted()).toBe(true);
     });
   });
+
+  it('exposes typed accessors that mirror its state', () => {
+    const deletedAt = new Date('2026-09-30T08:00:00Z');
+    const aggregate = newExpense()
+      .withCategory(ExpenseCategory.TRAVEL)
+      .withDescription('Train')
+      .withSplitType(ExpenseSplitType.OTHER_OWES_ALL)
+      .withUpdatedBy('user_b')
+      .withDeletedAt(deletedAt)
+      .build();
+
+    expect(aggregate.groupId.value).toBe(GROUP_ID);
+    expect(aggregate.amount.value).toBe(1250);
+    expect(aggregate.paidBy.value).toBe('user_a');
+    expect(aggregate.spentOn.value).toBe('2026-09-29');
+    expect(aggregate.description?.value).toBe('Train');
+    expect(aggregate.category?.value).toBe('travel');
+    expect(aggregate.splitType.value).toBe('OTHER_OWES_ALL');
+    expect(aggregate.createdBy.value).toBe('user_a');
+    expect(aggregate.updatedBy.value).toBe('user_b');
+    expect(aggregate.deletedAt?.value).toEqual(deletedAt);
+  });
 });

@@ -79,4 +79,15 @@ describe('GroupAggregate', () => {
       new GroupBuilder().withId(GROUP_ID).withName('Home').build(),
     ).toThrow();
   });
+
+  it('exposes its name and creator through typed accessors', () => {
+    const group = new GroupBuilder()
+      .withId(GROUP_ID)
+      .withName('  Home  ')
+      .withCreatedBy('user_owner')
+      .build();
+
+    expect(group.name.value).toBe('Home');
+    expect(group.createdBy.value).toBe('user_owner');
+  });
 });

@@ -118,4 +118,21 @@ describe('GroupMembershipAggregate', () => {
       expect(aggregate.isMember('stranger')).toBe(false);
     });
   });
+
+  it('exposes the persisted version through its accessor', () => {
+    const aggregate = new GroupMembershipBuilder()
+      .withId(GROUP_ID)
+      .withVersion(4)
+      .withMembers([
+        {
+          userId: 'owner',
+          role: GroupMemberRole.OWNER,
+          joinedAt: new Date('2026-01-01T09:00:00Z'),
+        },
+      ])
+      .build();
+
+    expect(aggregate.version.value).toBe(4);
+    expect(buildMembership().version.value).toBe(0);
+  });
 });

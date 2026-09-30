@@ -219,4 +219,23 @@ describe('PaymentAggregate', () => {
       expect(aggregate.isDeleted()).toBe(true);
     });
   });
+
+  it('exposes typed accessors that mirror its state', () => {
+    const deletedAt = new Date('2026-09-30T08:00:00Z');
+    const aggregate = newPayment()
+      .withNote('Rent')
+      .withUpdatedBy('user_b')
+      .withDeletedAt(deletedAt)
+      .build();
+
+    expect(aggregate.groupId.value).toBe(GROUP_ID);
+    expect(aggregate.fromUserId.value).toBe('user_a');
+    expect(aggregate.toUserId.value).toBe('user_b');
+    expect(aggregate.amount.value).toBe(1000);
+    expect(aggregate.paidOn.value).toBe('2026-09-29');
+    expect(aggregate.note?.value).toBe('Rent');
+    expect(aggregate.createdBy.value).toBe('user_a');
+    expect(aggregate.updatedBy.value).toBe('user_b');
+    expect(aggregate.deletedAt?.value).toEqual(deletedAt);
+  });
 });

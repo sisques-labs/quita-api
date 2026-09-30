@@ -95,4 +95,15 @@ describe('GroupInvitationCodeAggregate', () => {
         .build(),
     ).toThrow();
   });
+
+  it('exposes typed accessors, including the revocation instant', () => {
+    const revokedAt = new Date('2026-02-01T09:00:00Z');
+    const aggregate = newCode().withRevokedAt(revokedAt).build();
+
+    expect(aggregate.groupId.value).toBe(GROUP_ID);
+    expect(aggregate.createdBy.value).toBe('user_a');
+    expect(aggregate.revokedAt?.value).toEqual(revokedAt);
+    expect(aggregate.isActive()).toBe(false);
+    expect(newCode().build().revokedAt).toBeNull();
+  });
 });
