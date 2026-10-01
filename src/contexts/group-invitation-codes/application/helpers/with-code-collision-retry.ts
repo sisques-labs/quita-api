@@ -1,6 +1,5 @@
+import { MAX_CODE_ATTEMPTS } from '@contexts/group-invitation-codes/application/constants/max-code-attempts.constant';
 import { InvitationCodeCollisionException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
-
-export const MAX_CODE_ATTEMPTS = 3;
 
 /**
  * Runs `operation` again (it must draw a fresh code each time) when the code

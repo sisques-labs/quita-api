@@ -1,9 +1,7 @@
+import { INVITATION_CODE_ALPHABET } from '@contexts/group-invitation-codes/domain/constants/invitation-code-alphabet.constant';
+import { INVITATION_CODE_LENGTH } from '@contexts/group-invitation-codes/domain/constants/invitation-code-length.constant';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
-import {
-  INVITATION_CODE_ALPHABET,
-  INVITATION_CODE_LENGTH,
-  InvitationCodeValueObject,
-} from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
+import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 
 describe('InvitationCodeValueObject', () => {
   it('accepts an 8-character Crockford base32 code', () => {
