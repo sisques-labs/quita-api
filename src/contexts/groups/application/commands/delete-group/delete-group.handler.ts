@@ -5,7 +5,7 @@ import {
   GROUP_MEMBERSHIP_PORT,
   GroupMembershipPort,
 } from '@contexts/groups/application/ports/group-membership.port';
-import { AssertGroupExistsService } from '@contexts/groups/application/services/write/assert-group-exists.service';
+import { AssertGroupExistsService } from '@contexts/groups/application/services/write/assert-group-exists/assert-group-exists.service';
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
 import {
   GROUP_WRITE_REPOSITORY,
@@ -54,9 +54,7 @@ export class DeleteGroupHandler
   }
 
   async execute(command: DeleteGroupCommand): Promise<string> {
-    const group = await this.assertGroupExistsService.execute(
-      command.groupId.value,
-    );
+    const group = await this.assertGroupExistsService.execute(command.groupId);
 
     await this.repository.delete(group.id.value);
 

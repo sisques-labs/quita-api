@@ -5,18 +5,22 @@ import {
   GroupWriteRepository,
 } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
+import { IBaseService, UuidValueObject } from '@sisques-labs/nestjs-kit';
 
 @Injectable()
-export class AssertGroupExistsService {
+export class AssertGroupExistsService implements IBaseService<
+  UuidValueObject,
+  GroupAggregate
+> {
   constructor(
     @Inject(GROUP_WRITE_REPOSITORY)
     private readonly repository: GroupWriteRepository,
   ) {}
 
-  async execute(groupId: string): Promise<GroupAggregate> {
-    const group = await this.repository.findById(groupId);
+  async execute(groupId: UuidValueObject): Promise<GroupAggregate> {
+    const group = await this.repository.findById(groupId.value);
     if (!group) {
-      throw new GroupNotFoundException(groupId);
+      throw new GroupNotFoundException(groupId.value);
     }
     return group;
   }
