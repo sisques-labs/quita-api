@@ -10,8 +10,8 @@ import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 
 @Resolver(() => GroupBalanceResponseDto)
 @UseGuards(ClerkAuthGuard)
-export class BalancesResolver {
-  private readonly logger = new Logger(BalancesResolver.name);
+export class BalanceQueriesResolver {
+  private readonly logger = new Logger(BalanceQueriesResolver.name);
 
   constructor(
     private readonly queryBus: QueryBus,

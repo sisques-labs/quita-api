@@ -2,19 +2,22 @@ import { GroupBalanceQuery } from '@contexts/balances/application/queries/group-
 import { BalanceAccessDeniedException } from '@contexts/balances/domain/exceptions/balance-access-denied.exception';
 import { GroupBalanceViewModel } from '@contexts/balances/domain/view-models/group-balance.view-model';
 import { GroupBalanceGraphQLMapper } from '@contexts/balances/transport/graphql/mappers/group-balance-graphql.mapper';
-import { BalancesResolver } from '@contexts/balances/transport/graphql/resolvers/balances.resolver';
+import { BalanceQueriesResolver } from '@contexts/balances/transport/graphql/resolvers/balance-queries.resolver';
 import { QueryBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '5d1c8f0a-3f55-4b6a-8a27-3a8d3b0d7e22';
 
-describe('BalancesResolver', () => {
+describe('BalanceQueriesResolver', () => {
   let queryBus: Mocked<QueryBus>;
-  let resolver: BalancesResolver;
+  let resolver: BalanceQueriesResolver;
 
   beforeEach(() => {
     queryBus = { execute: vi.fn() } as unknown as Mocked<QueryBus>;
-    resolver = new BalancesResolver(queryBus, new GroupBalanceGraphQLMapper());
+    resolver = new BalanceQueriesResolver(
+      queryBus,
+      new GroupBalanceGraphQLMapper(),
+    );
   });
 
   it('reads the balance on behalf of the authenticated user, never of input', async () => {
