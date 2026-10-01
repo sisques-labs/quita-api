@@ -18,7 +18,7 @@ import { GroupMembershipTypeormReadRepository } from '@contexts/group-members/in
 import { GroupMembershipTypeormWriteRepository } from '@contexts/group-members/infrastructure/persistence/typeorm/repositories/group-membership-typeorm-write.repository';
 import '@contexts/group-members/transport/graphql/enums/group-member-registered-enums.graphql';
 import { GroupMemberGraphQLMapper } from '@contexts/group-members/transport/graphql/mappers/group-member-graphql.mapper';
-import { GroupMembersResolver } from '@contexts/group-members/transport/graphql/resolvers/group-members.resolver';
+import { GroupMemberQueriesResolver } from '@contexts/group-members/transport/graphql/resolvers/group-member-queries.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -59,7 +59,10 @@ const INFRASTRUCTURE_REPOSITORIES = [
   },
 ];
 
-const TRANSPORT_PROVIDERS = [GroupMembersResolver, GroupMemberGraphQLMapper];
+const TRANSPORT_PROVIDERS = [
+  GroupMemberQueriesResolver,
+  GroupMemberGraphQLMapper,
+];
 
 /** Leaf context: owns rosters and answers membership checks; no outgoing ports. */
 @Module({
