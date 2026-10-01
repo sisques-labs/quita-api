@@ -1,4 +1,5 @@
 import { CreateGroupMembershipCommand } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
+import { DeleteGroupMembershipCommand } from '@contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { GroupMemberIsMemberQuery } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import { GroupMembershipFindGroupIdsByUserQuery } from '@contexts/group-members/application/queries/group-membership-find-group-ids-by-user/group-membership-find-group-ids-by-user.query';
 import { GroupMembershipPort } from '@contexts/groups/application/ports/group-membership.port';
@@ -20,6 +21,12 @@ export class GroupMembershipBusAdapter implements GroupMembershipPort {
   async createMembership(groupId: string, ownerId: string): Promise<void> {
     await this.commandBus.execute(
       new CreateGroupMembershipCommand({ groupId, ownerId }),
+    );
+  }
+
+  async deleteMemberships(groupId: string): Promise<void> {
+    await this.commandBus.execute(
+      new DeleteGroupMembershipCommand({ groupId }),
     );
   }
 

@@ -1,4 +1,5 @@
 import { CreateGroupMembershipCommand } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
+import { DeleteGroupMembershipCommand } from '@contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { GroupMemberIsMemberQuery } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import { GroupMembershipFindGroupIdsByUserQuery } from '@contexts/group-members/application/queries/group-membership-find-group-ids-by-user/group-membership-find-group-ids-by-user.query';
 import { GroupMembershipBusAdapter } from '@contexts/groups/infrastructure/adapters/group-membership-bus.adapter';
@@ -63,5 +64,23 @@ describe('GroupMembershipBusAdapter', () => {
       .calls[0][0] as GroupMembershipFindGroupIdsByUserQuery;
     expect(query).toBeInstanceOf(GroupMembershipFindGroupIdsByUserQuery);
     expect(query.userId.value).toBe('user_a');
+  });
+
+  it('deletes the roster of a group through group-members', async () => {
+    commandBus.execute.mockResolvedValue(undefined);
+
+    await expect(adapter.deleteMemberships(GROUP_ID)).resolves.toBeUndefined();
+
+    expect(commandBus.execute).toHaveBeenCalledTimes(1);
+    const command = commandBus.execute.mock
+      .calls[0][0] as DeleteGroupMembershipCommand;
+    expect(command).toBeInstanceOf(DeleteGroupMembershipCommand);
+    expect(command.groupId.value).toBe(GROUP_ID);
+  });
+
+  it('propagates a failing membership deletion', async () => {
+    commandBus.execute.mockRejectedValue(new Error('boom'));
+
+    await expect(adapter.deleteMemberships(GROUP_ID)).rejects.toThrow('boom');
   });
 });

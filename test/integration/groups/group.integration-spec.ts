@@ -1,9 +1,11 @@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { DeleteGroupMembershipCommand } from '../../../src/contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { GroupMemberIsMemberQuery } from '../../../src/contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import { CreateGroupMembershipCommand } from '../../../src/contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
 import { GroupMembersModule } from '../../../src/contexts/group-members/group-members.module';
 import { CreateGroupCommand } from '../../../src/contexts/groups/application/commands/create-group/create-group.command';
+import { DeleteGroupCommand } from '../../../src/contexts/groups/application/commands/delete-group/delete-group.command';
 import { GroupFindByIdQuery } from '../../../src/contexts/groups/application/queries/group-find-by-id/group-find-by-id.query';
 import { GroupsFindOwnQuery } from '../../../src/contexts/groups/application/queries/groups-find-own/groups-find-own.query';
 import { GroupBuilder } from '../../../src/contexts/groups/domain/builders/group.builder';
@@ -141,6 +143,48 @@ describe('groups persistence and membership adapter (integration)', () => {
     );
 
     await expect(groupCount()).resolves.toBe(0);
+  });
+
+  it('removes the roster and members of a deleted group, leaving other groups intact', async () => {
+    const groupId = await createGroup('Home', 'alice');
+    const otherId = await createGroup('Trip', 'bob');
+
+    await expect(
+      commands.execute(new DeleteGroupCommand({ groupId })),
+    ).resolves.toBe(groupId);
+
+    await expect(repository.findById(groupId)).resolves.toBeNull();
+    await expect(
+      queries.execute(
+        new GroupMemberIsMemberQuery({ groupId, userId: 'alice' }),
+      ),
+    ).resolves.toBe(false);
+    const rows = await ctx.dataSource.query(
+      'SELECT (SELECT count(*)::int FROM group_memberships WHERE group_id = $1) AS memberships, (SELECT count(*)::int FROM group_members WHERE group_id = $1) AS members',
+      [groupId],
+    );
+    expect(rows[0]).toEqual({ memberships: 0, members: 0 });
+    await expect(
+      queries.execute(
+        new GroupMemberIsMemberQuery({ groupId: otherId, userId: 'bob' }),
+      ),
+    ).resolves.toBe(true);
+  });
+
+  it('still deletes the group when the membership cleanup fails', async () => {
+    const groupId = await createGroup('Home', 'alice');
+    const realExecute = commands.execute.bind(commands);
+    vi.spyOn(commands, 'execute').mockImplementation((command: unknown) =>
+      command instanceof DeleteGroupMembershipCommand
+        ? Promise.reject(new Error('members unavailable'))
+        : realExecute(command as never),
+    );
+
+    await expect(
+      commands.execute(new DeleteGroupCommand({ groupId })),
+    ).resolves.toBe(groupId);
+
+    await expect(repository.findById(groupId)).resolves.toBeNull();
   });
 
   it('saves, finds by criteria and deletes through the write repository', async () => {
