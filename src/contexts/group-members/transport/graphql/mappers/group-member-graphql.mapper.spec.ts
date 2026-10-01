@@ -13,9 +13,11 @@ describe('GroupMemberGraphQLMapper', () => {
       ])
       .buildViewModel();
 
-    const objects = new GroupMemberGraphQLMapper().toObjects(viewModel);
+    const dtos = new GroupMemberGraphQLMapper().toResponseDtosFromViewModel(
+      viewModel,
+    );
 
-    expect(objects).toEqual([
+    expect(dtos).toEqual([
       { userId: 'A', role: GroupMemberRole.OWNER, joinedAt },
       { userId: 'B', role: GroupMemberRole.MEMBER, joinedAt },
     ]);
