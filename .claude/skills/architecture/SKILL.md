@@ -64,7 +64,7 @@ src/contexts/{context}/
 │   └── decorators/        {name}.decorator.ts
 ├── transport/
 │   ├── graphql/
-│   │   ├── resolvers/     {name}.resolver.ts         — CommandBus/QueryBus only
+│   │   ├── resolvers/     {entity}-queries.resolver.ts / {entity}-mutations.resolver.ts — QueryBus / CommandBus only; one file per kind, only the kinds the context has
 │   │   ├── dtos/
 │   │   │   ├── requests/  {entity}-{op}.request.dto.ts — class {Entity}{Op}RequestDto, @InputType('{Entity}{Op}RequestDto')
 │   │   │   │              {name}-filter.input.ts     — createFilterInput({Name}QueryableField, '{Name}')
