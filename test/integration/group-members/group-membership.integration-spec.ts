@@ -17,6 +17,10 @@ import { GroupMemberAlreadyExistsException } from '../../../src/contexts/group-m
 import { GroupMembershipConcurrencyException } from '../../../src/contexts/group-members/domain/exceptions/group-membership-concurrency.exception';
 import { GroupMembershipFullException } from '../../../src/contexts/group-members/domain/exceptions/group-membership-full.exception';
 import {
+  GROUP_MEMBERSHIP_READ_REPOSITORY,
+  IGroupMembershipReadRepository,
+} from '../../../src/contexts/group-members/domain/repositories/read/group-membership-read.repository';
+import {
   GROUP_MEMBERSHIP_WRITE_REPOSITORY,
   IGroupMembershipWriteRepository,
 } from '../../../src/contexts/group-members/domain/repositories/write/group-membership-write.repository';
@@ -39,12 +43,14 @@ describe('group-members persistence (integration)', () => {
   let commands: CommandBus;
   let queries: QueryBus;
   let repository: IGroupMembershipWriteRepository;
+  let readRepository: IGroupMembershipReadRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({ imports: [GroupMembersModule] });
     commands = ctx.module.get(CommandBus);
     queries = ctx.module.get(QueryBus);
     repository = ctx.module.get(GROUP_MEMBERSHIP_WRITE_REPOSITORY);
+    readRepository = ctx.module.get(GROUP_MEMBERSHIP_READ_REPOSITORY);
   });
 
   afterAll(async () => {
@@ -256,5 +262,37 @@ describe('group-members persistence (integration)', () => {
     ).resolves.toBeUndefined();
 
     await expect(rosterOf(other)).resolves.toEqual(['someone']);
+  });
+
+  describe('read repository base contract', () => {
+    it('finds a roster by its group id and returns null when unknown', async () => {
+      const groupId = await createGroup('owner');
+      await commands.execute(
+        new AddGroupMemberCommand({ groupId, userId: 'guest' }),
+      );
+
+      const roster = await readRepository.findById(groupId);
+      expect(roster?.id).toBe(groupId);
+      expect(roster?.members.map((m) => m.userId)).toEqual(['owner', 'guest']);
+      await expect(readRepository.findById(randomUUID())).resolves.toBeNull();
+    });
+
+    it('does not support findByCriteria: a roster is addressed by group id', async () => {
+      await expect(
+        readRepository.findByCriteria(
+          new Criteria([], [], { page: 1, perPage: 10 }),
+        ),
+      ).rejects.toThrow(/addressed by group id/);
+    });
+
+    it('treats save and delete as no-ops: the write side owns persistence', async () => {
+      const groupId = await createGroup('owner');
+      const roster = (await readRepository.findById(groupId))!;
+
+      await expect(readRepository.save(roster)).resolves.toBeUndefined();
+      await expect(readRepository.delete(groupId)).resolves.toBeUndefined();
+
+      await expect(rosterOf(groupId)).resolves.toEqual(['owner']);
+    });
   });
 });
