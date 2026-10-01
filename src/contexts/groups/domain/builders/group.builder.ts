@@ -2,12 +2,14 @@ import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggrega
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
 import { GroupCreatedByValueObject } from '@contexts/groups/domain/value-objects/group-created-by/group-created-by.value-object';
 import { GroupNameValueObject } from '@contexts/groups/domain/value-objects/group-name/group-name.value-object';
+import { Injectable } from '@nestjs/common';
 import {
   BaseBuilder,
   DateValueObject,
   UuidValueObject,
 } from '@sisques-labs/nestjs-kit';
 
+@Injectable()
 export class GroupBuilder extends BaseBuilder<GroupAggregate, GroupViewModel> {
   private _name = '';
   private _createdBy = '';
@@ -23,27 +25,45 @@ export class GroupBuilder extends BaseBuilder<GroupAggregate, GroupViewModel> {
   }
 
   build(): GroupAggregate {
-    this.validateWithDefaults();
+    try {
+      this.validateWithDefaults();
 
-    return new GroupAggregate({
-      id: new UuidValueObject(this._id),
-      createdAt: new DateValueObject(this._createdAt),
-      updatedAt: new DateValueObject(this._updatedAt),
-      name: new GroupNameValueObject(this._name),
-      createdBy: new GroupCreatedByValueObject(this._createdBy),
-    });
+      return new GroupAggregate({
+        id: new UuidValueObject(this._id),
+        createdAt: new DateValueObject(this._createdAt),
+        updatedAt: new DateValueObject(this._updatedAt),
+        name: new GroupNameValueObject(this._name),
+        createdBy: new GroupCreatedByValueObject(this._createdBy),
+      });
+    } finally {
+      this.reset();
+    }
   }
 
   buildViewModel(): GroupViewModel {
-    this.validateWithDefaults();
+    try {
+      this.validateWithDefaults();
 
-    return new GroupViewModel({
-      id: this._id,
-      createdAt: this._createdAt,
-      updatedAt: this._updatedAt,
-      name: this._name,
-      createdBy: this._createdBy,
-    });
+      return new GroupViewModel({
+        id: this._id,
+        createdAt: this._createdAt,
+        updatedAt: this._updatedAt,
+        name: this._name,
+        createdBy: this._createdBy,
+      });
+    } finally {
+      this.reset();
+    }
+  }
+
+  /** Clears the inherited and local fields so a reused instance starts clean. */
+  private reset(): void {
+    // `BaseBuilder` declares these without defaults, so `undefined` is the initial state.
+    this._id = undefined as unknown as string;
+    this._createdAt = undefined as unknown as Date;
+    this._updatedAt = undefined as unknown as Date;
+    this._name = '';
+    this._createdBy = '';
   }
 
   private validateWithDefaults(): void {

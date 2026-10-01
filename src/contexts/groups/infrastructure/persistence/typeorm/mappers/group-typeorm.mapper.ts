@@ -6,6 +6,8 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GroupTypeormMapper {
+  constructor(private readonly groupBuilder: GroupBuilder) {}
+
   toAggregate(entity: GroupEntity): GroupAggregate {
     return this.toBuilder(entity).build();
   }
@@ -26,7 +28,7 @@ export class GroupTypeormMapper {
   }
 
   private toBuilder(entity: GroupEntity): GroupBuilder {
-    return new GroupBuilder()
+    return this.groupBuilder
       .withId(entity.id)
       .withName(entity.name)
       .withCreatedBy(entity.createdBy)

@@ -15,7 +15,7 @@ const entity = Object.assign(new GroupEntity(), {
 });
 
 describe('GroupTypeormMapper', () => {
-  const mapper = new GroupTypeormMapper();
+  const mapper = new GroupTypeormMapper(new GroupBuilder());
 
   it('hydrates the aggregate from a row', () => {
     expect(mapper.toAggregate(entity).toPrimitives()).toEqual({

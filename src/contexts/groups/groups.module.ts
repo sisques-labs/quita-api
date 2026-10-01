@@ -6,6 +6,7 @@ import { GroupsFindOwnHandler } from '@contexts/groups/application/queries/group
 import { AssertGroupViewModelExistsService } from '@contexts/groups/application/services/read/assert-group-view-model-exists.service';
 import { AssertRequesterIsGroupMemberService } from '@contexts/groups/application/services/read/assert-requester-is-group-member.service';
 import { AssertGroupExistsService } from '@contexts/groups/application/services/write/assert-group-exists.service';
+import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GROUP_READ_REPOSITORY } from '@contexts/groups/domain/repositories/read/group-read.repository';
 import { GROUP_WRITE_REPOSITORY } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { GroupMembershipBusAdapter } from '@contexts/groups/infrastructure/adapters/group-membership-bus.adapter';
@@ -28,6 +29,8 @@ const APPLICATION_SERVICES = [
   AssertRequesterIsGroupMemberService,
   AssertGroupExistsService,
 ];
+
+const DOMAIN_BUILDERS = [GroupBuilder];
 
 const INFRASTRUCTURE_ENTITIES = [GroupEntity];
 
@@ -60,6 +63,7 @@ const TRANSPORT_PROVIDERS = [GroupsResolver, GroupGraphQLMapper];
     ...COMMAND_HANDLERS,
     ...QUERY_HANDLERS,
     ...APPLICATION_SERVICES,
+    ...DOMAIN_BUILDERS,
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...INFRASTRUCTURE_ADAPTERS,
