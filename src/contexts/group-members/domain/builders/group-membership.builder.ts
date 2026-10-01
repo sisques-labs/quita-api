@@ -1,11 +1,9 @@
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
+import { DEFAULT_GROUP_MEMBERSHIP_CAPACITY } from '@contexts/group-members/domain/constants/default-group-membership-capacity.constant';
 import { GroupMember } from '@contexts/group-members/domain/entities/group-member';
 import { GroupMemberPrimitives } from '@contexts/group-members/domain/primitives/group-member.primitives';
+import { GroupMembershipCapacityValueObject } from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
 import { GroupMembershipViewModel } from '@contexts/group-members/domain/view-models/group-membership.view-model';
-import {
-  DEFAULT_GROUP_MEMBERSHIP_CAPACITY,
-  GroupMembershipCapacityValueObject,
-} from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
 import {
   BaseBuilder,
   DateValueObject,

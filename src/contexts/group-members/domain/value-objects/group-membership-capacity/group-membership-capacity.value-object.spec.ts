@@ -1,7 +1,5 @@
-import {
-  DEFAULT_GROUP_MEMBERSHIP_CAPACITY,
-  GroupMembershipCapacityValueObject,
-} from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
+import { DEFAULT_GROUP_MEMBERSHIP_CAPACITY } from '@contexts/group-members/domain/constants/default-group-membership-capacity.constant';
+import { GroupMembershipCapacityValueObject } from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
 
 describe('GroupMembershipCapacityValueObject', () => {
   it('defaults to 2 members in the MVP', () => {
