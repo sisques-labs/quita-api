@@ -1,12 +1,10 @@
-import { CreateGroupCommand } from '@contexts/groups/application/commands/create-group/create-group.command';
 import { GroupFindByIdQuery } from '@contexts/groups/application/queries/group-find-by-id/group-find-by-id.query';
 import { GroupsFindOwnQuery } from '@contexts/groups/application/queries/groups-find-own/groups-find-own.query';
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupAccessDeniedException } from '@contexts/groups/domain/exceptions/group-access-denied.exception';
 import { GroupGraphQLMapper } from '@contexts/groups/transport/graphql/mappers/group-graphql.mapper';
-import { GroupsResolver } from '@contexts/groups/transport/graphql/resolvers/groups.resolver';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { MutationResponseGraphQLMapper } from '@sisques-labs/nestjs-kit/graphql';
+import { GroupQueriesResolver } from '@contexts/groups/transport/graphql/resolvers/group-queries.resolver';
+import { QueryBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
@@ -20,39 +18,13 @@ const groupViewModel = (id = GROUP_ID, name = 'Home') =>
     .withCreatedAt(CREATED)
     .buildViewModel();
 
-describe('GroupsResolver', () => {
-  let commandBus: Mocked<CommandBus>;
+describe('GroupQueriesResolver', () => {
   let queryBus: Mocked<QueryBus>;
-  let resolver: GroupsResolver;
+  let resolver: GroupQueriesResolver;
 
   beforeEach(() => {
-    commandBus = { execute: vi.fn() } as unknown as Mocked<CommandBus>;
     queryBus = { execute: vi.fn() } as unknown as Mocked<QueryBus>;
-    resolver = new GroupsResolver(
-      commandBus,
-      queryBus,
-      new GroupGraphQLMapper(),
-      new MutationResponseGraphQLMapper(),
-    );
-  });
-
-  it('creates a group owned by the authenticated user, never by input', async () => {
-    commandBus.execute.mockResolvedValue(GROUP_ID);
-
-    const response = await resolver.createGroup(
-      { name: 'Home' },
-      { userId: 'A' },
-    );
-
-    const command = commandBus.execute.mock.calls[0][0] as CreateGroupCommand;
-    expect(command).toBeInstanceOf(CreateGroupCommand);
-    expect(command.name.value).toBe('Home');
-    expect(command.ownerId.value).toBe('A');
-    expect(response).toEqual({
-      success: true,
-      message: 'Group created successfully',
-      id: GROUP_ID,
-    });
+    resolver = new GroupQueriesResolver(queryBus, new GroupGraphQLMapper());
   });
 
   it('reads a group on behalf of the authenticated user', async () => {
