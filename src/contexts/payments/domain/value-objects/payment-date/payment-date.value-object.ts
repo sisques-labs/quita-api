@@ -1,8 +1,7 @@
+import { DATE_PATTERN } from '@contexts/payments/domain/constants/date-pattern.constant';
 import { PaymentDateInFutureException } from '@contexts/payments/domain/exceptions/payment-date-in-future.exception';
 import { PaymentDateInvalidException } from '@contexts/payments/domain/exceptions/payment-date-invalid.exception';
 import { ValueObject } from '@sisques-labs/nestjs-kit';
-
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
  * Date-only `YYYY-MM-DD` on which the payment was made. The constructor only

@@ -1,3 +1,4 @@
+import { PAYMENT_CURRENCY } from '@contexts/payments/domain/constants/payment-currency.constant';
 import { PaymentCreatedEvent } from '@contexts/payments/domain/events/payment-created/payment-created.event';
 import { PaymentDeletedEvent } from '@contexts/payments/domain/events/payment-deleted/payment-deleted.event';
 import { PaymentUpdatedEvent } from '@contexts/payments/domain/events/payment-updated/payment-updated.event';
@@ -14,9 +15,6 @@ import {
   DateValueObject,
   UuidValueObject,
 } from '@sisques-labs/nestjs-kit';
-
-/** Only euros are supported in the MVP. */
-export const PAYMENT_CURRENCY = 'EUR';
 
 /**
  * Fields a member may change. An omitted key keeps the current value;

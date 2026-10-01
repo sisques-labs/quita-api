@@ -1,3 +1,5 @@
+import { DEFAULT_SORTS } from '@contexts/payments/application/constants/default-sorts.constant';
+import { GROUP_FIELD } from '@contexts/payments/application/constants/group-field.constant';
 import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.query';
 import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
 import {
@@ -11,18 +13,7 @@ import {
   Criteria,
   FilterOperator,
   PaginatedResult,
-  Sort,
-  SortDirection,
 } from '@sisques-labs/nestjs-kit';
-
-/** View-model property the repository maps to the `group_id` column. */
-const GROUP_FIELD = 'groupId';
-
-/** History order: newest payment date first, ties broken by newest creation. */
-const DEFAULT_SORTS: Sort[] = [
-  { field: 'paidOn', direction: SortDirection.DESC },
-  { field: 'createdAt', direction: SortDirection.DESC },
-];
 
 /**
  * Lists a group's payments, soft-deleted ones included (flagged by

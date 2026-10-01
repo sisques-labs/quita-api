@@ -1,7 +1,5 @@
-import {
-  PAYMENT_CURRENCY,
-  PaymentAggregate,
-} from '@contexts/payments/domain/aggregates/payment.aggregate';
+import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
+import { PAYMENT_CURRENCY } from '@contexts/payments/domain/constants/payment-currency.constant';
 import { PaymentAmountValueObject } from '@contexts/payments/domain/value-objects/payment-amount/payment-amount.value-object';
 import { PaymentDateValueObject } from '@contexts/payments/domain/value-objects/payment-date/payment-date.value-object';
 import { PaymentNoteValueObject } from '@contexts/payments/domain/value-objects/payment-note/payment-note.value-object';

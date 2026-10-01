@@ -1,0 +1,1 @@
+export const PAYMENT_NOTE_MAX_LENGTH = 200;
