@@ -1,4 +1,6 @@
 import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
+import { MEMBERSHIP_CLEANUP_MAX_ATTEMPTS } from '@contexts/groups/application/constants/membership-cleanup-max-attempts.constant';
+import { MEMBERSHIP_CLEANUP_RETRY_DELAY_MS } from '@contexts/groups/application/constants/membership-cleanup-retry-delay-ms.constant';
 import {
   GROUP_MEMBERSHIP_PORT,
   GroupMembershipPort,
@@ -12,9 +14,6 @@ import {
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { BaseCommandHandler } from '@sisques-labs/nestjs-kit';
-
-export const MEMBERSHIP_CLEANUP_MAX_ATTEMPTS = 3;
-export const MEMBERSHIP_CLEANUP_RETRY_DELAY_MS = 50;
 
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
