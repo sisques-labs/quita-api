@@ -5,32 +5,32 @@ import { truncateAll } from '../helpers/db-reset';
 const TODAY = '2026-03-15';
 
 const CREATE_GROUP = `
-  mutation CreateGroup($input: CreateGroupInput!) {
+  mutation CreateGroup($input: GroupCreateRequestDto!) {
     createGroup(input: $input) { id }
   }
 `;
 const GENERATE = `
-  mutation Generate($input: GenerateInvitationCodeInput!) {
+  mutation Generate($input: GroupInvitationCodeGenerateRequestDto!) {
     generateInvitationCode(input: $input) { code }
   }
 `;
 const REDEEM = `
-  mutation Redeem($input: RedeemInvitationCodeInput!) {
+  mutation Redeem($input: GroupInvitationCodeRedeemRequestDto!) {
     redeemInvitationCode(input: $input) { id }
   }
 `;
 const CREATE_EXPENSE = `
-  mutation CreateExpense($input: CreateExpenseInput!) {
+  mutation CreateExpense($input: ExpenseCreateRequestDto!) {
     createExpense(input: $input) { success message id }
   }
 `;
 const EDIT_EXPENSE = `
-  mutation EditExpense($input: EditExpenseInput!) {
+  mutation EditExpense($input: ExpenseEditRequestDto!) {
     editExpense(input: $input) { success id }
   }
 `;
 const DELETE_EXPENSE = `
-  mutation DeleteExpense($input: DeleteExpenseInput!) {
+  mutation DeleteExpense($input: ExpenseDeleteRequestDto!) {
     deleteExpense(input: $input) { success id }
   }
 `;
