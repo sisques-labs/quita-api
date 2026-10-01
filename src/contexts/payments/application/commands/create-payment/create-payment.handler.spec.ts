@@ -3,6 +3,7 @@ import { CreatePaymentHandler } from '@contexts/payments/application/commands/cr
 import { GroupMembersPort } from '@contexts/payments/application/ports/group-members.port';
 import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
+import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
 import { PaymentDateInFutureException } from '@contexts/payments/domain/exceptions/payment-date-in-future.exception';
 import { PaymentPartiesMustDifferException } from '@contexts/payments/domain/exceptions/payment-parties-must-differ.exception';
@@ -54,6 +55,7 @@ describe('CreatePaymentHandler', () => {
       membersPort,
       assertMember,
       clock,
+      new PaymentBuilder(),
       eventBus,
     );
   });

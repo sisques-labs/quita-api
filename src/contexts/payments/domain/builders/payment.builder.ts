@@ -5,6 +5,7 @@ import { PaymentDateValueObject } from '@contexts/payments/domain/value-objects/
 import { PaymentNoteValueObject } from '@contexts/payments/domain/value-objects/payment-note/payment-note.value-object';
 import { PaymentUserIdValueObject } from '@contexts/payments/domain/value-objects/payment-user-id/payment-user-id.value-object';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
+import { Injectable } from '@nestjs/common';
 import {
   BaseBuilder,
   DateValueObject,
@@ -15,6 +16,7 @@ import {
  * Hydrates a payment from raw values. It validates formats only: the "not in
  * the future" rule needs `today` and is enforced by `PaymentDateValueObject.create`.
  */
+@Injectable()
 export class PaymentBuilder extends BaseBuilder<
   PaymentAggregate,
   PaymentViewModel
@@ -76,31 +78,44 @@ export class PaymentBuilder extends BaseBuilder<
   }
 
   build(): PaymentAggregate {
-    this.validateWithDefaults();
+    try {
+      this.validateWithDefaults();
 
-    return new PaymentAggregate({
-      id: new UuidValueObject(this._id),
-      createdAt: new DateValueObject(this._createdAt),
-      updatedAt: new DateValueObject(this._updatedAt),
-      groupId: new UuidValueObject(this._groupId),
-      fromUserId: new PaymentUserIdValueObject(this._fromUserId),
-      toUserId: new PaymentUserIdValueObject(this._toUserId),
-      amount: new PaymentAmountValueObject(this._amountCents),
-      paidOn: new PaymentDateValueObject(this._paidOn),
-      note: this.normalizedNote(),
-      createdBy: new PaymentUserIdValueObject(this._createdBy),
-      updatedBy: new PaymentUserIdValueObject(
-        this._updatedBy ?? this._createdBy,
-      ),
-      deletedAt: this._deletedAt ? new DateValueObject(this._deletedAt) : null,
-    });
+      return new PaymentAggregate({
+        id: new UuidValueObject(this._id),
+        createdAt: new DateValueObject(this._createdAt),
+        updatedAt: new DateValueObject(this._updatedAt),
+        groupId: new UuidValueObject(this._groupId),
+        fromUserId: new PaymentUserIdValueObject(this._fromUserId),
+        toUserId: new PaymentUserIdValueObject(this._toUserId),
+        amount: new PaymentAmountValueObject(this._amountCents),
+        paidOn: new PaymentDateValueObject(this._paidOn),
+        note: this.normalizedNote(),
+        createdBy: new PaymentUserIdValueObject(this._createdBy),
+        updatedBy: new PaymentUserIdValueObject(
+          this._updatedBy ?? this._createdBy,
+        ),
+        deletedAt: this._deletedAt
+          ? new DateValueObject(this._deletedAt)
+          : null,
+      });
+    } finally {
+      this.reset();
+    }
   }
 
   buildViewModel(): PaymentViewModel {
-    const aggregate = this.build();
-    const primitives = aggregate.toPrimitives();
+    try {
+      const aggregate = this.build();
+      const primitives = aggregate.toPrimitives();
 
-    return new PaymentViewModel({ ...primitives, currency: PAYMENT_CURRENCY });
+      return new PaymentViewModel({
+        ...primitives,
+        currency: PAYMENT_CURRENCY,
+      });
+    } finally {
+      this.reset();
+    }
   }
 
   private normalizedNote(): PaymentNoteValueObject | null {
@@ -108,6 +123,23 @@ export class PaymentBuilder extends BaseBuilder<
       return null;
     }
     return new PaymentNoteValueObject(this._note);
+  }
+
+  /** Clears the inherited and local fields so a reused instance starts clean. */
+  private reset(): void {
+    // `BaseBuilder` declares these without defaults, so `undefined` is the initial state.
+    this._id = undefined as unknown as string;
+    this._createdAt = undefined as unknown as Date;
+    this._updatedAt = undefined as unknown as Date;
+    this._groupId = '';
+    this._fromUserId = '';
+    this._toUserId = '';
+    this._amountCents = 0;
+    this._paidOn = '';
+    this._note = null;
+    this._createdBy = '';
+    this._updatedBy = null;
+    this._deletedAt = null;
   }
 
   private validateWithDefaults(): void {
