@@ -102,21 +102,7 @@ export class PaymentBuilder extends BaseBuilder<
     const aggregate = this.build();
     const primitives = aggregate.toPrimitives();
 
-    return new PaymentViewModel(
-      primitives.id,
-      primitives.createdAt,
-      primitives.updatedAt,
-      primitives.groupId,
-      primitives.fromUserId,
-      primitives.toUserId,
-      primitives.amountCents,
-      PAYMENT_CURRENCY,
-      primitives.paidOn,
-      primitives.note,
-      primitives.createdBy,
-      primitives.updatedBy,
-      primitives.deletedAt,
-    );
+    return new PaymentViewModel({ ...primitives, currency: PAYMENT_CURRENCY });
   }
 
   private normalizedNote(): PaymentNoteValueObject | null {

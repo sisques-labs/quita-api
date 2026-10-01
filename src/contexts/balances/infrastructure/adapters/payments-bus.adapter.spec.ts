@@ -12,21 +12,21 @@ const payment = (
   toUserId: string,
   amountCents: number,
 ): PaymentViewModel =>
-  new PaymentViewModel(
-    '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c22',
-    NOW,
-    NOW,
-    GROUP_ID,
+  new PaymentViewModel({
+    id: '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c22',
+    createdAt: NOW,
+    updatedAt: NOW,
+    groupId: GROUP_ID,
     fromUserId,
     toUserId,
     amountCents,
-    'EUR',
-    '2026-03-01',
-    null,
-    fromUserId,
-    fromUserId,
-    null,
-  );
+    currency: 'EUR',
+    paidOn: '2026-03-01',
+    note: null,
+    createdBy: fromUserId,
+    updatedBy: fromUserId,
+    deletedAt: null,
+  });
 
 describe('PaymentsBusAdapter', () => {
   let queryBus: Mocked<QueryBus>;
