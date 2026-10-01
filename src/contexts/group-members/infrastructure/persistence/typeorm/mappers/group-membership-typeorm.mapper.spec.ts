@@ -1,3 +1,4 @@
+import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMemberEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-member.entity';
 import { GroupMembershipEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-membership.entity';
@@ -32,7 +33,7 @@ const members = [
 ];
 
 describe('GroupMembershipTypeormMapper', () => {
-  const mapper = new GroupMembershipTypeormMapper();
+  const mapper = new GroupMembershipTypeormMapper(new GroupMembershipBuilder());
 
   it('hydrates the aggregate from the roster rows, version included', () => {
     const primitives = mapper.toAggregate(membership, members).toPrimitives();

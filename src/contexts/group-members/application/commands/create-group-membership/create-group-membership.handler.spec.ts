@@ -2,6 +2,7 @@ import { CreateGroupMembershipCommand } from '@contexts/group-members/applicatio
 import { CreateGroupMembershipHandler } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.handler';
 import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists.service';
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
+import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipAlreadyExistsException } from '@contexts/group-members/domain/exceptions/group-membership-already-exists.exception';
 import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
@@ -25,6 +26,7 @@ describe('CreateGroupMembershipHandler', () => {
     handler = new CreateGroupMembershipHandler(
       repository,
       assertNotExists,
+      new GroupMembershipBuilder(),
       eventBus,
     );
   });

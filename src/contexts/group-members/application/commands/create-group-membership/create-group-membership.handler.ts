@@ -25,6 +25,7 @@ export class CreateGroupMembershipHandler
     @Inject(GROUP_MEMBERSHIP_WRITE_REPOSITORY)
     private readonly repository: GroupMembershipWriteRepository,
     private readonly assertNotExists: AssertGroupMembershipNotExistsService,
+    private readonly groupMembershipBuilder: GroupMembershipBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -35,7 +36,7 @@ export class CreateGroupMembershipHandler
 
     const now = new Date();
 
-    const aggregate = new GroupMembershipBuilder()
+    const aggregate = this.groupMembershipBuilder
       .withId(command.groupId.value)
       .withMembers([
         {
