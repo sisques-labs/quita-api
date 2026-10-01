@@ -11,7 +11,7 @@ import {
   PaymentsPort,
 } from '@contexts/balances/application/ports/payments.port';
 import { GroupBalanceQuery } from '@contexts/balances/application/queries/group-balance/group-balance.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { BALANCE_CURRENCY } from '@contexts/balances/domain/constants/balance-currency.constant';
 import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 import { GroupBalanceViewModel } from '@contexts/balances/domain/view-models/group-balance.view-model';
@@ -46,8 +46,8 @@ export class GroupBalanceHandler implements IQueryHandler<
       `Computing balance of group ${groupId} for ${query.requesterId.value}`,
     );
     await this.assertRequesterIsMember.execute(
-      groupId,
-      query.requesterId.value,
+      query.groupId,
+      query.requesterId,
     );
 
     const [memberIds, expenses, payments] = await Promise.all([
