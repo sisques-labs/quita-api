@@ -114,22 +114,7 @@ export class ExpenseBuilder extends BaseBuilder<
     const aggregate = this.build();
     const primitives = aggregate.toPrimitives();
 
-    return new ExpenseViewModel(
-      primitives.id,
-      primitives.createdAt,
-      primitives.updatedAt,
-      primitives.groupId,
-      primitives.amountCents,
-      EXPENSE_CURRENCY,
-      primitives.paidBy,
-      primitives.spentOn,
-      primitives.description,
-      primitives.category,
-      primitives.splitType,
-      primitives.createdBy,
-      primitives.updatedBy,
-      primitives.deletedAt,
-    );
+    return new ExpenseViewModel({ ...primitives, currency: EXPENSE_CURRENCY });
   }
 
   private normalizedDescription(): ExpenseDescriptionValueObject | null {
