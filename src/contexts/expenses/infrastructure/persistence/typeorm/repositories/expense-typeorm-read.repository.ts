@@ -3,10 +3,9 @@ import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.
 import { ExpenseEntity } from '@contexts/expenses/infrastructure/persistence/typeorm/entities/expense.entity';
 import { ExpenseTypeormMapper } from '@contexts/expenses/infrastructure/persistence/typeorm/mappers/expense-typeorm.mapper';
 import {
-  applyExpenseCriteria,
   assertQueryableFields,
   EXPENSE_ALIAS,
-} from '@contexts/expenses/infrastructure/persistence/typeorm/repositories/expense-criteria-query';
+} from '@contexts/expenses/infrastructure/persistence/typeorm/repositories/expense-queryable-fields';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
@@ -15,6 +14,7 @@ import {
   PaginatedResult,
   SortDirection,
 } from '@sisques-labs/nestjs-kit';
+import { applyCriteriaToQueryBuilder } from '@sisques-labs/nestjs-kit/typeorm';
 import { DataSource, IsNull } from 'typeorm';
 
 @Injectable()
@@ -38,10 +38,13 @@ export class ExpenseTypeormReadRepository
     const qb = this.dataSource
       .getRepository(ExpenseEntity)
       .createQueryBuilder(EXPENSE_ALIAS);
-    applyExpenseCriteria(qb, criteria, [
-      { field: 'spentOn', direction: SortDirection.DESC },
-      { field: 'createdAt', direction: SortDirection.DESC },
-    ]);
+    applyCriteriaToQueryBuilder(qb, criteria, {
+      alias: EXPENSE_ALIAS,
+      defaultSort: [
+        { field: 'spentOn', direction: SortDirection.DESC },
+        { field: 'createdAt', direction: SortDirection.DESC },
+      ],
+    });
     const [rows, total] = await qb.skip(skip).take(limit).getManyAndCount();
 
     return new PaginatedResult(

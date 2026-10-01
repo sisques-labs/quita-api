@@ -3,10 +3,9 @@ import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/w
 import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typeorm/entities/payment.entity';
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
 import {
-  applyPaymentCriteria,
   assertQueryableFields,
   PAYMENT_ALIAS,
-} from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-criteria-query';
+} from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-queryable-fields';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
@@ -15,6 +14,7 @@ import {
   PaginatedResult,
   SortDirection,
 } from '@sisques-labs/nestjs-kit';
+import { applyCriteriaToQueryBuilder } from '@sisques-labs/nestjs-kit/typeorm';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -47,9 +47,12 @@ export class PaymentTypeormWriteRepository
     const qb = this.dataSource
       .getRepository(PaymentEntity)
       .createQueryBuilder(PAYMENT_ALIAS);
-    applyPaymentCriteria(qb, criteria, {
-      field: 'createdAt',
-      direction: SortDirection.DESC,
+    applyCriteriaToQueryBuilder(qb, criteria, {
+      alias: PAYMENT_ALIAS,
+      defaultSort: {
+        field: 'createdAt',
+        direction: SortDirection.DESC,
+      },
     });
     const [rows, total] = await qb.skip(skip).take(limit).getManyAndCount();
 

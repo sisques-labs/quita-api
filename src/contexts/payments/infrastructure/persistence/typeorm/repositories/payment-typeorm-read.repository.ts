@@ -3,10 +3,9 @@ import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.
 import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typeorm/entities/payment.entity';
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
 import {
-  applyPaymentCriteria,
   assertQueryableFields,
   PAYMENT_ALIAS,
-} from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-criteria-query';
+} from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-queryable-fields';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
@@ -15,6 +14,7 @@ import {
   PaginatedResult,
   SortDirection,
 } from '@sisques-labs/nestjs-kit';
+import { applyCriteriaToQueryBuilder } from '@sisques-labs/nestjs-kit/typeorm';
 import { DataSource, IsNull } from 'typeorm';
 
 @Injectable()
@@ -38,10 +38,13 @@ export class PaymentTypeormReadRepository
     const qb = this.dataSource
       .getRepository(PaymentEntity)
       .createQueryBuilder(PAYMENT_ALIAS);
-    applyPaymentCriteria(qb, criteria, [
-      { field: 'paidOn', direction: SortDirection.DESC },
-      { field: 'createdAt', direction: SortDirection.DESC },
-    ]);
+    applyCriteriaToQueryBuilder(qb, criteria, {
+      alias: PAYMENT_ALIAS,
+      defaultSort: [
+        { field: 'paidOn', direction: SortDirection.DESC },
+        { field: 'createdAt', direction: SortDirection.DESC },
+      ],
+    });
     const [rows, total] = await qb.skip(skip).take(limit).getManyAndCount();
 
     return new PaginatedResult(
