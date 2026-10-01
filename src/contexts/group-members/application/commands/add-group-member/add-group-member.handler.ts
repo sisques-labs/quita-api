@@ -31,13 +31,13 @@ export class AddGroupMemberHandler
   async execute(command: AddGroupMemberCommand): Promise<void> {
     const aggregate = await this.assertExists.execute(command.groupId.value);
 
-    aggregate.addMember(
-      new GroupMember(
-        command.userId,
-        new GroupMemberRoleValueObject(GroupMemberRole.MEMBER),
-        new DateValueObject(new Date()),
-      ),
+    const groupMember = new GroupMember(
+      command.userId,
+      new GroupMemberRoleValueObject(GroupMemberRole.MEMBER),
+      new DateValueObject(new Date()),
     );
+
+    aggregate.addMember(groupMember);
 
     await this.repository.save(aggregate);
     await this.publishEvents(aggregate);
