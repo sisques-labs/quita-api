@@ -71,9 +71,9 @@ authenticated user (`@AuthUser()`), never an input.
 
 | Operation | Result |
 |---|---|
-| `generateInvitationCode(input: { groupId }): GroupInvitationCode` | `{ groupId, code }` |
-| `regenerateInvitationCode(input: { groupId }): GroupInvitationCode` | `{ groupId, code }` |
-| `redeemInvitationCode(input: { code }): MutationResponseDto` | `id` of the joined group |
+| `generateInvitationCode(input: GroupInvitationCodeGenerateRequestDto): GroupInvitationCodeResponseDto` | `{ groupId, code }` |
+| `regenerateInvitationCode(input: GroupInvitationCodeRegenerateRequestDto): GroupInvitationCodeResponseDto` | `{ groupId, code }` |
+| `redeemInvitationCode(input: GroupInvitationCodeRedeemRequestDto): MutationResponseDto` | `id` of the joined group |
 
 This context defines no GraphQL enums, so it has no registered-enums file.
 

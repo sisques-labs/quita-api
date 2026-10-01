@@ -2,22 +2,22 @@ import { createE2EApp, E2EContext } from '../helpers/app-bootstrap';
 import { truncateAll } from '../helpers/db-reset';
 
 const CREATE_GROUP = `
-  mutation CreateGroup($input: CreateGroupInput!) {
+  mutation CreateGroup($input: GroupCreateRequestDto!) {
     createGroup(input: $input) { id }
   }
 `;
 const GENERATE = `
-  mutation Generate($input: GenerateInvitationCodeInput!) {
+  mutation Generate($input: GroupInvitationCodeGenerateRequestDto!) {
     generateInvitationCode(input: $input) { groupId code }
   }
 `;
 const REGENERATE = `
-  mutation Regenerate($input: RegenerateInvitationCodeInput!) {
+  mutation Regenerate($input: GroupInvitationCodeRegenerateRequestDto!) {
     regenerateInvitationCode(input: $input) { groupId code }
   }
 `;
 const REDEEM = `
-  mutation Redeem($input: RedeemInvitationCodeInput!) {
+  mutation Redeem($input: GroupInvitationCodeRedeemRequestDto!) {
     redeemInvitationCode(input: $input) { success id }
   }
 `;
