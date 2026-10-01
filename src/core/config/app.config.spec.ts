@@ -28,6 +28,18 @@ describe('appConfig', () => {
     expect(config.corsOrigins).toEqual(['http://localhost:3001']);
   });
 
+  it('defaults the timezone to Europe/Madrid', () => {
+    delete process.env.APP_TIMEZONE;
+
+    expect(appConfig().timezone).toBe('Europe/Madrid');
+  });
+
+  it('reads the timezone from APP_TIMEZONE', () => {
+    process.env.APP_TIMEZONE = ' America/New_York ';
+
+    expect(appConfig().timezone).toBe('America/New_York');
+  });
+
   it('reads overrides from the environment', () => {
     process.env.SERVICE_NAME = ' orders-service ';
     process.env.NODE_ENV = 'production';

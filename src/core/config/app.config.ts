@@ -5,6 +5,7 @@ import { resolveCorsOrigins } from '@core/config/cors-origins';
 export const appConfig = registerAs('app', () => ({
   name: process.env.SERVICE_NAME?.trim() || 'quita-api',
   nodeEnv: process.env.NODE_ENV ?? 'development',
+  timezone: process.env.APP_TIMEZONE?.trim() || 'Europe/Madrid',
   frontendUrl: (process.env.FRONTEND_URL ?? 'http://localhost:3001').replace(
     /\/$/,
     '',

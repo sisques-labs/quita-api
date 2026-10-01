@@ -117,4 +117,48 @@ describe('validateEnv', () => {
       /Environment validation failed:[\s\S]*OTEL_EXPORTER_OTLP_ENDPOINT/,
     );
   });
+
+  it('accepts an environment without APP_TIMEZONE', () => {
+    expect(() => validateEnv(validEnv())).not.toThrow();
+  });
+
+  it('accepts a valid IANA APP_TIMEZONE', () => {
+    const env = validEnv({ APP_TIMEZONE: 'America/New_York' });
+
+    expect(() => validateEnv(env)).not.toThrow();
+  });
+
+  it('rejects an invalid APP_TIMEZONE', () => {
+    const env = validEnv({ APP_TIMEZONE: 'Mars/Olympus' });
+
+    expect(() => validateEnv(env)).toThrow(
+      /Environment validation failed:[\s\S]*APP_TIMEZONE/,
+    );
+  });
+
+  it('accepts Clerk settings', () => {
+    const env = validEnv({
+      CLERK_JWKS_URL: 'https://clerk.example.com/.well-known/jwks.json',
+      CLERK_ISSUER: 'https://clerk.example.com',
+      CLERK_AUTHORIZED_PARTIES: 'https://app.example.com',
+    });
+
+    expect(() => validateEnv(env)).not.toThrow();
+  });
+
+  it('rejects a non-URL CLERK_JWKS_URL', () => {
+    const env = validEnv({ CLERK_JWKS_URL: 'not-a-url' });
+
+    expect(() => validateEnv(env)).toThrow(
+      /Environment validation failed:[\s\S]*CLERK_JWKS_URL/,
+    );
+  });
+
+  it('rejects an empty CLERK_ISSUER', () => {
+    const env = validEnv({ CLERK_ISSUER: '  ' });
+
+    expect(() => validateEnv(env)).toThrow(
+      /Environment validation failed:[\s\S]*CLERK_ISSUER/,
+    );
+  });
 });
