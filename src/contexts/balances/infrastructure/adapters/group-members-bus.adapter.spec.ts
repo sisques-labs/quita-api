@@ -36,10 +36,16 @@ describe('GroupMembersBusAdapter (balances)', () => {
   it('lists the user ids of the roster', async () => {
     const joinedAt = new Date('2026-03-01T10:00:00Z');
     queryBus.execute.mockResolvedValue(
-      new GroupMembershipViewModel(GROUP_ID, joinedAt, joinedAt, 2, [
-        { userId: 'user_a', role: 'OWNER', joinedAt },
-        { userId: 'user_b', role: 'MEMBER', joinedAt },
-      ]),
+      new GroupMembershipViewModel({
+        id: GROUP_ID,
+        createdAt: joinedAt,
+        updatedAt: joinedAt,
+        capacity: 2,
+        members: [
+          { userId: 'user_a', role: 'OWNER', joinedAt },
+          { userId: 'user_b', role: 'MEMBER', joinedAt },
+        ],
+      }),
     );
 
     await expect(adapter.listMemberIds(GROUP_ID)).resolves.toEqual([
