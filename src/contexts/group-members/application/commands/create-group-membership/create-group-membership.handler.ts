@@ -33,13 +33,15 @@ export class CreateGroupMembershipHandler
   async execute(command: CreateGroupMembershipCommand): Promise<void> {
     await this.assertNotExists.execute(command.groupId.value);
 
+    const now = new Date();
+
     const aggregate = new GroupMembershipBuilder()
       .withId(command.groupId.value)
       .withMembers([
         {
           userId: command.ownerId.value,
           role: GroupMemberRole.OWNER,
-          joinedAt: new Date(),
+          joinedAt: now,
         },
       ])
       .build();
