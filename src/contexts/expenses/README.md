@@ -54,6 +54,10 @@ Table `expenses` (migration `1780000000003-CreateExpenses`):
 - `deleted_at timestamptz` (soft delete), `updated_by`.
 - Index `(group_id, deleted_at)`. No foreign key: groups belong to another context.
 
+`IExpenseReadRepository` extends `IBaseReadRepository<ExpenseViewModel>` (plus
+`findActiveByGroupId`): `findById` returns the row even when soft-deleted, and
+`save` / `delete` are no-ops because the write side persists.
+
 The read repository translates `criteria.filters` through the query builder and
 covers all 8 `FilterOperator`s. Field names are entity properties that TypeORM
 resolves to columns (`groupId` becomes `group_id`); a name outside the

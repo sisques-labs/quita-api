@@ -41,6 +41,10 @@ with `CHECK (amount_cents > 0)`, `CHECK (from_user_id <> to_user_id)`,
 `paid_on date`, `deleted_at timestamptz`, index `(group_id, deleted_at)`, no
 foreign key (groups belong to another context).
 
+`IPaymentReadRepository` extends `IBaseReadRepository<PaymentViewModel>` (plus
+`findActiveByGroupId`): `findById` returns the row even when soft-deleted, and
+`save` / `delete` are no-ops because the write side persists.
+
 The read repository translates all 8 `FilterOperator`s through the query
 builder. Field names are entity properties (`groupId` becomes `group_id`); a
 name outside the whitelist is rejected before it can reach SQL. `LIKE` runs on
