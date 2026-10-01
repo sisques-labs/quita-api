@@ -1,6 +1,6 @@
 import { GroupMembersFindByGroupIdHandler } from '@contexts/group-members/application/queries/group-members-find-by-group-id/group-members-find-by-group-id.handler';
 import { GroupMembersFindByGroupIdQuery } from '@contexts/group-members/application/queries/group-members-find-by-group-id/group-members-find-by-group-id.query';
-import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists.service';
+import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists/assert-group-membership-view-model-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipNotFoundException } from '@contexts/group-members/domain/exceptions/group-membership-not-found.exception';
@@ -35,7 +35,9 @@ describe('GroupMembersFindByGroupIdHandler', () => {
 
     expect(result.members.map((m) => m.userId)).toEqual(['A', 'B']);
     expect(assertExists.execute).toHaveBeenCalledWith(
-      '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
+      expect.objectContaining({
+        value: '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
+      }),
     );
   });
 

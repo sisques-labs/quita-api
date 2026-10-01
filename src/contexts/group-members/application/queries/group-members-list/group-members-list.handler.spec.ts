@@ -1,6 +1,6 @@
 import { GroupMembersListHandler } from '@contexts/group-members/application/queries/group-members-list/group-members-list.handler';
 import { GroupMembersListQuery } from '@contexts/group-members/application/queries/group-members-list/group-members-list.query';
-import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists.service';
+import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists/assert-group-membership-view-model-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMemberAccessDeniedException } from '@contexts/group-members/domain/exceptions/group-member-access-denied.exception';
