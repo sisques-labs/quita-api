@@ -1,37 +1,26 @@
 import { CreateExpenseCommand } from '@contexts/expenses/application/commands/create-expense/create-expense.command';
 import { DeleteExpenseCommand } from '@contexts/expenses/application/commands/delete-expense/delete-expense.command';
 import { EditExpenseCommand } from '@contexts/expenses/application/commands/edit-expense/edit-expense.command';
-import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.query';
-import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
 import { ExpenseCreateRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-create.request.dto';
 import { ExpenseDeleteRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-delete.request.dto';
 import { ExpenseEditRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-edit.request.dto';
-import { ExpensesFindByCriteriaRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expenses-find-by-criteria.request.dto';
-import { ExpenseGraphQLMapper } from '@contexts/expenses/transport/graphql/mappers/expense-graphql.mapper';
-import { ExpenseResponseDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
-import { PaginatedExpenseResultDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
-import { expenseFilterableFields } from '@contexts/expenses/transport/graphql/registries/expense-filterable-fields.registry';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Criteria, PaginatedResult } from '@sisques-labs/nestjs-kit';
+import { CommandBus } from '@nestjs/cqrs';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import {
-  FilterValidationPipe,
   MutationResponseDto,
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => ExpenseResponseDto)
+@Resolver()
 @UseGuards(ClerkAuthGuard)
-export class ExpensesResolver {
-  private readonly logger = new Logger(ExpensesResolver.name);
+export class ExpenseMutationsResolver {
+  private readonly logger = new Logger(ExpenseMutationsResolver.name);
 
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-    private readonly mapper: ExpenseGraphQLMapper,
     private readonly mutationResponseMapper: MutationResponseGraphQLMapper,
   ) {}
 
@@ -126,40 +115,5 @@ export class ExpensesResolver {
       message: 'Expense deleted successfully',
       id,
     });
-  }
-
-  @Query(() => PaginatedExpenseResultDto, {
-    name: 'expenses',
-    description:
-      "A group's expense history, soft-deleted rows included, newest date first. Members only.",
-  })
-  async expenses(
-    @Args('groupId', { type: () => ID }) groupId: string,
-    @Args(
-      'criteria',
-      { type: () => ExpensesFindByCriteriaRequestDto, nullable: true },
-      new FilterValidationPipe(expenseFilterableFields),
-    )
-    criteria: ExpensesFindByCriteriaRequestDto | undefined,
-    @AuthUser() user: AuthUser,
-  ): Promise<PaginatedExpenseResultDto> {
-    this.logger.log(`expenses group=${groupId} requester=${user.userId}`);
-
-    const result = await this.queryBus.execute<
-      ExpensesFindByCriteriaQuery,
-      PaginatedResult<ExpenseViewModel>
-    >(
-      new ExpensesFindByCriteriaQuery({
-        groupId,
-        requesterId: user.userId,
-        criteria: new Criteria(
-          criteria?.filters,
-          criteria?.sorts,
-          criteria?.pagination,
-        ),
-      }),
-    );
-
-    return this.mapper.toPaginatedResponseDto(result);
   }
 }
