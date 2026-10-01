@@ -18,7 +18,7 @@ describe('GroupBalanceGraphQLMapper', () => {
       debts: [{ fromUserId: 'user_b', toUserId: 'user_a', amountCents: 500 }],
     });
 
-    expect(mapper.toObject(viewModel)).toEqual({
+    expect(mapper.toResponseDtoFromViewModel(viewModel)).toEqual({
       groupId: GROUP_ID,
       currency: 'EUR',
       settled: false,
@@ -42,10 +42,10 @@ describe('GroupBalanceGraphQLMapper', () => {
       debts: [],
     });
 
-    const object = mapper.toObject(viewModel);
+    const dto = mapper.toResponseDtoFromViewModel(viewModel);
 
-    expect(object.settled).toBe(true);
-    expect(object.debts).toEqual([]);
-    expect(object.memberBalances).toHaveLength(2);
+    expect(dto.settled).toBe(true);
+    expect(dto.debts).toEqual([]);
+    expect(dto.memberBalances).toHaveLength(2);
   });
 });
