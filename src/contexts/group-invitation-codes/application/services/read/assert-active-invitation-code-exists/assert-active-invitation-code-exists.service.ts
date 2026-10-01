@@ -6,17 +6,25 @@ import {
 import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import { GroupInvitationCodeViewModel } from '@contexts/group-invitation-codes/domain/view-models/group-invitation-code.view-model';
 import { Inject, Injectable } from '@nestjs/common';
+import { IBaseService } from '@sisques-labs/nestjs-kit';
 
-/** Resolves a raw code to its active record; malformed, unknown and revoked codes are all invalid. */
+/**
+ * Resolves a code to its active record; unknown and revoked codes are invalid.
+ * Malformed codes are already rejected by `InvitationCodeValueObject`.
+ */
 @Injectable()
-export class AssertActiveInvitationCodeExistsService {
+export class AssertActiveInvitationCodeExistsService implements IBaseService<
+  InvitationCodeValueObject,
+  GroupInvitationCodeViewModel
+> {
   constructor(
     @Inject(GROUP_INVITATION_CODE_READ_REPOSITORY)
     private readonly repository: GroupInvitationCodeReadRepository,
   ) {}
 
-  async execute(rawCode: string): Promise<GroupInvitationCodeViewModel> {
-    const code = new InvitationCodeValueObject(rawCode);
+  async execute(
+    code: InvitationCodeValueObject,
+  ): Promise<GroupInvitationCodeViewModel> {
     const viewModel = await this.repository.findActiveByCode(code.value);
     if (!viewModel) {
       throw new InvitationCodeInvalidException();

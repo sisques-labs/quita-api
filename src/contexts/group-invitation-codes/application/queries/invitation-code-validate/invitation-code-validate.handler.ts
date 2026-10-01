@@ -1,5 +1,5 @@
 import { InvitationCodeValidateQuery } from '@contexts/group-invitation-codes/application/queries/invitation-code-validate/invitation-code-validate.query';
-import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
+import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
 import { GroupInvitationCodeViewModel } from '@contexts/group-invitation-codes/domain/view-models/group-invitation-code.view-model';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
@@ -16,6 +16,6 @@ export class InvitationCodeValidateHandler implements IQueryHandler<
   execute(
     query: InvitationCodeValidateQuery,
   ): Promise<GroupInvitationCodeViewModel> {
-    return this.assertCodeExists.execute(query.code.value);
+    return this.assertCodeExists.execute(query.code);
   }
 }
