@@ -5,6 +5,7 @@ import { Criteria, FilterOperator } from '@sisques-labs/nestjs-kit';
 
 import { AddGroupMemberCommand } from '../../../src/contexts/group-members/application/commands/add-group-member/add-group-member.command';
 import { CreateGroupMembershipCommand } from '../../../src/contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
+import { DeleteGroupMembershipCommand } from '../../../src/contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { GroupMemberIsMemberQuery } from '../../../src/contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import { GroupMembersFindByGroupIdQuery } from '../../../src/contexts/group-members/application/queries/group-members-find-by-group-id/group-members-find-by-group-id.query';
 import { GroupMembersListQuery } from '../../../src/contexts/group-members/application/queries/group-members-list/group-members-list.query';
@@ -208,5 +209,52 @@ describe('group-members persistence (integration)', () => {
         new GroupMemberIsMemberQuery({ groupId, userId: 'owner' }),
       ),
     ).resolves.toBe(false);
+  });
+
+  const rowCounts = async (groupId: string) => {
+    const [memberships] = await ctx.dataSource.query(
+      'SELECT count(*)::int AS n FROM group_memberships WHERE group_id = $1',
+      [groupId],
+    );
+    const [members] = await ctx.dataSource.query(
+      'SELECT count(*)::int AS n FROM group_members WHERE group_id = $1',
+      [groupId],
+    );
+    return { memberships: memberships.n, members: members.n };
+  };
+
+  it('deletes a roster with its members and leaves other groups untouched', async () => {
+    const groupId = await createGroup('owner');
+    await commands.execute(
+      new AddGroupMemberCommand({ groupId, userId: 'guest' }),
+    );
+    const other = await createGroup('someone');
+
+    await commands.execute(new DeleteGroupMembershipCommand({ groupId }));
+
+    await expect(rowCounts(groupId)).resolves.toEqual({
+      memberships: 0,
+      members: 0,
+    });
+    await expect(repository.findById(groupId)).resolves.toBeNull();
+    await expect(rowCounts(other)).resolves.toEqual({
+      memberships: 1,
+      members: 1,
+    });
+    await expect(rosterOf(other)).resolves.toEqual(['someone']);
+  });
+
+  it('is idempotent when the group has no roster', async () => {
+    const groupId = randomUUID();
+    const other = await createGroup('someone');
+
+    await expect(
+      commands.execute(new DeleteGroupMembershipCommand({ groupId })),
+    ).resolves.toBeUndefined();
+    await expect(
+      commands.execute(new DeleteGroupMembershipCommand({ groupId })),
+    ).resolves.toBeUndefined();
+
+    await expect(rosterOf(other)).resolves.toEqual(['someone']);
   });
 });

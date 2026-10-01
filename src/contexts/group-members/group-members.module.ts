@@ -1,5 +1,6 @@
 import { AddGroupMemberHandler } from '@contexts/group-members/application/commands/add-group-member/add-group-member.handler';
 import { CreateGroupMembershipHandler } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.handler';
+import { DeleteGroupMembershipHandler } from '@contexts/group-members/application/commands/delete-group-membership/delete-group-membership.handler';
 import { GroupMemberIsMemberHandler } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.handler';
 import { GroupMembersFindByGroupIdHandler } from '@contexts/group-members/application/queries/group-members-find-by-group-id/group-members-find-by-group-id.handler';
 import { GroupMembersListHandler } from '@contexts/group-members/application/queries/group-members-list/group-members-list.handler';
@@ -21,7 +22,11 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-const COMMAND_HANDLERS = [CreateGroupMembershipHandler, AddGroupMemberHandler];
+const COMMAND_HANDLERS = [
+  CreateGroupMembershipHandler,
+  AddGroupMemberHandler,
+  DeleteGroupMembershipHandler,
+];
 
 const QUERY_HANDLERS = [
   GroupMemberIsMemberHandler,
