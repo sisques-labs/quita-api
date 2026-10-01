@@ -1,22 +1,16 @@
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
-import { Criteria, PaginatedResult } from '@sisques-labs/nestjs-kit';
+import { IBaseReadRepository } from '@sisques-labs/nestjs-kit';
 
 export const PAYMENT_READ_REPOSITORY = Symbol('PAYMENT_READ_REPOSITORY');
 
 /**
- * Query-only view over the `payments` table. It does not extend
- * `IBaseReadRepository`: there is no separate projection store.
+ * Query view over the `payments` table. There is no separate projection store, so
+ * `save` / `delete` are no-ops (the write side persists). `findByCriteria`
+ * translates every filter of the criteria (all 8 `FilterOperator`s) and its
+ * sorts; soft-deleted rows are included. Field names are view-model
+ * properties; the query handler always adds a `groupId` equality filter.
  */
-export interface IPaymentReadRepository {
-  /**
-   * Translates every filter of `criteria` (all 8 `FilterOperator`s) and its
-   * sorts. Soft-deleted rows are included. Field names are view-model
-   * properties; the query handler always adds a `groupId` equality filter.
-   */
-  findByCriteria(
-    criteria: Criteria,
-  ): Promise<PaginatedResult<PaymentViewModel>>;
-
+export interface IPaymentReadRepository extends IBaseReadRepository<PaymentViewModel> {
   /** Every non-deleted payment of the group (used by the balance calculation). */
   findActiveByGroupId(groupId: string): Promise<PaymentViewModel[]>;
 }
