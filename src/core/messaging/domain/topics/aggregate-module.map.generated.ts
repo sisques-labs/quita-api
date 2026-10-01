@@ -12,4 +12,10 @@
  *
  * @see scripts/generate-aggregate-module-map.ts
  */
-export const AGGREGATE_MODULE_MAP: Readonly<Record<string, string>> = {};
+export const AGGREGATE_MODULE_MAP: Readonly<Record<string, string>> = {
+  ExpenseAggregate: 'expenses',
+  GroupAggregate: 'groups',
+  GroupInvitationCodeAggregate: 'group-invitation-codes',
+  GroupMembershipAggregate: 'group-members',
+  PaymentAggregate: 'payments',
+};

@@ -6,7 +6,11 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { DataSource } from 'typeorm';
 import { SharedGraphQLModule } from '@sisques-labs/nestjs-kit/graphql';
 
+import { ClerkAuthModule } from '../../src/core/auth/infrastructure/clerk/clerk-auth.module';
+import { ClockModule } from '../../src/core/clock/clock.module';
 import { appConfig } from '../../src/core/config/app.config';
+import { clerkConfig } from '../../src/core/config/clerk.config';
+import { ClerkTestSigner, createClerkTestSigner } from './clerk-test-signer';
 import { bootstrapTestDataSource } from './test-data-source';
 
 const DB_HOST = process.env.DATABASE_HOST ?? 'localhost';
@@ -23,6 +27,8 @@ export interface IntegrationModuleOptions {
 export interface IntegrationContext {
   module: TestingModule;
   dataSource: DataSource;
+  /** Signs Clerk tokens accepted by the slim module's `ClerkAuthGuard`. */
+  clerk: ClerkTestSigner;
   close: () => Promise<void>;
 }
 
@@ -35,11 +41,12 @@ export async function createIntegrationModule(
 ): Promise<IntegrationContext> {
   await bootstrapTestDataSource();
 
-  const moduleFixture = await Test.createTestingModule({
+  const clerk = await createClerkTestSigner();
+  let builder = Test.createTestingModule({
     imports: [
       ConfigModule.forRoot({
         isGlobal: true,
-        load: [appConfig],
+        load: [appConfig, clerkConfig],
       }),
       TypeOrmModule.forRoot({
         type: 'postgres',
@@ -56,18 +63,27 @@ export async function createIntegrationModule(
         synchronize: false,
         logging: false,
       }),
-      CqrsModule,
+      CqrsModule.forRoot(),
       SharedGraphQLModule,
+      ClockModule,
+      ClerkAuthModule,
       ...options.imports,
     ],
     providers: options.providers ?? [],
-  }).compile();
+  });
+  for (const { token, value } of clerk.overrides) {
+    builder = builder.overrideProvider(token).useValue(value);
+  }
+  const moduleFixture = await builder.compile();
+  // CQRS registers command/query/event handlers on application bootstrap.
+  await moduleFixture.init();
 
   const dataSource = moduleFixture.get<DataSource>(getDataSourceToken());
 
   return {
     module: moduleFixture,
     dataSource,
+    clerk,
     close: async () => {
       await moduleFixture.close();
     },

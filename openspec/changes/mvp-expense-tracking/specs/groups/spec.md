@@ -37,3 +37,19 @@ A user MUST only see groups they belong to.
 - GIVEN U belongs to G1 but not G2
 - WHEN U lists groups
 - THEN only G1 is returned
+
+### Requirement: Group creation compensation
+
+When creating a group fails to establish the creator's membership, the group MUST NOT remain available, and the original failure MUST be reported to the client. Cleaning up the membership roster is best-effort: a failure of that cleanup MUST NOT change the outcome the client sees.
+
+#### Scenario: Membership failure rolls the group back
+- GIVEN an authenticated user U
+- WHEN U creates group "Home" and establishing U's membership fails
+- THEN the group does not remain available
+- AND the request fails with the original membership failure
+
+#### Scenario: Cleanup failure does not change the outcome
+- GIVEN a group creation whose membership step failed
+- WHEN the best-effort cleanup of the group's roster also fails after its bounded retries
+- THEN the client still receives the original membership failure
+- AND the group does not remain available
