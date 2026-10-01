@@ -10,7 +10,13 @@ describe('AssertActiveInvitationCodeExistsService', () => {
   let service: AssertActiveInvitationCodeExistsService;
 
   beforeEach(() => {
-    repository = { findActiveByCode: vi.fn() };
+    repository = {
+      findById: vi.fn(),
+      findByCriteria: vi.fn(),
+      findActiveByCode: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    };
     service = new AssertActiveInvitationCodeExistsService(repository);
   });
 
