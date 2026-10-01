@@ -65,10 +65,11 @@ src/contexts/{context}/
 ├── transport/
 │   ├── graphql/
 │   │   ├── resolvers/     {name}.resolver.ts         — CommandBus/QueryBus only
-│   │   ├── dtos/          {name}.input.ts
-│   │   │                  {name}-filter.input.ts     — createFilterInput({Name}QueryableField, '{Name}')
-│   │   │                  {name}-sort.input.ts        — createSortInput({Name}QueryableField, '{Name}')
-│   │   ├── objects/       {name}.object.ts
+│   │   ├── dtos/
+│   │   │   ├── requests/  {entity}-{op}.request.dto.ts — class {Entity}{Op}RequestDto, @InputType('{Entity}{Op}RequestDto')
+│   │   │   │              {name}-filter.input.ts     — createFilterInput({Name}QueryableField, '{Name}')
+│   │   │   │              {name}-sort.input.ts        — createSortInput({Name}QueryableField, '{Name}')
+│   │   │   └── responses/ {entity}.response.dto.ts   — {Entity}ResponseDto, @ObjectType('{Entity}ResponseDto'); Paginated{Entity}ResultDto lives in the same file
 │   │   ├── mappers/       {name}.mapper.ts
 │   │   ├── enums/         {name}-registered-enums.graphql.ts
 │   │   │                  {name}-queryable-field.enum.ts  — whitelist for findByCriteria
