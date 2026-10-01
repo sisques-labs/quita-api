@@ -8,7 +8,7 @@ import { ExpensesBusAdapter } from '@contexts/balances/infrastructure/adapters/e
 import { GroupMembersBusAdapter } from '@contexts/balances/infrastructure/adapters/group-members-bus.adapter';
 import { PaymentsBusAdapter } from '@contexts/balances/infrastructure/adapters/payments-bus.adapter';
 import { GroupBalanceGraphQLMapper } from '@contexts/balances/transport/graphql/mappers/group-balance-graphql.mapper';
-import { BalancesResolver } from '@contexts/balances/transport/graphql/resolvers/balances.resolver';
+import { BalanceQueriesResolver } from '@contexts/balances/transport/graphql/resolvers/balance-queries.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
@@ -24,7 +24,7 @@ const INFRASTRUCTURE_ADAPTERS = [
   { provide: PAYMENTS_PORT, useClass: PaymentsBusAdapter },
 ];
 
-const TRANSPORT_PROVIDERS = [BalancesResolver, GroupBalanceGraphQLMapper];
+const TRANSPORT_PROVIDERS = [BalanceQueriesResolver, GroupBalanceGraphQLMapper];
 
 /**
  * Owns no tables. It reaches group-members, expenses and payments only through
