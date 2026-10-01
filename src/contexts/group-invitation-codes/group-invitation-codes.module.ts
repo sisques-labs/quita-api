@@ -14,7 +14,7 @@ import { GroupInvitationCodeEntity } from '@contexts/group-invitation-codes/infr
 import { GroupInvitationCodeTypeormMapper } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/mappers/group-invitation-code-typeorm.mapper';
 import { GroupInvitationCodeTypeormReadRepository } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/repositories/group-invitation-code-typeorm-read.repository';
 import { GroupInvitationCodeTypeormWriteRepository } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/repositories/group-invitation-code-typeorm-write.repository';
-import { GroupInvitationCodesResolver } from '@contexts/group-invitation-codes/transport/graphql/resolvers/group-invitation-codes.resolver';
+import { GroupInvitationCodeMutationsResolver } from '@contexts/group-invitation-codes/transport/graphql/resolvers/group-invitation-code-mutations.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -55,7 +55,7 @@ const INFRASTRUCTURE_ADAPTERS = [
   },
 ];
 
-const TRANSPORT_PROVIDERS = [GroupInvitationCodesResolver];
+const TRANSPORT_PROVIDERS = [GroupInvitationCodeMutationsResolver];
 
 /**
  * Reaches group-members only through the bus (see `GroupMembersBusAdapter`),

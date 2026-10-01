@@ -2,20 +2,20 @@ import { GenerateInvitationCodeCommand } from '@contexts/group-invitation-codes/
 import { RedeemInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/redeem-invitation-code/redeem-invitation-code.command';
 import { RegenerateInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/regenerate-invitation-code/regenerate-invitation-code.command';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
-import { GroupInvitationCodesResolver } from '@contexts/group-invitation-codes/transport/graphql/resolvers/group-invitation-codes.resolver';
+import { GroupInvitationCodeMutationsResolver } from '@contexts/group-invitation-codes/transport/graphql/resolvers/group-invitation-code-mutations.resolver';
 import { CommandBus } from '@nestjs/cqrs';
 import { MutationResponseGraphQLMapper } from '@sisques-labs/nestjs-kit/graphql';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '5d1c8f0a-3f55-4b6a-8a27-3a8d3b0d7e22';
 
-describe('GroupInvitationCodesResolver', () => {
+describe('GroupInvitationCodeMutationsResolver', () => {
   let commandBus: Mocked<CommandBus>;
-  let resolver: GroupInvitationCodesResolver;
+  let resolver: GroupInvitationCodeMutationsResolver;
 
   beforeEach(() => {
     commandBus = { execute: vi.fn() } as unknown as Mocked<CommandBus>;
-    resolver = new GroupInvitationCodesResolver(
+    resolver = new GroupInvitationCodeMutationsResolver(
       commandBus,
       new MutationResponseGraphQLMapper(),
     );
