@@ -34,6 +34,7 @@ describe('GenerateInvitationCodeHandler', () => {
       repository,
       generator,
       assertMember,
+      new GroupInvitationCodeBuilder(),
       eventBus,
     );
   });

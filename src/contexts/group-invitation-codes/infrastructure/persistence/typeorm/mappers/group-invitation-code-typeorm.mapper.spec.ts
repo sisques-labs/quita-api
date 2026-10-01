@@ -20,7 +20,9 @@ const row = (revokedAt: Date | null) =>
   });
 
 describe('GroupInvitationCodeTypeormMapper', () => {
-  const mapper = new GroupInvitationCodeTypeormMapper();
+  const mapper = new GroupInvitationCodeTypeormMapper(
+    new GroupInvitationCodeBuilder(),
+  );
 
   it('hydrates an active aggregate from a row', () => {
     const aggregate = mapper.toAggregate(row(null));

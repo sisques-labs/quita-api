@@ -6,6 +6,10 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GroupInvitationCodeTypeormMapper {
+  constructor(
+    private readonly groupInvitationCodeBuilder: GroupInvitationCodeBuilder,
+  ) {}
+
   toAggregate(entity: GroupInvitationCodeEntity): GroupInvitationCodeAggregate {
     return this.toBuilder(entity).build();
   }
@@ -30,7 +34,7 @@ export class GroupInvitationCodeTypeormMapper {
   private toBuilder(
     entity: GroupInvitationCodeEntity,
   ): GroupInvitationCodeBuilder {
-    return new GroupInvitationCodeBuilder()
+    return this.groupInvitationCodeBuilder
       .withId(entity.id)
       .withGroupId(entity.groupId)
       .withCode(entity.code)
