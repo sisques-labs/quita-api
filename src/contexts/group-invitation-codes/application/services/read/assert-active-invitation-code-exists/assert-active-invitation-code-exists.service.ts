@@ -1,7 +1,7 @@
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import {
   GROUP_INVITATION_CODE_READ_REPOSITORY,
-  GroupInvitationCodeReadRepository,
+  IGroupInvitationCodeReadRepository,
 } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
 import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import { GroupInvitationCodeViewModel } from '@contexts/group-invitation-codes/domain/view-models/group-invitation-code.view-model';
@@ -19,7 +19,7 @@ export class AssertActiveInvitationCodeExistsService implements IBaseService<
 > {
   constructor(
     @Inject(GROUP_INVITATION_CODE_READ_REPOSITORY)
-    private readonly repository: GroupInvitationCodeReadRepository,
+    private readonly repository: IGroupInvitationCodeReadRepository,
   ) {}
 
   async execute(

@@ -1,18 +1,18 @@
 import { DeleteGroupMembershipCommand } from '@contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { DeleteGroupMembershipHandler } from '@contexts/group-members/application/commands/delete-group-membership/delete-group-membership.handler';
-import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
+import { IGroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
 describe('DeleteGroupMembershipHandler', () => {
-  let repository: Mocked<GroupMembershipWriteRepository>;
+  let repository: Mocked<IGroupMembershipWriteRepository>;
   let handler: DeleteGroupMembershipHandler;
 
   beforeEach(() => {
     repository = {
       delete: vi.fn().mockResolvedValue(undefined),
-    } as unknown as Mocked<GroupMembershipWriteRepository>;
+    } as unknown as Mocked<IGroupMembershipWriteRepository>;
     handler = new DeleteGroupMembershipHandler(repository);
   });
 

@@ -4,12 +4,12 @@ import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/a
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipAlreadyExistsException } from '@contexts/group-members/domain/exceptions/group-membership-already-exists.exception';
-import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
+import { IGroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 describe('CreateGroupMembershipHandler', () => {
-  let repository: Mocked<GroupMembershipWriteRepository>;
+  let repository: Mocked<IGroupMembershipWriteRepository>;
   let assertNotExists: Mocked<AssertGroupMembershipNotExistsService>;
   let eventBus: Mocked<EventBus>;
   let handler: CreateGroupMembershipHandler;
@@ -17,7 +17,7 @@ describe('CreateGroupMembershipHandler', () => {
   beforeEach(() => {
     repository = {
       save: vi.fn(),
-    } as unknown as Mocked<GroupMembershipWriteRepository>;
+    } as unknown as Mocked<IGroupMembershipWriteRepository>;
     assertNotExists = {
       execute: vi.fn(),
     } as unknown as Mocked<AssertGroupMembershipNotExistsService>;

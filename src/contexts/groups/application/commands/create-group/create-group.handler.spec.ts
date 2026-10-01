@@ -3,12 +3,12 @@ import { CreateGroupHandler } from '@contexts/groups/application/commands/create
 import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
 import { GroupMembershipPort } from '@contexts/groups/application/ports/group-membership.port';
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
-import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
+import { IGroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 describe('CreateGroupHandler', () => {
-  let repository: Mocked<GroupWriteRepository>;
+  let repository: Mocked<IGroupWriteRepository>;
   let membershipPort: Mocked<GroupMembershipPort>;
   let commandBus: Mocked<CommandBus>;
   let eventBus: Mocked<EventBus>;
@@ -17,7 +17,7 @@ describe('CreateGroupHandler', () => {
   beforeEach(() => {
     repository = {
       save: vi.fn(),
-    } as unknown as Mocked<GroupWriteRepository>;
+    } as unknown as Mocked<IGroupWriteRepository>;
     membershipPort = {
       createMembership: vi.fn(),
     } as unknown as Mocked<GroupMembershipPort>;

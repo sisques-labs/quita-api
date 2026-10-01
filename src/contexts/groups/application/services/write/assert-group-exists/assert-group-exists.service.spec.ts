@@ -1,20 +1,20 @@
 import { AssertGroupExistsService } from '@contexts/groups/application/services/write/assert-group-exists/assert-group-exists.service';
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupNotFoundException } from '@contexts/groups/domain/exceptions/group-not-found.exception';
-import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
+import { IGroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
 describe('AssertGroupExistsService', () => {
-  let repository: Mocked<GroupWriteRepository>;
+  let repository: Mocked<IGroupWriteRepository>;
   let service: AssertGroupExistsService;
 
   beforeEach(() => {
     repository = {
       findById: vi.fn(),
-    } as unknown as Mocked<GroupWriteRepository>;
+    } as unknown as Mocked<IGroupWriteRepository>;
     service = new AssertGroupExistsService(repository);
   });
 

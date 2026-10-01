@@ -3,7 +3,7 @@ import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/quer
 import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
-import { ExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
+import { IExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import {
   Criteria,
   FilterOperator,
@@ -27,7 +27,7 @@ const viewModel = (id: string, spentOn: string, deletedAt: Date | null) =>
     .buildViewModel();
 
 describe('ExpensesFindByCriteriaHandler', () => {
-  let repository: Mocked<ExpenseReadRepository>;
+  let repository: Mocked<IExpenseReadRepository>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let handler: ExpensesFindByCriteriaHandler;
 

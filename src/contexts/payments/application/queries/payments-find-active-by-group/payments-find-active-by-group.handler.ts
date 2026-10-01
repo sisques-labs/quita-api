@@ -1,7 +1,7 @@
 import { PaymentsFindActiveByGroupQuery } from '@contexts/payments/application/queries/payments-find-active-by-group/payments-find-active-by-group.query';
 import {
   PAYMENT_READ_REPOSITORY,
-  PaymentReadRepository,
+  IPaymentReadRepository,
 } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
 import { Inject, Logger } from '@nestjs/common';
@@ -16,7 +16,7 @@ export class PaymentsFindActiveByGroupHandler implements IQueryHandler<
 
   constructor(
     @Inject(PAYMENT_READ_REPOSITORY)
-    private readonly repository: PaymentReadRepository,
+    private readonly repository: IPaymentReadRepository,
   ) {}
 
   async execute(

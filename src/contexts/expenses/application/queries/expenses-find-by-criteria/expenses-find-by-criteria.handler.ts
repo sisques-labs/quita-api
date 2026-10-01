@@ -4,7 +4,7 @@ import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/quer
 import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import {
   EXPENSE_READ_REPOSITORY,
-  ExpenseReadRepository,
+  IExpenseReadRepository,
 } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
 import { Inject, Logger } from '@nestjs/common';
@@ -30,7 +30,7 @@ export class ExpensesFindByCriteriaHandler implements IQueryHandler<
   constructor(
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     @Inject(EXPENSE_READ_REPOSITORY)
-    private readonly repository: ExpenseReadRepository,
+    private readonly repository: IExpenseReadRepository,
   ) {}
 
   async execute(

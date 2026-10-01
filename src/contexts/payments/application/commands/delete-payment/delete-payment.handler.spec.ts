@@ -7,7 +7,7 @@ import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.build
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
 import { PaymentAlreadyDeletedException } from '@contexts/payments/domain/exceptions/payment-already-deleted.exception';
 import { PaymentNotFoundException } from '@contexts/payments/domain/exceptions/payment-not-found.exception';
-import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
+import { IPaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
@@ -29,7 +29,7 @@ const activePayment = () =>
     .build();
 
 describe('DeletePaymentHandler', () => {
-  let repository: Mocked<PaymentWriteRepository>;
+  let repository: Mocked<IPaymentWriteRepository>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let assertExists: Mocked<AssertPaymentExistsService>;
   let eventBus: Mocked<EventBus>;

@@ -1,16 +1,16 @@
 import { GroupMembershipFindGroupIdsByUserHandler } from '@contexts/group-members/application/queries/group-membership-find-group-ids-by-user/group-membership-find-group-ids-by-user.handler';
 import { GroupMembershipFindGroupIdsByUserQuery } from '@contexts/group-members/application/queries/group-membership-find-group-ids-by-user/group-membership-find-group-ids-by-user.query';
-import { GroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
+import { IGroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { Mocked } from 'vitest';
 
 describe('GroupMembershipFindGroupIdsByUserHandler', () => {
-  let repository: Mocked<GroupMembershipReadRepository>;
+  let repository: Mocked<IGroupMembershipReadRepository>;
   let handler: GroupMembershipFindGroupIdsByUserHandler;
 
   beforeEach(() => {
     repository = {
       findGroupIdsByUserId: vi.fn(),
-    } as unknown as Mocked<GroupMembershipReadRepository>;
+    } as unknown as Mocked<IGroupMembershipReadRepository>;
     handler = new GroupMembershipFindGroupIdsByUserHandler(repository);
   });
 

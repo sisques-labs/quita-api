@@ -2,7 +2,7 @@ import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.a
 import { ExpenseNotFoundException } from '@contexts/expenses/domain/exceptions/expense-not-found.exception';
 import {
   EXPENSE_WRITE_REPOSITORY,
-  ExpenseWriteRepository,
+  IExpenseWriteRepository,
 } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
@@ -18,7 +18,7 @@ import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 export class AssertExpenseExistsService {
   constructor(
     @Inject(EXPENSE_WRITE_REPOSITORY)
-    private readonly repository: ExpenseWriteRepository,
+    private readonly repository: IExpenseWriteRepository,
   ) {}
 
   async execute(

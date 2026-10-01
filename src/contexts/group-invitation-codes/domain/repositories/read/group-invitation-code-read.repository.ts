@@ -8,7 +8,7 @@ export const GROUP_INVITATION_CODE_READ_REPOSITORY = Symbol(
  * Query-only view over `group_invitation_codes`. It does not extend
  * `IBaseReadRepository`: there is no separate projection store.
  */
-export interface GroupInvitationCodeReadRepository {
+export interface IGroupInvitationCodeReadRepository {
   /** Only non-revoked codes match; `code` is already normalized. */
   findActiveByCode(code: string): Promise<GroupInvitationCodeViewModel | null>;
 }

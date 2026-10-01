@@ -10,7 +10,7 @@ import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/dom
 import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
 import {
   GROUP_INVITATION_CODE_WRITE_REPOSITORY,
-  GroupInvitationCodeWriteRepository,
+  IGroupInvitationCodeWriteRepository,
 } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -29,7 +29,7 @@ export class GenerateInvitationCodeHandler
 
   constructor(
     @Inject(GROUP_INVITATION_CODE_WRITE_REPOSITORY)
-    private readonly repository: GroupInvitationCodeWriteRepository,
+    private readonly repository: IGroupInvitationCodeWriteRepository,
     @Inject(INVITATION_CODE_GENERATOR)
     private readonly generator: InvitationCodeGeneratorPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,

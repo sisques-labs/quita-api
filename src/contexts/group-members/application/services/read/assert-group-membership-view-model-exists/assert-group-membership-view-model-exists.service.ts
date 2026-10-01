@@ -1,7 +1,7 @@
 import { GroupMembershipNotFoundException } from '@contexts/group-members/domain/exceptions/group-membership-not-found.exception';
 import {
   GROUP_MEMBERSHIP_READ_REPOSITORY,
-  GroupMembershipReadRepository,
+  IGroupMembershipReadRepository,
 } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { GroupMembershipViewModel } from '@contexts/group-members/domain/view-models/group-membership.view-model';
 import { Inject, Injectable } from '@nestjs/common';
@@ -14,7 +14,7 @@ export class AssertGroupMembershipViewModelExistsService implements IBaseService
 > {
   constructor(
     @Inject(GROUP_MEMBERSHIP_READ_REPOSITORY)
-    private readonly repository: GroupMembershipReadRepository,
+    private readonly repository: IGroupMembershipReadRepository,
   ) {}
 
   async execute(groupId: UuidValueObject): Promise<GroupMembershipViewModel> {

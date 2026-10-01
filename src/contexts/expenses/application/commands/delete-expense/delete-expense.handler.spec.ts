@@ -7,7 +7,7 @@ import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.build
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
 import { ExpenseAlreadyDeletedException } from '@contexts/expenses/domain/exceptions/expense-already-deleted.exception';
 import { ExpenseNotFoundException } from '@contexts/expenses/domain/exceptions/expense-not-found.exception';
-import { ExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
+import { IExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
@@ -28,7 +28,7 @@ const activeExpense = () =>
     .build();
 
 describe('DeleteExpenseHandler', () => {
-  let repository: Mocked<ExpenseWriteRepository>;
+  let repository: Mocked<IExpenseWriteRepository>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let assertExists: Mocked<AssertExpenseExistsService>;
   let eventBus: Mocked<EventBus>;

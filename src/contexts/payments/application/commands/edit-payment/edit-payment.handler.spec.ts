@@ -11,7 +11,7 @@ import { PaymentDateInFutureException } from '@contexts/payments/domain/exceptio
 import { PaymentNotFoundException } from '@contexts/payments/domain/exceptions/payment-not-found.exception';
 import { PaymentPartiesMustDifferException } from '@contexts/payments/domain/exceptions/payment-parties-must-differ.exception';
 import { PaymentPartyNotMemberException } from '@contexts/payments/domain/exceptions/payment-party-not-member.exception';
-import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
+import { IPaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { ClockPort } from '@core/clock/domain/clock.port';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
@@ -43,7 +43,7 @@ const activePayment = () =>
     .build();
 
 describe('EditPaymentHandler', () => {
-  let repository: Mocked<PaymentWriteRepository>;
+  let repository: Mocked<IPaymentWriteRepository>;
   let membersPort: Mocked<GroupMembersPort>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let assertExists: Mocked<AssertPaymentExistsService>;

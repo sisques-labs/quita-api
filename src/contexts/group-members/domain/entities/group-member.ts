@@ -1,4 +1,4 @@
-import { GroupMemberPrimitives } from '@contexts/group-members/domain/primitives/group-member.primitives';
+import { IGroupMemberPrimitives } from '@contexts/group-members/domain/primitives/group-member.primitives';
 import { GroupMemberRoleValueObject } from '@contexts/group-members/domain/value-objects/group-member-role/group-member-role.value-object';
 import { GroupMemberUserIdValueObject } from '@contexts/group-members/domain/value-objects/group-member-user-id/group-member-user-id.value-object';
 import { DateValueObject } from '@sisques-labs/nestjs-kit';
@@ -11,7 +11,7 @@ export class GroupMember {
     readonly joinedAt: DateValueObject,
   ) {}
 
-  static fromPrimitives(primitives: GroupMemberPrimitives): GroupMember {
+  static fromPrimitives(primitives: IGroupMemberPrimitives): GroupMember {
     return new GroupMember(
       new GroupMemberUserIdValueObject(primitives.userId),
       new GroupMemberRoleValueObject(primitives.role),
@@ -19,7 +19,7 @@ export class GroupMember {
     );
   }
 
-  toPrimitives(): GroupMemberPrimitives {
+  toPrimitives(): IGroupMemberPrimitives {
     return {
       userId: this.userId.value,
       role: this.role.value,

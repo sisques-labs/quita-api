@@ -1,12 +1,12 @@
 import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
-import { GroupInvitationCodeReadRepository } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
+import { IGroupInvitationCodeReadRepository } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
 import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import { Mocked } from 'vitest';
 
 describe('AssertActiveInvitationCodeExistsService', () => {
-  let repository: Mocked<GroupInvitationCodeReadRepository>;
+  let repository: Mocked<IGroupInvitationCodeReadRepository>;
   let service: AssertActiveInvitationCodeExistsService;
 
   beforeEach(() => {

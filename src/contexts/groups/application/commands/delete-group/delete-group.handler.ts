@@ -9,7 +9,7 @@ import { AssertGroupExistsService } from '@contexts/groups/application/services/
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
 import {
   GROUP_WRITE_REPOSITORY,
-  GroupWriteRepository,
+  IGroupWriteRepository,
 } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -44,7 +44,7 @@ export class DeleteGroupHandler
 
   constructor(
     @Inject(GROUP_WRITE_REPOSITORY)
-    private readonly repository: GroupWriteRepository,
+    private readonly repository: IGroupWriteRepository,
     private readonly assertGroupExistsService: AssertGroupExistsService,
     @Inject(GROUP_MEMBERSHIP_PORT)
     private readonly membershipPort: GroupMembershipPort,

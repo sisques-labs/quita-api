@@ -9,7 +9,7 @@ export const GROUP_READ_REPOSITORY = Symbol('GROUP_READ_REPOSITORY');
  * `IBaseReadRepository`: there is no separate projection store, so the base
  * `save` / `delete` / `findByCriteria` would have no meaning here.
  */
-export interface GroupReadRepository {
+export interface IGroupReadRepository {
   findById(id: string): Promise<GroupViewModel | null>;
   findByIds(ids: string[]): Promise<GroupViewModel[]>;
 }

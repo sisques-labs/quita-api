@@ -3,7 +3,7 @@ import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/quer
 import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
-import { PaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
+import { IPaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import {
   Criteria,
   FilterOperator,
@@ -28,7 +28,7 @@ const viewModel = (id: string, paidOn: string, deletedAt: Date | null) =>
     .buildViewModel();
 
 describe('PaymentsFindByCriteriaHandler', () => {
-  let repository: Mocked<PaymentReadRepository>;
+  let repository: Mocked<IPaymentReadRepository>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let handler: PaymentsFindByCriteriaHandler;
 

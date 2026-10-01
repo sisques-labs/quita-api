@@ -1,4 +1,4 @@
-import { GroupReadRepository } from '@contexts/groups/domain/repositories/read/group-read.repository';
+import { IGroupReadRepository } from '@contexts/groups/domain/repositories/read/group-read.repository';
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
 import { GroupEntity } from '@contexts/groups/infrastructure/persistence/typeorm/entities/group.entity';
 import { GroupTypeormMapper } from '@contexts/groups/infrastructure/persistence/typeorm/mappers/group-typeorm.mapper';
@@ -7,7 +7,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, In } from 'typeorm';
 
 @Injectable()
-export class GroupTypeormReadRepository implements GroupReadRepository {
+export class GroupTypeormReadRepository implements IGroupReadRepository {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mapper: GroupTypeormMapper,

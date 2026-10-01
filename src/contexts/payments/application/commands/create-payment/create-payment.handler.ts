@@ -9,7 +9,7 @@ import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.build
 import { PaymentPartyNotMemberException } from '@contexts/payments/domain/exceptions/payment-party-not-member.exception';
 import {
   PAYMENT_WRITE_REPOSITORY,
-  PaymentWriteRepository,
+  IPaymentWriteRepository,
 } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { PaymentDateValueObject } from '@contexts/payments/domain/value-objects/payment-date/payment-date.value-object';
 import { CLOCK, ClockPort } from '@core/clock/domain/clock.port';
@@ -26,7 +26,7 @@ export class CreatePaymentHandler
 
   constructor(
     @Inject(PAYMENT_WRITE_REPOSITORY)
-    private readonly repository: PaymentWriteRepository,
+    private readonly repository: IPaymentWriteRepository,
     @Inject(GROUP_MEMBERS_PORT)
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,

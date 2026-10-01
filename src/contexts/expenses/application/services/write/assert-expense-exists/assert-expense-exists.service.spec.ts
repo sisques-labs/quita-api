@@ -1,7 +1,7 @@
 import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseNotFoundException } from '@contexts/expenses/domain/exceptions/expense-not-found.exception';
-import { ExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
+import { IExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
@@ -20,7 +20,7 @@ const expense = () =>
     .build();
 
 describe('AssertExpenseExistsService', () => {
-  let repository: Mocked<ExpenseWriteRepository>;
+  let repository: Mocked<IExpenseWriteRepository>;
   let service: AssertExpenseExistsService;
 
   beforeEach(() => {

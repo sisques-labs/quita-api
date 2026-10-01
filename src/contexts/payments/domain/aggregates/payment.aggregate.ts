@@ -5,7 +5,7 @@ import { PaymentUpdatedEvent } from '@contexts/payments/domain/events/payment-up
 import { PaymentAlreadyDeletedException } from '@contexts/payments/domain/exceptions/payment-already-deleted.exception';
 import { PaymentPartiesMustDifferException } from '@contexts/payments/domain/exceptions/payment-parties-must-differ.exception';
 import { IPayment } from '@contexts/payments/domain/interfaces/payment.interface';
-import { PaymentPrimitives } from '@contexts/payments/domain/primitives/payment.primitives';
+import { IPaymentPrimitives } from '@contexts/payments/domain/primitives/payment.primitives';
 import { PaymentAmountValueObject } from '@contexts/payments/domain/value-objects/payment-amount/payment-amount.value-object';
 import { PaymentDateValueObject } from '@contexts/payments/domain/value-objects/payment-date/payment-date.value-object';
 import { PaymentNoteValueObject } from '@contexts/payments/domain/value-objects/payment-note/payment-note.value-object';
@@ -164,7 +164,7 @@ export class PaymentAggregate extends BaseAggregate {
     return this._deletedAt;
   }
 
-  toPrimitives(): PaymentPrimitives {
+  toPrimitives(): IPaymentPrimitives {
     return {
       id: this.id.value,
       groupId: this._groupId.value,

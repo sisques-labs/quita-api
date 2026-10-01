@@ -1,7 +1,7 @@
 import { GroupMemberIsMemberQuery } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import {
   GROUP_MEMBERSHIP_READ_REPOSITORY,
-  GroupMembershipReadRepository,
+  IGroupMembershipReadRepository,
 } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { Inject, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -15,7 +15,7 @@ export class GroupMemberIsMemberHandler implements IQueryHandler<
 
   constructor(
     @Inject(GROUP_MEMBERSHIP_READ_REPOSITORY)
-    private readonly repository: GroupMembershipReadRepository,
+    private readonly repository: IGroupMembershipReadRepository,
   ) {}
 
   async execute(query: GroupMemberIsMemberQuery): Promise<boolean> {

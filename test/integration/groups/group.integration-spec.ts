@@ -13,7 +13,7 @@ import { GroupAccessDeniedException } from '../../../src/contexts/groups/domain/
 import { GroupNotFoundException } from '../../../src/contexts/groups/domain/exceptions/group-not-found.exception';
 import {
   GROUP_WRITE_REPOSITORY,
-  GroupWriteRepository,
+  IGroupWriteRepository,
 } from '../../../src/contexts/groups/domain/repositories/write/group-write.repository';
 import { GroupsModule } from '../../../src/contexts/groups/groups.module';
 import { truncateAll } from '../../helpers/db-reset';
@@ -28,7 +28,7 @@ describe('groups persistence and membership adapter (integration)', () => {
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let repository: GroupWriteRepository;
+  let repository: IGroupWriteRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({

@@ -1,7 +1,7 @@
 import { ExpensesFindActiveByGroupQuery } from '@contexts/expenses/application/queries/expenses-find-active-by-group/expenses-find-active-by-group.query';
 import {
   EXPENSE_READ_REPOSITORY,
-  ExpenseReadRepository,
+  IExpenseReadRepository,
 } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
 import { Inject, Logger } from '@nestjs/common';
@@ -16,7 +16,7 @@ export class ExpensesFindActiveByGroupHandler implements IQueryHandler<
 
   constructor(
     @Inject(EXPENSE_READ_REPOSITORY)
-    private readonly repository: ExpenseReadRepository,
+    private readonly repository: IExpenseReadRepository,
   ) {}
 
   async execute(

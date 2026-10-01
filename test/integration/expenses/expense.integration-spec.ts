@@ -19,7 +19,7 @@ import { ExpensePayerNotMemberException } from '../../../src/contexts/expenses/d
 import { GroupNotReadyException } from '../../../src/contexts/expenses/domain/exceptions/group-not-ready.exception';
 import {
   EXPENSE_READ_REPOSITORY,
-  ExpenseReadRepository,
+  IExpenseReadRepository,
 } from '../../../src/contexts/expenses/domain/repositories/read/expense-read.repository';
 import { ExpenseViewModel } from '../../../src/contexts/expenses/domain/view-models/expense.view-model';
 import { ExpensesModule } from '../../../src/contexts/expenses/expenses.module';
@@ -47,7 +47,7 @@ describe('expenses persistence and adapters (integration)', () => {
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let readRepository: ExpenseReadRepository;
+  let readRepository: IExpenseReadRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({

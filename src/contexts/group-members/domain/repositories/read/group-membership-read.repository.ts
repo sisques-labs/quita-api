@@ -9,7 +9,7 @@ export const GROUP_MEMBERSHIP_READ_REPOSITORY = Symbol(
  * `IBaseReadRepository`: there is no separate projection store, so the base
  * `save` / `delete` / `findByCriteria` would have no meaning here.
  */
-export interface GroupMembershipReadRepository {
+export interface IGroupMembershipReadRepository {
   findByGroupId(groupId: string): Promise<GroupMembershipViewModel | null>;
   isMember(groupId: string, userId: string): Promise<boolean>;
   findGroupIdsByUserId(userId: string): Promise<string[]>;

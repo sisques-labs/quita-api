@@ -1,4 +1,4 @@
-import { GroupInvitationCodeReadRepository } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
+import { IGroupInvitationCodeReadRepository } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
 import { GroupInvitationCodeViewModel } from '@contexts/group-invitation-codes/domain/view-models/group-invitation-code.view-model';
 import { GroupInvitationCodeEntity } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/entities/group-invitation-code.entity';
 import { GroupInvitationCodeTypeormMapper } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/mappers/group-invitation-code-typeorm.mapper';
@@ -7,7 +7,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, IsNull } from 'typeorm';
 
 @Injectable()
-export class GroupInvitationCodeTypeormReadRepository implements GroupInvitationCodeReadRepository {
+export class GroupInvitationCodeTypeormReadRepository implements IGroupInvitationCodeReadRepository {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mapper: GroupInvitationCodeTypeormMapper,

@@ -1,7 +1,7 @@
 import { GroupCreatedEvent } from '@contexts/groups/domain/events/group-created/group-created.event';
 import { GroupDeletedEvent } from '@contexts/groups/domain/events/group-deleted/group-deleted.event';
 import { IGroup } from '@contexts/groups/domain/interfaces/group.interface';
-import { GroupPrimitives } from '@contexts/groups/domain/primitives/group.primitives';
+import { IGroupPrimitives } from '@contexts/groups/domain/primitives/group.primitives';
 import { GroupCreatedByValueObject } from '@contexts/groups/domain/value-objects/group-created-by/group-created-by.value-object';
 import { GroupNameValueObject } from '@contexts/groups/domain/value-objects/group-name/group-name.value-object';
 import { BaseAggregate } from '@sisques-labs/nestjs-kit';
@@ -43,7 +43,7 @@ export class GroupAggregate extends BaseAggregate {
     return this._createdBy;
   }
 
-  toPrimitives(): GroupPrimitives {
+  toPrimitives(): IGroupPrimitives {
     return {
       id: this.id.value,
       name: this._name.value,
