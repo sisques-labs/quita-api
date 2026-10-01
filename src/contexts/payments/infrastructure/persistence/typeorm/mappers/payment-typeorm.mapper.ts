@@ -6,6 +6,8 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PaymentTypeormMapper {
+  constructor(private readonly paymentBuilder: PaymentBuilder) {}
+
   toAggregate(entity: PaymentEntity): PaymentAggregate {
     return this.toBuilder(entity).build();
   }
@@ -34,7 +36,7 @@ export class PaymentTypeormMapper {
   }
 
   private toBuilder(entity: PaymentEntity): PaymentBuilder {
-    return new PaymentBuilder()
+    return this.paymentBuilder
       .withId(entity.id)
       .withGroupId(entity.groupId)
       .withFromUserId(entity.fromUserId)

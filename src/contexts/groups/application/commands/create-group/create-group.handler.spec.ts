@@ -3,6 +3,7 @@ import { CreateGroupHandler } from '@contexts/groups/application/commands/create
 import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
 import { GroupMembershipPort } from '@contexts/groups/application/ports/group-membership.port';
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
+import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
@@ -29,6 +30,7 @@ describe('CreateGroupHandler', () => {
       repository,
       membershipPort,
       commandBus,
+      new GroupBuilder(),
       eventBus,
     );
   });

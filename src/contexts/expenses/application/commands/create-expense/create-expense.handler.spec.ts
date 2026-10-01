@@ -3,6 +3,7 @@ import { CreateExpenseHandler } from '@contexts/expenses/application/commands/cr
 import { GroupMembersPort } from '@contexts/expenses/application/ports/group-members.port';
 import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
+import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
 import { ExpenseDateInFutureException } from '@contexts/expenses/domain/exceptions/expense-date-in-future.exception';
 import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/exceptions/expense-payer-not-member.exception';
@@ -56,6 +57,7 @@ describe('CreateExpenseHandler', () => {
       membersPort,
       assertMember,
       clock,
+      new ExpenseBuilder(),
       eventBus,
     );
   });

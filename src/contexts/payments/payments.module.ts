@@ -6,6 +6,7 @@ import { PaymentsFindActiveByGroupHandler } from '@contexts/payments/application
 import { PaymentsFindByCriteriaHandler } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.handler';
 import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
 import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PAYMENT_READ_REPOSITORY } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PAYMENT_WRITE_REPOSITORY } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { GroupMembersBusAdapter } from '@contexts/payments/infrastructure/adapters/group-members-bus.adapter';
@@ -35,6 +36,8 @@ const APPLICATION_SERVICES = [
   AssertRequesterIsGroupMemberService,
   AssertPaymentExistsService,
 ];
+
+const DOMAIN_BUILDERS = [PaymentBuilder];
 
 const INFRASTRUCTURE_ENTITIES = [PaymentEntity];
 
@@ -68,6 +71,7 @@ const TRANSPORT_PROVIDERS = [PaymentsResolver, PaymentGraphQLMapper];
     ...COMMAND_HANDLERS,
     ...QUERY_HANDLERS,
     ...APPLICATION_SERVICES,
+    ...DOMAIN_BUILDERS,
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...INFRASTRUCTURE_ADAPTERS,

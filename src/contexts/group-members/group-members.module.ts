@@ -8,6 +8,7 @@ import { GroupMembershipFindGroupIdsByUserHandler } from '@contexts/group-member
 import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists.service';
 import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists.service';
 import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists.service';
+import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GROUP_MEMBERSHIP_READ_REPOSITORY } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { GROUP_MEMBERSHIP_WRITE_REPOSITORY } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { GroupMemberEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-member.entity';
@@ -41,6 +42,8 @@ const APPLICATION_SERVICES = [
   AssertGroupMembershipViewModelExistsService,
 ];
 
+const DOMAIN_BUILDERS = [GroupMembershipBuilder];
+
 const INFRASTRUCTURE_ENTITIES = [GroupMembershipEntity, GroupMemberEntity];
 
 const INFRASTRUCTURE_MAPPERS = [GroupMembershipTypeormMapper];
@@ -65,6 +68,7 @@ const TRANSPORT_PROVIDERS = [GroupMembersResolver, GroupMemberGraphQLMapper];
     ...COMMAND_HANDLERS,
     ...QUERY_HANDLERS,
     ...APPLICATION_SERVICES,
+    ...DOMAIN_BUILDERS,
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...TRANSPORT_PROVIDERS,

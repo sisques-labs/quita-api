@@ -11,6 +11,10 @@ import { Injectable } from '@nestjs/common';
  */
 @Injectable()
 export class GroupMembershipTypeormMapper {
+  constructor(
+    private readonly groupMembershipBuilder: GroupMembershipBuilder,
+  ) {}
+
   toAggregate(
     membership: GroupMembershipEntity,
     members: GroupMemberEntity[],
@@ -29,7 +33,7 @@ export class GroupMembershipTypeormMapper {
     membership: GroupMembershipEntity,
     members: GroupMemberEntity[],
   ): GroupMembershipBuilder {
-    return new GroupMembershipBuilder()
+    return this.groupMembershipBuilder
       .withId(membership.groupId)
       .withCapacity(membership.capacity)
       .withVersion(membership.version)

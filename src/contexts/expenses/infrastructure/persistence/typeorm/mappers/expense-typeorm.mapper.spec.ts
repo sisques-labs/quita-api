@@ -37,7 +37,7 @@ const minimalEntity = Object.assign(new ExpenseEntity(), {
 });
 
 describe('ExpenseTypeormMapper', () => {
-  const mapper = new ExpenseTypeormMapper();
+  const mapper = new ExpenseTypeormMapper(new ExpenseBuilder());
 
   it('hydrates the aggregate from a fully populated row', () => {
     expect(mapper.toAggregate(fullEntity).toPrimitives()).toEqual({

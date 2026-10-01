@@ -25,7 +25,7 @@ const fullEntity = Object.assign(new PaymentEntity(), {
 });
 
 describe('PaymentTypeormMapper', () => {
-  const mapper = new PaymentTypeormMapper();
+  const mapper = new PaymentTypeormMapper(new PaymentBuilder());
 
   it('hydrates the aggregate from a fully populated row', () => {
     expect(mapper.toAggregate(fullEntity).toPrimitives()).toEqual({

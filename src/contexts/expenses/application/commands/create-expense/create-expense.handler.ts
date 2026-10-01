@@ -33,6 +33,7 @@ export class CreateExpenseHandler
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     @Inject(CLOCK) private readonly clock: ClockPort,
+    private readonly expenseBuilder: ExpenseBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -58,7 +59,7 @@ export class CreateExpenseHandler
       throw new ExpensePayerNotMemberException(command.paidBy.value, groupId);
     }
 
-    const expense = new ExpenseBuilder()
+    const expense = this.expenseBuilder
       .withId(UuidValueObject.generate().value)
       .withGroupId(groupId)
       .withAmountCents(command.amount.value)

@@ -33,6 +33,7 @@ export class GenerateInvitationCodeHandler
     @Inject(INVITATION_CODE_GENERATOR)
     private readonly generator: InvitationCodeGeneratorPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
+    private readonly groupInvitationCodeBuilder: GroupInvitationCodeBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -78,7 +79,7 @@ export class GenerateInvitationCodeHandler
   private async createAndSave(
     command: GenerateInvitationCodeCommand,
   ): Promise<GroupInvitationCodeAggregate> {
-    const created = new GroupInvitationCodeBuilder()
+    const created = this.groupInvitationCodeBuilder
       .withId(UuidValueObject.generate().value)
       .withGroupId(command.groupId.value)
       .withCode(this.generator.generate())

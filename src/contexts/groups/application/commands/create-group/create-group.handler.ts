@@ -37,13 +37,14 @@ export class CreateGroupHandler
     @Inject(GROUP_MEMBERSHIP_PORT)
     private readonly membershipPort: GroupMembershipPort,
     private readonly commandBus: CommandBus,
+    private readonly groupBuilder: GroupBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
   }
 
   async execute(command: CreateGroupCommand): Promise<string> {
-    const group = new GroupBuilder()
+    const group = this.groupBuilder
       .withId(UuidValueObject.generate().value)
       .withName(command.name.value)
       .withCreatedBy(command.ownerId.value)

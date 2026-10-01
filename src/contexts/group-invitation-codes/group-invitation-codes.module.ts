@@ -6,6 +6,7 @@ import { INVITATION_CODE_GENERATOR } from '@contexts/group-invitation-codes/appl
 import { InvitationCodeValidateHandler } from '@contexts/group-invitation-codes/application/queries/invitation-code-validate/invitation-code-validate.handler';
 import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
 import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
+import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import { GROUP_INVITATION_CODE_READ_REPOSITORY } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
 import { GROUP_INVITATION_CODE_WRITE_REPOSITORY } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupMembersBusAdapter } from '@contexts/group-invitation-codes/infrastructure/adapters/group-members-bus.adapter';
@@ -31,6 +32,8 @@ const APPLICATION_SERVICES = [
   AssertActiveInvitationCodeExistsService,
   AssertRequesterIsGroupMemberService,
 ];
+
+const DOMAIN_BUILDERS = [GroupInvitationCodeBuilder];
 
 const INFRASTRUCTURE_ENTITIES = [GroupInvitationCodeEntity];
 
@@ -67,6 +70,7 @@ const TRANSPORT_PROVIDERS = [GroupInvitationCodesResolver];
     ...COMMAND_HANDLERS,
     ...QUERY_HANDLERS,
     ...APPLICATION_SERVICES,
+    ...DOMAIN_BUILDERS,
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...INFRASTRUCTURE_ADAPTERS,

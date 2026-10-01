@@ -35,6 +35,7 @@ export class RegenerateInvitationCodeHandler
     @Inject(INVITATION_CODE_GENERATOR)
     private readonly generator: InvitationCodeGeneratorPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
+    private readonly groupInvitationCodeBuilder: GroupInvitationCodeBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -52,7 +53,7 @@ export class RegenerateInvitationCodeHandler
     previous?.revoke(new Date());
 
     const created = await withCodeCollisionRetry(async () => {
-      const candidate = new GroupInvitationCodeBuilder()
+      const candidate = this.groupInvitationCodeBuilder
         .withId(UuidValueObject.generate().value)
         .withGroupId(command.groupId.value)
         .withCode(this.generator.generate())

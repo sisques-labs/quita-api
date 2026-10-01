@@ -31,6 +31,7 @@ export class CreatePaymentHandler
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     @Inject(CLOCK) private readonly clock: ClockPort,
+    private readonly paymentBuilder: PaymentBuilder,
     eventBus: EventBus,
   ) {
     super(eventBus);
@@ -55,7 +56,7 @@ export class CreatePaymentHandler
     }
 
     // The aggregate rejects a payment from a member to themselves.
-    const payment = new PaymentBuilder()
+    const payment = this.paymentBuilder
       .withId(UuidValueObject.generate().value)
       .withGroupId(groupId)
       .withFromUserId(command.fromUserId.value)

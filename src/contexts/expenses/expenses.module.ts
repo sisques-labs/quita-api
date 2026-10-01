@@ -6,6 +6,7 @@ import { ExpensesFindActiveByGroupHandler } from '@contexts/expenses/application
 import { ExpensesFindByCriteriaHandler } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.handler';
 import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
 import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { EXPENSE_READ_REPOSITORY } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { EXPENSE_WRITE_REPOSITORY } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { GroupMembersBusAdapter } from '@contexts/expenses/infrastructure/adapters/group-members-bus.adapter';
@@ -35,6 +36,8 @@ const APPLICATION_SERVICES = [
   AssertRequesterIsGroupMemberService,
   AssertExpenseExistsService,
 ];
+
+const DOMAIN_BUILDERS = [ExpenseBuilder];
 
 const INFRASTRUCTURE_ENTITIES = [ExpenseEntity];
 
@@ -68,6 +71,7 @@ const TRANSPORT_PROVIDERS = [ExpensesResolver, ExpenseGraphQLMapper];
     ...COMMAND_HANDLERS,
     ...QUERY_HANDLERS,
     ...APPLICATION_SERVICES,
+    ...DOMAIN_BUILDERS,
     ...INFRASTRUCTURE_MAPPERS,
     ...INFRASTRUCTURE_REPOSITORIES,
     ...INFRASTRUCTURE_ADAPTERS,
