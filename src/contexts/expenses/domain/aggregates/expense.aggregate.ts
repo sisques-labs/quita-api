@@ -6,7 +6,7 @@ import { ExpenseDeletedEvent } from '@contexts/expenses/domain/events/expense-de
 import { ExpenseUpdatedEvent } from '@contexts/expenses/domain/events/expense-updated/expense-updated.event';
 import { ExpenseAlreadyDeletedException } from '@contexts/expenses/domain/exceptions/expense-already-deleted.exception';
 import { IExpense } from '@contexts/expenses/domain/interfaces/expense.interface';
-import { ExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
+import { IExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
 import { ExpenseAmountValueObject } from '@contexts/expenses/domain/value-objects/expense-amount/expense-amount.value-object';
 import { ExpenseCategoryValueObject } from '@contexts/expenses/domain/value-objects/expense-category/expense-category.value-object';
 import { ExpenseDateValueObject } from '@contexts/expenses/domain/value-objects/expense-date/expense-date.value-object';
@@ -177,7 +177,7 @@ export class ExpenseAggregate extends BaseAggregate {
     return this._deletedAt;
   }
 
-  toPrimitives(): ExpensePrimitives {
+  toPrimitives(): IExpensePrimitives {
     return {
       id: this.id.value,
       groupId: this._groupId.value,

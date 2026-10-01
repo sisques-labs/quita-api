@@ -2,7 +2,7 @@ import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggrega
 import { GroupMembershipNotFoundException } from '@contexts/group-members/domain/exceptions/group-membership-not-found.exception';
 import {
   GROUP_MEMBERSHIP_WRITE_REPOSITORY,
-  GroupMembershipWriteRepository,
+  IGroupMembershipWriteRepository,
 } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
 import { IBaseService, UuidValueObject } from '@sisques-labs/nestjs-kit';
@@ -14,7 +14,7 @@ export class AssertGroupMembershipExistsService implements IBaseService<
 > {
   constructor(
     @Inject(GROUP_MEMBERSHIP_WRITE_REPOSITORY)
-    private readonly repository: GroupMembershipWriteRepository,
+    private readonly repository: IGroupMembershipWriteRepository,
   ) {}
 
   async execute(groupId: UuidValueObject): Promise<GroupMembershipAggregate> {

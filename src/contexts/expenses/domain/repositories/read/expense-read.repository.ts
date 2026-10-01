@@ -7,7 +7,7 @@ export const EXPENSE_READ_REPOSITORY = Symbol('EXPENSE_READ_REPOSITORY');
  * Query-only view over the `expenses` table. It does not extend
  * `IBaseReadRepository`: there is no separate projection store.
  */
-export interface ExpenseReadRepository {
+export interface IExpenseReadRepository {
   /**
    * Translates every filter of `criteria` (all 8 `FilterOperator`s) and its
    * sorts. Soft-deleted rows are included. Field names are view-model

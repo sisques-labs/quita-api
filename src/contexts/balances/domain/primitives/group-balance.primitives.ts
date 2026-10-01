@@ -4,7 +4,7 @@ import {
 } from '@contexts/balances/domain/interfaces/balance-entries.interface';
 
 /** Primitive props of a group balance read model. */
-export type GroupBalancePrimitives = {
+export type IGroupBalancePrimitives = {
   groupId: string;
   currency: string;
   settled: boolean;

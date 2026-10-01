@@ -1,5 +1,5 @@
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
-import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
+import { IPaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typeorm/entities/payment.entity';
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
 import {
@@ -20,7 +20,7 @@ import { DataSource } from 'typeorm';
 @Injectable()
 export class PaymentTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements PaymentWriteRepository
+  implements IPaymentWriteRepository
 {
   private readonly repoLogger = new Logger(PaymentTypeormWriteRepository.name);
 

@@ -1,6 +1,6 @@
 import { BasePrimitives } from '@sisques-labs/nestjs-kit';
 
-export type PaymentPrimitives = BasePrimitives & {
+export type IPaymentPrimitives = BasePrimitives & {
   groupId: string;
   /** Member who paid. */
   fromUserId: string;

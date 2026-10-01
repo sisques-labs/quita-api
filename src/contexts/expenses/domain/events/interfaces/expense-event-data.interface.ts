@@ -1,4 +1,4 @@
-import { ExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
+import { IExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
 import { IBaseEventData } from '@sisques-labs/nestjs-kit';
 
-export type IExpenseEventData = ExpensePrimitives & IBaseEventData;
+export type IExpenseEventData = IExpensePrimitives & IBaseEventData;

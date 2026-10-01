@@ -9,7 +9,7 @@ import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.a
 import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/exceptions/expense-payer-not-member.exception';
 import {
   EXPENSE_WRITE_REPOSITORY,
-  ExpenseWriteRepository,
+  IExpenseWriteRepository,
 } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { CLOCK, ClockPort } from '@core/clock/domain/clock.port';
 import { Inject, Logger } from '@nestjs/common';
@@ -26,7 +26,7 @@ export class EditExpenseHandler
 
   constructor(
     @Inject(EXPENSE_WRITE_REPOSITORY)
-    private readonly repository: ExpenseWriteRepository,
+    private readonly repository: IExpenseWriteRepository,
     @Inject(GROUP_MEMBERS_PORT)
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,

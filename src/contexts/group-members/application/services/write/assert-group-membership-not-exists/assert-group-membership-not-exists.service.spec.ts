@@ -1,18 +1,18 @@
 import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists/assert-group-membership-not-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMembershipAlreadyExistsException } from '@contexts/group-members/domain/exceptions/group-membership-already-exists.exception';
-import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
+import { IGroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
 describe('AssertGroupMembershipNotExistsService', () => {
-  let repository: Mocked<GroupMembershipWriteRepository>;
+  let repository: Mocked<IGroupMembershipWriteRepository>;
   let service: AssertGroupMembershipNotExistsService;
 
   beforeEach(() => {
     repository = {
       findById: vi.fn(),
-    } as unknown as Mocked<GroupMembershipWriteRepository>;
+    } as unknown as Mocked<IGroupMembershipWriteRepository>;
     service = new AssertGroupMembershipNotExistsService(repository);
   });
 

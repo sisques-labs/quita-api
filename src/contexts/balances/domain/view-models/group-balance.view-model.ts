@@ -2,7 +2,7 @@ import {
   BalanceDebt,
   MemberBalance,
 } from '@contexts/balances/domain/interfaces/balance-entries.interface';
-import { GroupBalancePrimitives } from '@contexts/balances/domain/primitives/group-balance.primitives';
+import { IGroupBalancePrimitives } from '@contexts/balances/domain/primitives/group-balance.primitives';
 
 /** Read model computed on read; balances persists nothing. */
 export class GroupBalanceViewModel {
@@ -12,7 +12,7 @@ export class GroupBalanceViewModel {
   readonly memberBalances: MemberBalance[];
   readonly debts: BalanceDebt[];
 
-  constructor(props: GroupBalancePrimitives) {
+  constructor(props: IGroupBalancePrimitives) {
     this.groupId = props.groupId;
     this.currency = props.currency;
     this.settled = props.settled;

@@ -1,4 +1,4 @@
-import { PaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
+import { IPaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
 import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typeorm/entities/payment.entity';
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
@@ -20,7 +20,7 @@ import { DataSource, IsNull } from 'typeorm';
 @Injectable()
 export class PaymentTypeormReadRepository
   extends BaseDatabaseRepository
-  implements PaymentReadRepository
+  implements IPaymentReadRepository
 {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,

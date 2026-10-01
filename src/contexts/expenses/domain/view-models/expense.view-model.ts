@@ -1,6 +1,6 @@
 import { ExpenseCategory } from '@contexts/expenses/domain/enums/expense-category.enum';
 import { ExpenseSplitType } from '@contexts/expenses/domain/enums/expense-split-type.enum';
-import { ExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
+import { IExpensePrimitives } from '@contexts/expenses/domain/primitives/expense.primitives';
 import { BaseViewModel } from '@sisques-labs/nestjs-kit';
 
 /** Read-side projection of an expense; soft-deleted rows carry `deletedAt`. */
@@ -17,7 +17,7 @@ export class ExpenseViewModel extends BaseViewModel {
   readonly updatedBy: string;
   readonly deletedAt: Date | null;
 
-  constructor(props: ExpensePrimitives) {
+  constructor(props: IExpensePrimitives) {
     super(props.id, props.createdAt, props.updatedAt);
     this.groupId = props.groupId;
     this.amountCents = props.amountCents;

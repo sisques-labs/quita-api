@@ -18,7 +18,7 @@ import { GroupMembershipConcurrencyException } from '../../../src/contexts/group
 import { GroupMembershipFullException } from '../../../src/contexts/group-members/domain/exceptions/group-membership-full.exception';
 import {
   GROUP_MEMBERSHIP_WRITE_REPOSITORY,
-  GroupMembershipWriteRepository,
+  IGroupMembershipWriteRepository,
 } from '../../../src/contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { GroupMembersModule } from '../../../src/contexts/group-members/group-members.module';
 import { truncateAll } from '../../helpers/db-reset';
@@ -38,7 +38,7 @@ describe('group-members persistence (integration)', () => {
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let repository: GroupMembershipWriteRepository;
+  let repository: IGroupMembershipWriteRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({ imports: [GroupMembersModule] });

@@ -5,7 +5,7 @@ export const GROUP_INVITATION_CODE_WRITE_REPOSITORY = Symbol(
   'GROUP_INVITATION_CODE_WRITE_REPOSITORY',
 );
 
-export interface GroupInvitationCodeWriteRepository extends IBaseWriteRepository<GroupInvitationCodeAggregate> {
+export interface IGroupInvitationCodeWriteRepository extends IBaseWriteRepository<GroupInvitationCodeAggregate> {
   /** The group's single non-revoked code, if it has one. */
   findActiveByGroupId(
     groupId: string,

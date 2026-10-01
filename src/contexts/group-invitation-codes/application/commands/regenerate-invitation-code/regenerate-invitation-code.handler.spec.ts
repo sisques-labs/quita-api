@@ -7,7 +7,7 @@ import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/dom
 import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
 import { InvitationCodeCollisionException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
 import { GroupInvitationAccessDeniedException } from '@contexts/group-invitation-codes/domain/exceptions/group-invitation-access-denied.exception';
-import { GroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
+import { IGroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
@@ -22,7 +22,7 @@ const activeCode = () =>
     .build();
 
 describe('RegenerateInvitationCodeHandler', () => {
-  let repository: Mocked<GroupInvitationCodeWriteRepository>;
+  let repository: Mocked<IGroupInvitationCodeWriteRepository>;
   let generator: Mocked<InvitationCodeGeneratorPort>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let eventBus: Mocked<EventBus>;
@@ -32,7 +32,7 @@ describe('RegenerateInvitationCodeHandler', () => {
     repository = {
       findActiveByGroupId: vi.fn().mockResolvedValue(null),
       replaceActive: vi.fn(),
-    } as unknown as Mocked<GroupInvitationCodeWriteRepository>;
+    } as unknown as Mocked<IGroupInvitationCodeWriteRepository>;
     generator = { generate: vi.fn().mockReturnValue('7KQ2M9XZ') };
     assertMember = {
       execute: vi.fn(),

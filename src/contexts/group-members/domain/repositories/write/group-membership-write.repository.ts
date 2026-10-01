@@ -10,5 +10,5 @@ export const GROUP_MEMBERSHIP_WRITE_REPOSITORY = Symbol(
  * aggregate `version` and throws `GroupMembershipConcurrencyException` when
  * the stored roster moved on since it was loaded.
  */
-export type GroupMembershipWriteRepository =
+export type IGroupMembershipWriteRepository =
   IBaseWriteRepository<GroupMembershipAggregate>;

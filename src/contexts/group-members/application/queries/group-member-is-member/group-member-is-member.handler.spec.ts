@@ -1,16 +1,16 @@
 import { GroupMemberIsMemberHandler } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.handler';
 import { GroupMemberIsMemberQuery } from '@contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
-import { GroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
+import { IGroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { Mocked } from 'vitest';
 
 describe('GroupMemberIsMemberHandler', () => {
-  let repository: Mocked<GroupMembershipReadRepository>;
+  let repository: Mocked<IGroupMembershipReadRepository>;
   let handler: GroupMemberIsMemberHandler;
 
   beforeEach(() => {
     repository = {
       isMember: vi.fn(),
-    } as unknown as Mocked<GroupMembershipReadRepository>;
+    } as unknown as Mocked<IGroupMembershipReadRepository>;
     handler = new GroupMemberIsMemberHandler(repository);
   });
 

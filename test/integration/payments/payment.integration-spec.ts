@@ -25,7 +25,7 @@ import { PaymentPartiesMustDifferException } from '../../../src/contexts/payment
 import { PaymentPartyNotMemberException } from '../../../src/contexts/payments/domain/exceptions/payment-party-not-member.exception';
 import {
   PAYMENT_READ_REPOSITORY,
-  PaymentReadRepository,
+  IPaymentReadRepository,
 } from '../../../src/contexts/payments/domain/repositories/read/payment-read.repository';
 import { PaymentViewModel } from '../../../src/contexts/payments/domain/view-models/payment.view-model';
 import { PaymentsModule } from '../../../src/contexts/payments/payments.module';
@@ -47,7 +47,7 @@ describe('payments persistence and adapters (integration)', () => {
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let readRepository: PaymentReadRepository;
+  let readRepository: IPaymentReadRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({

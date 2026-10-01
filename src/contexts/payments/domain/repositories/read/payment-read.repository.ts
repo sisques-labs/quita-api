@@ -7,7 +7,7 @@ export const PAYMENT_READ_REPOSITORY = Symbol('PAYMENT_READ_REPOSITORY');
  * Query-only view over the `payments` table. It does not extend
  * `IBaseReadRepository`: there is no separate projection store.
  */
-export interface PaymentReadRepository {
+export interface IPaymentReadRepository {
   /**
    * Translates every filter of `criteria` (all 8 `FilterOperator`s) and its
    * sorts. Soft-deleted rows are included. Field names are view-model

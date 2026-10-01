@@ -2,14 +2,14 @@ import { GroupMembershipPort } from '@contexts/groups/application/ports/group-me
 import { GroupsFindOwnHandler } from '@contexts/groups/application/queries/groups-find-own/groups-find-own.handler';
 import { GroupsFindOwnQuery } from '@contexts/groups/application/queries/groups-find-own/groups-find-own.query';
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
-import { GroupReadRepository } from '@contexts/groups/domain/repositories/read/group-read.repository';
+import { IGroupReadRepository } from '@contexts/groups/domain/repositories/read/group-read.repository';
 import { Mocked } from 'vitest';
 
 const G1 = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
 describe('GroupsFindOwnHandler', () => {
   let membershipPort: Mocked<GroupMembershipPort>;
-  let repository: Mocked<GroupReadRepository>;
+  let repository: Mocked<IGroupReadRepository>;
   let handler: GroupsFindOwnHandler;
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('GroupsFindOwnHandler', () => {
     } as unknown as Mocked<GroupMembershipPort>;
     repository = {
       findByIds: vi.fn(),
-    } as unknown as Mocked<GroupReadRepository>;
+    } as unknown as Mocked<IGroupReadRepository>;
     handler = new GroupsFindOwnHandler(membershipPort, repository);
   });
 

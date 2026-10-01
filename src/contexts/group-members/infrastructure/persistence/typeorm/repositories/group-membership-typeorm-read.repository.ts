@@ -1,4 +1,4 @@
-import { GroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
+import { IGroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { GroupMembershipViewModel } from '@contexts/group-members/domain/view-models/group-membership.view-model';
 import { GroupMemberEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-member.entity';
 import { GroupMembershipEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-membership.entity';
@@ -8,7 +8,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 @Injectable()
-export class GroupMembershipTypeormReadRepository implements GroupMembershipReadRepository {
+export class GroupMembershipTypeormReadRepository implements IGroupMembershipReadRepository {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mapper: GroupMembershipTypeormMapper,

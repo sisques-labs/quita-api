@@ -5,7 +5,7 @@ import {
 import { GroupsFindOwnQuery } from '@contexts/groups/application/queries/groups-find-own/groups-find-own.query';
 import {
   GROUP_READ_REPOSITORY,
-  GroupReadRepository,
+  IGroupReadRepository,
 } from '@contexts/groups/domain/repositories/read/group-read.repository';
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
 import { Inject, Logger } from '@nestjs/common';
@@ -23,7 +23,7 @@ export class GroupsFindOwnHandler implements IQueryHandler<
     @Inject(GROUP_MEMBERSHIP_PORT)
     private readonly membershipPort: GroupMembershipPort,
     @Inject(GROUP_READ_REPOSITORY)
-    private readonly repository: GroupReadRepository,
+    private readonly repository: IGroupReadRepository,
   ) {}
 
   async execute(query: GroupsFindOwnQuery): Promise<GroupViewModel[]> {

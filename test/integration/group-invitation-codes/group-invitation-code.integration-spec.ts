@@ -16,7 +16,7 @@ import { InvitationCodeCollisionException } from '../../../src/contexts/group-in
 import { InvitationCodeInvalidException } from '../../../src/contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import {
   GROUP_INVITATION_CODE_WRITE_REPOSITORY,
-  GroupInvitationCodeWriteRepository,
+  IGroupInvitationCodeWriteRepository,
 } from '../../../src/contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupInvitationCodesModule } from '../../../src/contexts/group-invitation-codes/group-invitation-codes.module';
 import { truncateAll } from '../../helpers/db-reset';
@@ -32,7 +32,7 @@ describe('group invitation codes persistence and adapters (integration)', () => 
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let repository: GroupInvitationCodeWriteRepository;
+  let repository: IGroupInvitationCodeWriteRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({

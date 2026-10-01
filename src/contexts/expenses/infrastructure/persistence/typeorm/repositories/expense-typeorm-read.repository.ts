@@ -1,4 +1,4 @@
-import { ExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
+import { IExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
 import { ExpenseEntity } from '@contexts/expenses/infrastructure/persistence/typeorm/entities/expense.entity';
 import { ExpenseTypeormMapper } from '@contexts/expenses/infrastructure/persistence/typeorm/mappers/expense-typeorm.mapper';
@@ -20,7 +20,7 @@ import { DataSource, IsNull } from 'typeorm';
 @Injectable()
 export class ExpenseTypeormReadRepository
   extends BaseDatabaseRepository
-  implements ExpenseReadRepository
+  implements IExpenseReadRepository
 {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,

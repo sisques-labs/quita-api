@@ -8,7 +8,7 @@ import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggrega
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import {
   GROUP_WRITE_REPOSITORY,
-  GroupWriteRepository,
+  IGroupWriteRepository,
 } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { Inject, Logger } from '@nestjs/common';
 import {
@@ -33,7 +33,7 @@ export class CreateGroupHandler
 
   constructor(
     @Inject(GROUP_WRITE_REPOSITORY)
-    private readonly repository: GroupWriteRepository,
+    private readonly repository: IGroupWriteRepository,
     @Inject(GROUP_MEMBERSHIP_PORT)
     private readonly membershipPort: GroupMembershipPort,
     private readonly commandBus: CommandBus,

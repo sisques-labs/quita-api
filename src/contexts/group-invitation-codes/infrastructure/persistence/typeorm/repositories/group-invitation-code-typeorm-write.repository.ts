@@ -1,7 +1,7 @@
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
 import { InvitationCodeCollisionException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
-import { GroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
+import { IGroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupInvitationCodeEntity } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/entities/group-invitation-code.entity';
 import { GroupInvitationCodeTypeormMapper } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/mappers/group-invitation-code-typeorm.mapper';
 import { Injectable, Logger } from '@nestjs/common';
@@ -32,7 +32,7 @@ const CODE_CONSTRAINT = 'uq_group_invitation_codes_code';
 @Injectable()
 export class GroupInvitationCodeTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements GroupInvitationCodeWriteRepository
+  implements IGroupInvitationCodeWriteRepository
 {
   private readonly repoLogger = new Logger(
     GroupInvitationCodeTypeormWriteRepository.name,

@@ -1,18 +1,18 @@
 import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists/assert-group-membership-view-model-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMembershipNotFoundException } from '@contexts/group-members/domain/exceptions/group-membership-not-found.exception';
-import { GroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
+import { IGroupMembershipReadRepository } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
 describe('AssertGroupMembershipViewModelExistsService', () => {
-  let repository: Mocked<GroupMembershipReadRepository>;
+  let repository: Mocked<IGroupMembershipReadRepository>;
   let service: AssertGroupMembershipViewModelExistsService;
 
   beforeEach(() => {
     repository = {
       findByGroupId: vi.fn(),
-    } as unknown as Mocked<GroupMembershipReadRepository>;
+    } as unknown as Mocked<IGroupMembershipReadRepository>;
     service = new AssertGroupMembershipViewModelExistsService(repository);
   });
 

@@ -11,7 +11,7 @@ import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/except
 import { GroupNotReadyException } from '@contexts/expenses/domain/exceptions/group-not-ready.exception';
 import {
   EXPENSE_WRITE_REPOSITORY,
-  ExpenseWriteRepository,
+  IExpenseWriteRepository,
 } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { ExpenseDateValueObject } from '@contexts/expenses/domain/value-objects/expense-date/expense-date.value-object';
 import { CLOCK, ClockPort } from '@core/clock/domain/clock.port';
@@ -28,7 +28,7 @@ export class CreateExpenseHandler
 
   constructor(
     @Inject(EXPENSE_WRITE_REPOSITORY)
-    private readonly repository: ExpenseWriteRepository,
+    private readonly repository: IExpenseWriteRepository,
     @Inject(GROUP_MEMBERS_PORT)
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,

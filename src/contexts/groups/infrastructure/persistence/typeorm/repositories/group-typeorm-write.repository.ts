@@ -1,5 +1,5 @@
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
-import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
+import { IGroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { GroupEntity } from '@contexts/groups/infrastructure/persistence/typeorm/entities/group.entity';
 import { GroupTypeormMapper } from '@contexts/groups/infrastructure/persistence/typeorm/mappers/group-typeorm.mapper';
 import { Injectable, Logger } from '@nestjs/common';
@@ -25,7 +25,7 @@ const CRITERIA_FIELDS: ReadonlySet<string> = new Set([
 @Injectable()
 export class GroupTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements GroupWriteRepository
+  implements IGroupWriteRepository
 {
   private readonly repoLogger = new Logger(GroupTypeormWriteRepository.name);
 

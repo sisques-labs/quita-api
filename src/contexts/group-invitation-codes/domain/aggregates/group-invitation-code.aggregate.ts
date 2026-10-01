@@ -1,7 +1,7 @@
 import { GroupInvitationCodeCreatedEvent } from '@contexts/group-invitation-codes/domain/events/group-invitation-code-created/group-invitation-code-created.event';
 import { GroupInvitationCodeRevokedEvent } from '@contexts/group-invitation-codes/domain/events/group-invitation-code-revoked/group-invitation-code-revoked.event';
 import { IGroupInvitationCode } from '@contexts/group-invitation-codes/domain/interfaces/group-invitation-code.interface';
-import { GroupInvitationCodePrimitives } from '@contexts/group-invitation-codes/domain/primitives/group-invitation-code.primitives';
+import { IGroupInvitationCodePrimitives } from '@contexts/group-invitation-codes/domain/primitives/group-invitation-code.primitives';
 import { GroupInvitationCodeCreatedByValueObject } from '@contexts/group-invitation-codes/domain/value-objects/group-invitation-code-created-by/group-invitation-code-created-by.value-object';
 import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import {
@@ -72,7 +72,7 @@ export class GroupInvitationCodeAggregate extends BaseAggregate {
     return this._revokedAt;
   }
 
-  toPrimitives(): GroupInvitationCodePrimitives {
+  toPrimitives(): IGroupInvitationCodePrimitives {
     return {
       id: this.id.value,
       groupId: this._groupId.value,

@@ -2,7 +2,7 @@ import { ExpenseCategory } from '@contexts/expenses/domain/enums/expense-categor
 import { ExpenseSplitType } from '@contexts/expenses/domain/enums/expense-split-type.enum';
 import { BasePrimitives } from '@sisques-labs/nestjs-kit';
 
-export type ExpensePrimitives = BasePrimitives & {
+export type IExpensePrimitives = BasePrimitives & {
   groupId: string;
   amountCents: number;
   currency: string;

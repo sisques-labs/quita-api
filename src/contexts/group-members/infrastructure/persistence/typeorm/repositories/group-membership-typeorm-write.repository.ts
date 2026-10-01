@@ -1,6 +1,6 @@
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
 import { GroupMembershipConcurrencyException } from '@contexts/group-members/domain/exceptions/group-membership-concurrency.exception';
-import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
+import { IGroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { GroupMemberEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-member.entity';
 import { GroupMembershipEntity } from '@contexts/group-members/infrastructure/persistence/typeorm/entities/group-membership.entity';
 import { GroupMembershipTypeormMapper } from '@contexts/group-members/infrastructure/persistence/typeorm/mappers/group-membership-typeorm.mapper';
@@ -27,7 +27,7 @@ const CRITERIA_FIELDS: ReadonlySet<string> = new Set([
 @Injectable()
 export class GroupMembershipTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements GroupMembershipWriteRepository
+  implements IGroupMembershipWriteRepository
 {
   private readonly repoLogger = new Logger(
     GroupMembershipTypeormWriteRepository.name,

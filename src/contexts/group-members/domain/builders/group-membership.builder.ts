@@ -1,7 +1,7 @@
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
 import { DEFAULT_GROUP_MEMBERSHIP_CAPACITY } from '@contexts/group-members/domain/constants/default-group-membership-capacity.constant';
 import { GroupMember } from '@contexts/group-members/domain/entities/group-member';
-import { GroupMemberPrimitives } from '@contexts/group-members/domain/primitives/group-member.primitives';
+import { IGroupMemberPrimitives } from '@contexts/group-members/domain/primitives/group-member.primitives';
 import { GroupMembershipCapacityValueObject } from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
 import { GroupMembershipViewModel } from '@contexts/group-members/domain/view-models/group-membership.view-model';
 import { Injectable } from '@nestjs/common';
@@ -20,7 +20,7 @@ export class GroupMembershipBuilder extends BaseBuilder<
 > {
   private _capacity = DEFAULT_GROUP_MEMBERSHIP_CAPACITY;
   private _version = 0;
-  private _members: GroupMemberPrimitives[] = [];
+  private _members: IGroupMemberPrimitives[] = [];
 
   withCapacity(capacity: number): this {
     this._capacity = capacity;
@@ -32,7 +32,7 @@ export class GroupMembershipBuilder extends BaseBuilder<
     return this;
   }
 
-  withMembers(members: GroupMemberPrimitives[]): this {
+  withMembers(members: IGroupMemberPrimitives[]): this {
     this._members = members;
     return this;
   }

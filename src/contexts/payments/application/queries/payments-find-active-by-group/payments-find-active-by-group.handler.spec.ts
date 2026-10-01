@@ -1,13 +1,13 @@
 import { PaymentsFindActiveByGroupHandler } from '@contexts/payments/application/queries/payments-find-active-by-group/payments-find-active-by-group.handler';
 import { PaymentsFindActiveByGroupQuery } from '@contexts/payments/application/queries/payments-find-active-by-group/payments-find-active-by-group.query';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
-import { PaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
+import { IPaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '5d1c8f0a-3f55-4b6a-8a27-3a8d3b0d7e22';
 
 describe('PaymentsFindActiveByGroupHandler', () => {
-  let repository: Mocked<PaymentReadRepository>;
+  let repository: Mocked<IPaymentReadRepository>;
   let handler: PaymentsFindActiveByGroupHandler;
 
   beforeEach(() => {
