@@ -1,7 +1,7 @@
 import { CreateExpenseCommand } from '@contexts/expenses/application/commands/create-expense/create-expense.command';
 import { CreateExpenseHandler } from '@contexts/expenses/application/commands/create-expense/create-expense.handler';
 import { GroupMembersPort } from '@contexts/expenses/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
@@ -65,7 +65,10 @@ describe('CreateExpenseHandler', () => {
   it('creates an EQUAL expense without category by default and publishes its event', async () => {
     const id = await handler.execute(new CreateExpenseCommand(input()));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_a');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_a' }),
+    );
     expect(savedExpense().toPrimitives()).toMatchObject({
       id,
       groupId: GROUP_ID,

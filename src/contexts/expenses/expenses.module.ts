@@ -4,8 +4,8 @@ import { EditExpenseHandler } from '@contexts/expenses/application/commands/edit
 import { GROUP_MEMBERS_PORT } from '@contexts/expenses/application/ports/group-members.port';
 import { ExpensesFindActiveByGroupHandler } from '@contexts/expenses/application/queries/expenses-find-active-by-group/expenses-find-active-by-group.handler';
 import { ExpensesFindByCriteriaHandler } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.handler';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { EXPENSE_READ_REPOSITORY } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { EXPENSE_WRITE_REPOSITORY } from '@contexts/expenses/domain/repositories/write/expense-write.repository';

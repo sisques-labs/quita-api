@@ -3,8 +3,8 @@ import {
   GROUP_MEMBERS_PORT,
   GroupMembersPort,
 } from '@contexts/expenses/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/exceptions/expense-payer-not-member.exception';
 import {
@@ -40,13 +40,13 @@ export class EditExpenseHandler
   async execute(command: EditExpenseCommand): Promise<string> {
     const groupId = command.groupId.value;
     await this.assertRequesterIsMember.execute(
-      groupId,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const expense = await this.assertExpenseExists.execute(
-      command.expenseId.value,
-      groupId,
+      command.expenseId,
+      command.groupId,
     );
 
     const { paidBy } = command.changes;

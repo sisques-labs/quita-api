@@ -4,7 +4,7 @@ import {
   GROUP_MEMBERS_PORT,
   GroupMembersPort,
 } from '@contexts/expenses/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/exceptions/expense-payer-not-member.exception';
@@ -42,8 +42,8 @@ export class CreateExpenseHandler
   async execute(command: CreateExpenseCommand): Promise<string> {
     const groupId = command.groupId.value;
     await this.assertRequesterIsMember.execute(
-      groupId,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const spentOn = ExpenseDateValueObject.create(

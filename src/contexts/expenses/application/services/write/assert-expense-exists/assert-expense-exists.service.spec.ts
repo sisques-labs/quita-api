@@ -1,7 +1,8 @@
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseNotFoundException } from '@contexts/expenses/domain/exceptions/expense-not-found.exception';
 import { ExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
+import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
 const ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
@@ -36,23 +37,28 @@ describe('AssertExpenseExistsService', () => {
     const aggregate = expense();
     repository.findById.mockResolvedValue(aggregate);
 
-    await expect(service.execute(ID, GROUP_ID)).resolves.toBe(aggregate);
+    await expect(
+      service.execute(new UuidValueObject(ID), new UuidValueObject(GROUP_ID)),
+    ).resolves.toBe(aggregate);
     expect(repository.findById).toHaveBeenCalledWith(ID);
   });
 
   it('reports a missing expense', async () => {
     repository.findById.mockResolvedValue(null);
 
-    await expect(service.execute(ID, GROUP_ID)).rejects.toThrow(
-      ExpenseNotFoundException,
-    );
+    await expect(
+      service.execute(new UuidValueObject(ID), new UuidValueObject(GROUP_ID)),
+    ).rejects.toThrow(ExpenseNotFoundException);
   });
 
   it('reports an expense of another group as not found (no cross-group leak)', async () => {
     repository.findById.mockResolvedValue(expense());
 
-    await expect(service.execute(ID, OTHER_GROUP_ID)).rejects.toThrow(
-      ExpenseNotFoundException,
-    );
+    await expect(
+      service.execute(
+        new UuidValueObject(ID),
+        new UuidValueObject(OTHER_GROUP_ID),
+      ),
+    ).rejects.toThrow(ExpenseNotFoundException);
   });
 });
