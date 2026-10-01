@@ -60,13 +60,13 @@ export class GroupMembershipBuilder extends BaseBuilder<
     try {
       this.validateWithDefaults();
 
-      return new GroupMembershipViewModel(
-        this._id,
-        this._createdAt,
-        this._updatedAt,
-        this._capacity,
-        this._members,
-      );
+      return new GroupMembershipViewModel({
+        id: this._id,
+        createdAt: this._createdAt,
+        updatedAt: this._updatedAt,
+        capacity: this._capacity,
+        members: this._members,
+      });
     } finally {
       this.reset();
     }
