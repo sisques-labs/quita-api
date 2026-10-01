@@ -1,12 +1,10 @@
 import { GenerateInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/generate-invitation-code/generate-invitation-code.command';
 import { RedeemInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/redeem-invitation-code/redeem-invitation-code.command';
 import { RegenerateInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/regenerate-invitation-code/regenerate-invitation-code.command';
-import {
-  GenerateInvitationCodeInput,
-  RedeemInvitationCodeInput,
-  RegenerateInvitationCodeInput,
-} from '@contexts/group-invitation-codes/transport/graphql/dtos/group-invitation-code.inputs';
-import { GroupInvitationCodeObject } from '@contexts/group-invitation-codes/transport/graphql/objects/group-invitation-code.object';
+import { GroupInvitationCodeGenerateRequestDto } from '@contexts/group-invitation-codes/transport/graphql/dtos/requests/group-invitation-code-generate.request.dto';
+import { GroupInvitationCodeRedeemRequestDto } from '@contexts/group-invitation-codes/transport/graphql/dtos/requests/group-invitation-code-redeem.request.dto';
+import { GroupInvitationCodeRegenerateRequestDto } from '@contexts/group-invitation-codes/transport/graphql/dtos/requests/group-invitation-code-regenerate.request.dto';
+import { GroupInvitationCodeResponseDto } from '@contexts/group-invitation-codes/transport/graphql/dtos/responses/group-invitation-code.response.dto';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
 import { Logger, UseGuards } from '@nestjs/common';
@@ -17,7 +15,7 @@ import {
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => GroupInvitationCodeObject)
+@Resolver(() => GroupInvitationCodeResponseDto)
 @UseGuards(ClerkAuthGuard)
 export class GroupInvitationCodesResolver {
   private readonly logger = new Logger(GroupInvitationCodesResolver.name);
@@ -27,15 +25,15 @@ export class GroupInvitationCodesResolver {
     private readonly mutationResponseMapper: MutationResponseGraphQLMapper,
   ) {}
 
-  @Mutation(() => GroupInvitationCodeObject, {
+  @Mutation(() => GroupInvitationCodeResponseDto, {
     name: 'generateInvitationCode',
     description:
       "The group's active code, created when it has none. Members only.",
   })
   async generateInvitationCode(
-    @Args('input') input: GenerateInvitationCodeInput,
+    @Args('input') input: GroupInvitationCodeGenerateRequestDto,
     @AuthUser() user: AuthUser,
-  ): Promise<GroupInvitationCodeObject> {
+  ): Promise<GroupInvitationCodeResponseDto> {
     this.logger.log(
       `generateInvitationCode group=${input.groupId} requester=${user.userId}`,
     );
@@ -53,15 +51,15 @@ export class GroupInvitationCodesResolver {
     return { groupId: input.groupId, code };
   }
 
-  @Mutation(() => GroupInvitationCodeObject, {
+  @Mutation(() => GroupInvitationCodeResponseDto, {
     name: 'regenerateInvitationCode',
     description:
       'Replaces the active code; the previous one stops working. Members only.',
   })
   async regenerateInvitationCode(
-    @Args('input') input: RegenerateInvitationCodeInput,
+    @Args('input') input: GroupInvitationCodeRegenerateRequestDto,
     @AuthUser() user: AuthUser,
-  ): Promise<GroupInvitationCodeObject> {
+  ): Promise<GroupInvitationCodeResponseDto> {
     this.logger.log(
       `regenerateInvitationCode group=${input.groupId} requester=${user.userId}`,
     );
@@ -84,7 +82,7 @@ export class GroupInvitationCodesResolver {
     description: 'Joins the caller to the group behind an active code.',
   })
   async redeemInvitationCode(
-    @Args('input') input: RedeemInvitationCodeInput,
+    @Args('input') input: GroupInvitationCodeRedeemRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(`redeemInvitationCode requester=${user.userId}`);
