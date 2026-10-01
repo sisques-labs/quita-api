@@ -1,3 +1,4 @@
+import { EXPENSE_CURRENCY } from '@contexts/expenses/domain/constants/expense-currency.constant';
 import { ExpenseCategory } from '@contexts/expenses/domain/enums/expense-category.enum';
 import { ExpenseSplitType } from '@contexts/expenses/domain/enums/expense-split-type.enum';
 import { ExpenseCreatedEvent } from '@contexts/expenses/domain/events/expense-created/expense-created.event';
@@ -17,9 +18,6 @@ import {
   DateValueObject,
   UuidValueObject,
 } from '@sisques-labs/nestjs-kit';
-
-/** Only euros are supported in the MVP. */
-export const EXPENSE_CURRENCY = 'EUR';
 
 /**
  * Fields a member may change. An omitted key keeps the current value;

@@ -1,6 +1,5 @@
+import { EXPENSE_DESCRIPTION_MAX_LENGTH } from '@contexts/expenses/domain/constants/expense-description-max-length.constant';
 import { StringValueObject } from '@sisques-labs/nestjs-kit';
-
-export const EXPENSE_DESCRIPTION_MAX_LENGTH = 200;
 
 /** Free-text note: trimmed and at most 200 characters. */
 export class ExpenseDescriptionValueObject extends StringValueObject {

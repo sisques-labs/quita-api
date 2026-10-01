@@ -1,6 +1,5 @@
+import { PAYMENT_NOTE_MAX_LENGTH } from '@contexts/payments/domain/constants/payment-note-max-length.constant';
 import { StringValueObject } from '@sisques-labs/nestjs-kit';
-
-export const PAYMENT_NOTE_MAX_LENGTH = 200;
 
 /** Free-text note: trimmed and at most 200 characters. */
 export class PaymentNoteValueObject extends StringValueObject {

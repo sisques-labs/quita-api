@@ -1,6 +1,5 @@
+import { GROUP_NAME_MAX_LENGTH } from '@contexts/groups/domain/constants/group-name-max-length.constant';
 import { StringValueObject } from '@sisques-labs/nestjs-kit';
-
-export const GROUP_NAME_MAX_LENGTH = 80;
 
 /** Display name of a group: required, trimmed, at most 80 characters. */
 export class GroupNameValueObject extends StringValueObject {

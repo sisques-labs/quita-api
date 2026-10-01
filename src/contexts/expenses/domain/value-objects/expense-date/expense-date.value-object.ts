@@ -1,8 +1,7 @@
+import { DATE_PATTERN } from '@contexts/expenses/domain/constants/date-pattern.constant';
 import { ExpenseDateInFutureException } from '@contexts/expenses/domain/exceptions/expense-date-in-future.exception';
 import { ExpenseDateInvalidException } from '@contexts/expenses/domain/exceptions/expense-date-invalid.exception';
 import { ValueObject } from '@sisques-labs/nestjs-kit';
-
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
  * Date-only `YYYY-MM-DD` on which the expense was made. The constructor only

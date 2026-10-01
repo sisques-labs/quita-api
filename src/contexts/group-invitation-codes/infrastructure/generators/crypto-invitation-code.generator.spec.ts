@@ -1,9 +1,7 @@
+import { INVITATION_CODE_ALPHABET } from '@contexts/group-invitation-codes/domain/constants/invitation-code-alphabet.constant';
+import { INVITATION_CODE_LENGTH } from '@contexts/group-invitation-codes/domain/constants/invitation-code-length.constant';
+import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import { CryptoInvitationCodeGenerator } from '@contexts/group-invitation-codes/infrastructure/generators/crypto-invitation-code.generator';
-import {
-  INVITATION_CODE_ALPHABET,
-  INVITATION_CODE_LENGTH,
-  InvitationCodeValueObject,
-} from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 
 describe('CryptoInvitationCodeGenerator', () => {
   const generator = new CryptoInvitationCodeGenerator();

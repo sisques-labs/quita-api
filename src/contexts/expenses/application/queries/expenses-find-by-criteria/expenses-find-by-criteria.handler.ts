@@ -1,3 +1,5 @@
+import { DEFAULT_SORTS } from '@contexts/expenses/application/constants/default-sorts.constant';
+import { GROUP_FIELD } from '@contexts/expenses/application/constants/group-field.constant';
 import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.query';
 import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
 import {
@@ -11,18 +13,7 @@ import {
   Criteria,
   FilterOperator,
   PaginatedResult,
-  Sort,
-  SortDirection,
 } from '@sisques-labs/nestjs-kit';
-
-/** View-model property the repository maps to the `group_id` column. */
-const GROUP_FIELD = 'groupId';
-
-/** History order: newest expense date first, ties broken by newest creation. */
-const DEFAULT_SORTS: Sort[] = [
-  { field: 'spentOn', direction: SortDirection.DESC },
-  { field: 'createdAt', direction: SortDirection.DESC },
-];
 
 /**
  * Lists a group's expenses, soft-deleted ones included (flagged by

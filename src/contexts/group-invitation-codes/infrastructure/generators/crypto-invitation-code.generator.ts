@@ -1,8 +1,6 @@
 import { InvitationCodeGeneratorPort } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
-import {
-  INVITATION_CODE_ALPHABET,
-  INVITATION_CODE_LENGTH,
-} from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
+import { INVITATION_CODE_ALPHABET } from '@contexts/group-invitation-codes/domain/constants/invitation-code-alphabet.constant';
+import { INVITATION_CODE_LENGTH } from '@contexts/group-invitation-codes/domain/constants/invitation-code-length.constant';
 import { Injectable } from '@nestjs/common';
 import { randomInt } from 'node:crypto';
 

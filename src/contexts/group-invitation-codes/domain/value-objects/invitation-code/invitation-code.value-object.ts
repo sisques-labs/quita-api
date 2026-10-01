@@ -1,11 +1,8 @@
+import { CROCKFORD_ALIASES } from '@contexts/group-invitation-codes/domain/constants/crockford-aliases.constant';
+import { INVITATION_CODE_ALPHABET } from '@contexts/group-invitation-codes/domain/constants/invitation-code-alphabet.constant';
+import { INVITATION_CODE_LENGTH } from '@contexts/group-invitation-codes/domain/constants/invitation-code-length.constant';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import { StringValueObject } from '@sisques-labs/nestjs-kit';
-
-/** Crockford base32: no I, L, O or U, so codes survive being read aloud. */
-export const INVITATION_CODE_ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
-export const INVITATION_CODE_LENGTH = 8;
-
-const CROCKFORD_ALIASES: Record<string, string> = { I: '1', L: '1', O: '0' };
 
 function normalize(value: string): string {
   const normalized = value

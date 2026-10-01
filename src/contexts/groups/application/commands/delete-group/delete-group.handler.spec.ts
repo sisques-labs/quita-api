@@ -1,8 +1,6 @@
 import { DeleteGroupCommand } from '@contexts/groups/application/commands/delete-group/delete-group.command';
-import {
-  DeleteGroupHandler,
-  MEMBERSHIP_CLEANUP_RETRY_DELAY_MS,
-} from '@contexts/groups/application/commands/delete-group/delete-group.handler';
+import { DeleteGroupHandler } from '@contexts/groups/application/commands/delete-group/delete-group.handler';
+import { MEMBERSHIP_CLEANUP_RETRY_DELAY_MS } from '@contexts/groups/application/constants/membership-cleanup-retry-delay-ms.constant';
 import { GroupMembershipPort } from '@contexts/groups/application/ports/group-membership.port';
 import { AssertGroupExistsService } from '@contexts/groups/application/services/write/assert-group-exists.service';
 import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggregate';
