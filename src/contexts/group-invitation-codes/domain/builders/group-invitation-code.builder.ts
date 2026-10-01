@@ -54,15 +54,15 @@ export class GroupInvitationCodeBuilder extends BaseBuilder<
   buildViewModel(): GroupInvitationCodeViewModel {
     this.validateWithDefaults();
 
-    return new GroupInvitationCodeViewModel(
-      this._id,
-      this._createdAt,
-      this._updatedAt,
-      this._groupId,
-      new InvitationCodeValueObject(this._code).value,
-      this._createdBy,
-      this._revokedAt,
-    );
+    return new GroupInvitationCodeViewModel({
+      id: this._id,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      groupId: this._groupId,
+      code: new InvitationCodeValueObject(this._code).value,
+      createdBy: this._createdBy,
+      revokedAt: this._revokedAt,
+    });
   }
 
   private validateWithDefaults(): void {

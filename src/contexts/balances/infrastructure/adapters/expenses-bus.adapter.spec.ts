@@ -15,22 +15,22 @@ const expense = (
   paidBy: string,
   splitType: string,
 ): ExpenseViewModel =>
-  new ExpenseViewModel(
-    '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
-    NOW,
-    NOW,
-    GROUP_ID,
+  new ExpenseViewModel({
+    id: '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
+    createdAt: NOW,
+    updatedAt: NOW,
+    groupId: GROUP_ID,
     amountCents,
-    'EUR',
+    currency: 'EUR',
     paidBy,
-    '2026-03-01',
-    null,
-    null,
-    splitType as ExpenseSplitType,
-    paidBy,
-    paidBy,
-    null,
-  );
+    spentOn: '2026-03-01',
+    description: null,
+    category: null,
+    splitType: splitType as ExpenseSplitType,
+    createdBy: paidBy,
+    updatedBy: paidBy,
+    deletedAt: null,
+  });
 
 describe('ExpensesBusAdapter', () => {
   let queryBus: Mocked<QueryBus>;
