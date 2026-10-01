@@ -12,7 +12,7 @@ import {
 } from '@contexts/balances/application/ports/payments.port';
 import { GroupBalanceQuery } from '@contexts/balances/application/queries/group-balance/group-balance.query';
 import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member.service';
-import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance.calculator';
+import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 import { GroupBalanceViewModel } from '@contexts/balances/domain/view-models/group-balance.view-model';
 import { Inject, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';

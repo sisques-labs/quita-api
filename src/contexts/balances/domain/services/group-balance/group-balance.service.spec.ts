@@ -5,7 +5,7 @@ import {
   BalanceExpenseEntry,
   BalancePaymentEntry,
 } from '@contexts/balances/domain/interfaces/balance-entries.interface';
-import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance.calculator';
+import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 
 const A = 'user_a';
 const B = 'user_b';

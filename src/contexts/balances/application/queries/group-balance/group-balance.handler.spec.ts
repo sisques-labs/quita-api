@@ -7,7 +7,7 @@ import { AssertRequesterIsGroupMemberService } from '@contexts/balances/applicat
 import { BalanceSplitType } from '@contexts/balances/domain/enums/balance-split-type.enum';
 import { BalanceAccessDeniedException } from '@contexts/balances/domain/exceptions/balance-access-denied.exception';
 import { GroupNotReadyException } from '@contexts/balances/domain/exceptions/group-not-ready.exception';
-import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance.calculator';
+import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '5d1c8f0a-3f55-4b6a-8a27-3a8d3b0d7e22';
