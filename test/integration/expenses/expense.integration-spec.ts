@@ -248,6 +248,50 @@ describe('expenses persistence and adapters (integration)', () => {
     ).rejects.toThrow(ExpenseAlreadyDeletedException);
   });
 
+  describe('read repository base contract', () => {
+    it('finds an expense by id, including a soft-deleted one, and null when unknown', async () => {
+      const groupId = await createCouple();
+      const id = await create(groupId, 'alice', {
+        amountCents: 1000,
+        paidBy: 'alice',
+        spentOn: '2026-02-01',
+      });
+
+      const found = await readRepository.findById(id);
+      expect(found).toMatchObject({ id, groupId, amountCents: 1000 });
+      expect(found?.deletedAt).toBeNull();
+
+      await commands.execute(
+        new DeleteExpenseCommand({
+          expenseId: id,
+          groupId,
+          requesterId: 'bob',
+        }),
+      );
+      const deleted = await readRepository.findById(id);
+      expect(deleted?.deletedAt).toBeInstanceOf(Date);
+
+      await expect(
+        readRepository.findById('9d1c2b3a-4e5f-4a6b-8c7d-0e1f2a3b4c5d'),
+      ).resolves.toBeNull();
+    });
+
+    it('treats save and delete as no-ops: the write side owns persistence', async () => {
+      const groupId = await createCouple();
+      const id = await create(groupId, 'alice', {
+        amountCents: 1000,
+        paidBy: 'alice',
+        spentOn: '2026-02-01',
+      });
+      const viewModel = (await readRepository.findById(id))!;
+
+      await expect(readRepository.save(viewModel)).resolves.toBeUndefined();
+      await expect(readRepository.delete(id)).resolves.toBeUndefined();
+
+      expect(await rawRow(id)).toMatchObject({ amount_cents: 1000 });
+    });
+  });
+
   describe('database constraints', () => {
     const insert = (amount: number, category: string | null, split = 'EQUAL') =>
       ctx.dataSource.query(

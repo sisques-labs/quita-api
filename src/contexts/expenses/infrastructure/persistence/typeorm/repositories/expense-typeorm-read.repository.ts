@@ -29,6 +29,13 @@ export class ExpenseTypeormReadRepository
     super();
   }
 
+  async findById(id: string): Promise<ExpenseViewModel | null> {
+    const row = await this.dataSource
+      .getRepository(ExpenseEntity)
+      .findOneBy({ id });
+    return row ? this.mapper.toViewModel(row) : null;
+  }
+
   async findByCriteria(
     criteria: Criteria,
   ): Promise<PaginatedResult<ExpenseViewModel>> {
@@ -60,5 +67,13 @@ export class ExpenseTypeormReadRepository
       .getRepository(ExpenseEntity)
       .find({ where: { groupId, deletedAt: IsNull() } });
     return rows.map((row) => this.mapper.toViewModel(row));
+  }
+
+  async save(_viewModel: ExpenseViewModel): Promise<void> {
+    // read-side projection — write side handles persistence
+  }
+
+  async delete(_id: string): Promise<void> {
+    // read-side projection — write side handles persistence
   }
 }
