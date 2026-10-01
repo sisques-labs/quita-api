@@ -4,7 +4,7 @@ import {
   AddMemberResult,
   GroupMembersPort,
 } from '@contexts/group-invitation-codes/application/ports/group-members.port';
-import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
+import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import { Mocked } from 'vitest';
@@ -45,7 +45,9 @@ describe('RedeemInvitationCodeHandler', () => {
     );
 
     expect(groupId).toBe(GROUP_ID);
-    expect(assertCode.execute).toHaveBeenCalledWith('7KQ2M9XZ');
+    expect(assertCode.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: '7KQ2M9XZ' }),
+    );
     expect(membersPort.addMember).toHaveBeenCalledWith(GROUP_ID, 'user_c');
   });
 

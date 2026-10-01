@@ -1,7 +1,7 @@
 import { GenerateInvitationCodeCommand } from '@contexts/group-invitation-codes/application/commands/generate-invitation-code/generate-invitation-code.command';
 import { GenerateInvitationCodeHandler } from '@contexts/group-invitation-codes/application/commands/generate-invitation-code/generate-invitation-code.handler';
 import { InvitationCodeGeneratorPort } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
@@ -47,7 +47,10 @@ describe('GenerateInvitationCodeHandler', () => {
     );
 
     expect(code).toBe('7KQ2M9XZ');
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_a');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_a' }),
+    );
     const saved = repository.save.mock
       .calls[0][0] as GroupInvitationCodeAggregate;
     expect(saved.toPrimitives()).toMatchObject({

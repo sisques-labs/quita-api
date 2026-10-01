@@ -4,8 +4,8 @@ import { RegenerateInvitationCodeHandler } from '@contexts/group-invitation-code
 import { GROUP_MEMBERS_PORT } from '@contexts/group-invitation-codes/application/ports/group-members.port';
 import { INVITATION_CODE_GENERATOR } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
 import { InvitationCodeValidateHandler } from '@contexts/group-invitation-codes/application/queries/invitation-code-validate/invitation-code-validate.handler';
-import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
-import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
+import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { GROUP_INVITATION_CODE_READ_REPOSITORY } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
 import { GROUP_INVITATION_CODE_WRITE_REPOSITORY } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupMembersBusAdapter } from '@contexts/group-invitation-codes/infrastructure/adapters/group-members-bus.adapter';

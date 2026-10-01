@@ -1,7 +1,8 @@
-import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
+import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import { InvitationCodeInvalidException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import { GroupInvitationCodeReadRepository } from '@contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
+import { InvitationCodeValueObject } from '@contexts/group-invitation-codes/domain/value-objects/invitation-code/invitation-code.value-object';
 import { Mocked } from 'vitest';
 
 describe('AssertActiveInvitationCodeExistsService', () => {
@@ -22,22 +23,17 @@ describe('AssertActiveInvitationCodeExistsService', () => {
       .buildViewModel();
     repository.findActiveByCode.mockResolvedValue(viewModel);
 
-    await expect(service.execute('7kq2m9xz')).resolves.toBe(viewModel);
+    await expect(
+      service.execute(new InvitationCodeValueObject('7kq2m9xz')),
+    ).resolves.toBe(viewModel);
     expect(repository.findActiveByCode).toHaveBeenCalledWith('7KQ2M9XZ');
   });
 
   it('reports an unknown or revoked code as invalid', async () => {
     repository.findActiveByCode.mockResolvedValue(null);
 
-    await expect(service.execute('7KQ2M9XZ')).rejects.toThrow(
-      InvitationCodeInvalidException,
-    );
-  });
-
-  it('reports a malformed code as invalid without hitting the repository', async () => {
-    await expect(service.execute('nope')).rejects.toThrow(
-      InvitationCodeInvalidException,
-    );
-    expect(repository.findActiveByCode).not.toHaveBeenCalled();
+    await expect(
+      service.execute(new InvitationCodeValueObject('7KQ2M9XZ')),
+    ).rejects.toThrow(InvitationCodeInvalidException);
   });
 });
