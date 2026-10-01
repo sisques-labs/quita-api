@@ -1,7 +1,7 @@
 import { DEFAULT_SORTS } from '@contexts/payments/application/constants/default-sorts.constant';
 import { GROUP_FIELD } from '@contexts/payments/application/constants/group-field.constant';
 import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import {
   PAYMENT_READ_REPOSITORY,
   PaymentReadRepository,
@@ -40,8 +40,8 @@ export class PaymentsFindByCriteriaHandler implements IQueryHandler<
       `Listing payments of group ${query.groupId.value} for ${query.requesterId.value}`,
     );
     await this.assertRequesterIsMember.execute(
-      query.groupId.value,
-      query.requesterId.value,
+      query.groupId,
+      query.requesterId,
     );
 
     const { filters, sorts, pagination } = query.criteria;

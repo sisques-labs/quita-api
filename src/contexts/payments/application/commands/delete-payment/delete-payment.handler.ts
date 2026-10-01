@@ -1,6 +1,6 @@
 import { DeletePaymentCommand } from '@contexts/payments/application/commands/delete-payment/delete-payment.command';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import {
   PAYMENT_WRITE_REPOSITORY,
@@ -29,15 +29,14 @@ export class DeletePaymentHandler
   }
 
   async execute(command: DeletePaymentCommand): Promise<string> {
-    const groupId = command.groupId.value;
     await this.assertRequesterIsMember.execute(
-      groupId,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const payment = await this.assertPaymentExists.execute(
-      command.paymentId.value,
-      groupId,
+      command.paymentId,
+      command.groupId,
     );
     payment.delete(command.requesterId.value, new Date());
 

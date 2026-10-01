@@ -1,8 +1,8 @@
 import { EditPaymentCommand } from '@contexts/payments/application/commands/edit-payment/edit-payment.command';
 import { EditPaymentHandler } from '@contexts/payments/application/commands/edit-payment/edit-payment.handler';
 import { GroupMembersPort } from '@contexts/payments/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
@@ -80,8 +80,14 @@ describe('EditPaymentHandler', () => {
   it('lets another member change the amount and records them as editor', async () => {
     await handler.execute(command({ amountCents: 2000 }));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_b');
-    expect(assertExists.execute).toHaveBeenCalledWith(ID, GROUP_ID);
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_b' }),
+    );
+    expect(assertExists.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: ID }),
+      expect.objectContaining({ value: GROUP_ID }),
+    );
     const saved = repository.save.mock.calls[0][0];
     expect(saved.toPrimitives()).toMatchObject({
       amountCents: 2000,

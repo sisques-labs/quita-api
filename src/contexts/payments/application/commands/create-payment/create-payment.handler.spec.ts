@@ -1,7 +1,7 @@
 import { CreatePaymentCommand } from '@contexts/payments/application/commands/create-payment/create-payment.command';
 import { CreatePaymentHandler } from '@contexts/payments/application/commands/create-payment/create-payment.handler';
 import { GroupMembersPort } from '@contexts/payments/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
 import { PaymentDateInFutureException } from '@contexts/payments/domain/exceptions/payment-date-in-future.exception';
@@ -61,7 +61,10 @@ describe('CreatePaymentHandler', () => {
   it('records the payment, defaults to EUR with no note, and publishes its event', async () => {
     const id = await handler.execute(new CreatePaymentCommand(input()));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_a');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_a' }),
+    );
     expect(savedPayment().toPrimitives()).toMatchObject({
       id,
       groupId: GROUP_ID,

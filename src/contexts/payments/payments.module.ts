@@ -4,8 +4,8 @@ import { EditPaymentHandler } from '@contexts/payments/application/commands/edit
 import { GROUP_MEMBERS_PORT } from '@contexts/payments/application/ports/group-members.port';
 import { PaymentsFindActiveByGroupHandler } from '@contexts/payments/application/queries/payments-find-active-by-group/payments-find-active-by-group.handler';
 import { PaymentsFindByCriteriaHandler } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.handler';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PAYMENT_READ_REPOSITORY } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PAYMENT_WRITE_REPOSITORY } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { GroupMembersBusAdapter } from '@contexts/payments/infrastructure/adapters/group-members-bus.adapter';
