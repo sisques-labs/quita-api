@@ -13,8 +13,28 @@ import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { BaseCommandHandler } from '@sisques-labs/nestjs-kit';
 
+export const MEMBERSHIP_CLEANUP_MAX_ATTEMPTS = 3;
+export const MEMBERSHIP_CLEANUP_RETRY_DELAY_MS = 50;
+
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 /**
- * Deletes the group and its associated memberships.
+ * Deletes the group and, on a best-effort basis, its membership roster.
+ *
+ * Ordering: the group row is hard-deleted FIRST, then the roster is cleaned
+ * through `GroupMembershipPort.deleteMemberships` (idempotent on the members
+ * side). Cleanup is retried up to `MEMBERSHIP_CLEANUP_MAX_ATTEMPTS` times in
+ * total with a short fixed delay; only after the last failure is a single
+ * error logged. The failure is never rethrown: the event is still published
+ * and the group id returned, so the outcome seen by the caller does not
+ * depend on the cleanup.
+ *
+ * Known trade-off: if every attempt fails, an orphan roster stays in the
+ * database and nothing reconciles it automatically. It is harmless today
+ * because `GroupsFindOwnHandler` resolves groups through `findByIds`, which
+ * returns nothing for a missing group row, and every other handler asserts the
+ * group exists first.
  */
 @CommandHandler(DeleteGroupCommand)
 export class DeleteGroupHandler
@@ -43,19 +63,33 @@ export class DeleteGroupHandler
 
     group.delete();
 
-    try {
-      await this.membershipPort.deleteMemberships(group.id.value);
-    } catch (error) {
-      this.logger.error(
-        `Could not delete memberships for group ${group.id.value}`,
-        error instanceof Error ? error.stack : undefined,
-      );
-    }
+    await this.deleteMembershipsBestEffort(group.id.value);
 
     await this.publishEvents(group);
 
     this.logger.log(`Group ${group.id.value} deleted`);
 
     return group.id.value;
+  }
+
+  private async deleteMembershipsBestEffort(groupId: string): Promise<void> {
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await this.membershipPort.deleteMemberships(groupId);
+        return;
+      } catch (error) {
+        if (attempt >= MEMBERSHIP_CLEANUP_MAX_ATTEMPTS) {
+          this.logger.error(
+            `Could not delete memberships for group ${groupId} after ${attempt} attempts`,
+            error instanceof Error ? error.stack : undefined,
+          );
+          return;
+        }
+        this.logger.warn(
+          `Membership cleanup for group ${groupId} failed (attempt ${attempt}/${MEMBERSHIP_CLEANUP_MAX_ATTEMPTS}), retrying`,
+        );
+        await sleep(MEMBERSHIP_CLEANUP_RETRY_DELAY_MS);
+      }
+    }
   }
 }
