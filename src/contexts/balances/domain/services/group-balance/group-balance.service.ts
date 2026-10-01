@@ -1,3 +1,4 @@
+import { MEMBERS_REQUIRED } from '@contexts/balances/domain/constants/members-required.constant';
 import { BalanceSplitType } from '@contexts/balances/domain/enums/balance-split-type.enum';
 import { BalanceParticipantUnknownException } from '@contexts/balances/domain/exceptions/balance-participant-unknown.exception';
 import { GroupNotReadyException } from '@contexts/balances/domain/exceptions/group-not-ready.exception';
@@ -7,8 +8,6 @@ import {
   BalanceDebt,
 } from '@contexts/balances/domain/interfaces/balance-entries.interface';
 import { BalanceAmountValueObject } from '@contexts/balances/domain/value-objects/balance-amount/balance-amount.value-object';
-
-const MEMBERS_REQUIRED = 2;
 
 /**
  * Pure calculator of the net position of each member of a two-person group.
