@@ -3,15 +3,13 @@ import { DeletePaymentCommand } from '@contexts/payments/application/commands/de
 import { EditPaymentCommand } from '@contexts/payments/application/commands/edit-payment/edit-payment.command';
 import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.query';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
-import {
-  CreatePaymentInput,
-  DeletePaymentInput,
-  EditPaymentInput,
-} from '@contexts/payments/transport/graphql/dtos/payment.inputs';
+import { PaymentCreateRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-create.request.dto';
+import { PaymentDeleteRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-delete.request.dto';
+import { PaymentEditRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-edit.request.dto';
 import { PaymentsFindByCriteriaRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payments-find-by-criteria.request.dto';
 import { PaymentGraphQLMapper } from '@contexts/payments/transport/graphql/mappers/payment-graphql.mapper';
-import { PaginatedPaymentResultObject } from '@contexts/payments/transport/graphql/objects/paginated-payment-result.object';
-import { PaymentObject } from '@contexts/payments/transport/graphql/objects/payment.object';
+import { PaginatedPaymentResultDto } from '@contexts/payments/transport/graphql/dtos/responses/payment.response.dto';
+import { PaymentResponseDto } from '@contexts/payments/transport/graphql/dtos/responses/payment.response.dto';
 import { paymentFilterableFields } from '@contexts/payments/transport/graphql/registries/payment-filterable-fields.registry';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
@@ -25,7 +23,7 @@ import {
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => PaymentObject)
+@Resolver(() => PaymentResponseDto)
 @UseGuards(ClerkAuthGuard)
 export class PaymentsResolver {
   private readonly logger = new Logger(PaymentsResolver.name);
@@ -43,7 +41,7 @@ export class PaymentsResolver {
       'Records a settlement between two members of a group the caller belongs to.',
   })
   async createPayment(
-    @Args('input') input: CreatePaymentInput,
+    @Args('input') input: PaymentCreateRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -74,7 +72,7 @@ export class PaymentsResolver {
     description: 'Edits an active payment; any member of the group may do so.',
   })
   async editPayment(
-    @Args('input') input: EditPaymentInput,
+    @Args('input') input: PaymentEditRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -107,7 +105,7 @@ export class PaymentsResolver {
       'Soft-deletes an active payment; any member of the group may do so.',
   })
   async deletePayment(
-    @Args('input') input: DeletePaymentInput,
+    @Args('input') input: PaymentDeleteRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -129,7 +127,7 @@ export class PaymentsResolver {
     });
   }
 
-  @Query(() => PaginatedPaymentResultObject, {
+  @Query(() => PaginatedPaymentResultDto, {
     name: 'payments',
     description:
       "A group's payment history, soft-deleted rows included, newest date first. Members only.",
@@ -143,7 +141,7 @@ export class PaymentsResolver {
     )
     criteria: PaymentsFindByCriteriaRequestDto | undefined,
     @AuthUser() user: AuthUser,
-  ): Promise<PaginatedPaymentResultObject> {
+  ): Promise<PaginatedPaymentResultDto> {
     this.logger.log(`payments group=${groupId} requester=${user.userId}`);
 
     const result = await this.queryBus.execute<
@@ -161,6 +159,6 @@ export class PaymentsResolver {
       }),
     );
 
-    return this.mapper.toPaginated(result);
+    return this.mapper.toPaginatedResponseDto(result);
   }
 }

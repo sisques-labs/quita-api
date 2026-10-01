@@ -1,7 +1,8 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { BasePaginatedResultDto } from '@sisques-labs/nestjs-kit/graphql';
 
-@ObjectType('Payment')
-export class PaymentObject {
+@ObjectType('PaymentResponseDto')
+export class PaymentResponseDto {
   @Field(() => ID)
   id!: string;
 
@@ -43,4 +44,10 @@ export class PaymentObject {
     description: 'Set when the payment was soft-deleted',
   })
   deletedAt!: Date | null;
+}
+
+@ObjectType('PaginatedPaymentResultDto')
+export class PaginatedPaymentResultDto extends BasePaginatedResultDto {
+  @Field(() => [PaymentResponseDto])
+  items!: PaymentResponseDto[];
 }

@@ -28,26 +28,30 @@ describe('PaymentGraphQLMapper', () => {
   const mapper = new PaymentGraphQLMapper();
 
   it('maps a view model to a GraphQL object, flagging a deleted row', () => {
-    expect(mapper.toObject(viewModel(ID_1, DELETED))).toEqual({
-      id: ID_1,
-      groupId: GROUP_ID,
-      fromUserId: 'user_a',
-      toUserId: 'user_b',
-      amountCents: 1234,
-      currency: 'EUR',
-      paidOn: '2026-02-28',
-      note: 'Rent',
-      createdBy: 'user_a',
-      updatedBy: 'user_b',
-      createdAt: CREATED,
-      updatedAt: CREATED,
-      deletedAt: DELETED,
-    });
-    expect(mapper.toObject(viewModel(ID_1, null)).deletedAt).toBeNull();
+    expect(mapper.toResponseDtoFromViewModel(viewModel(ID_1, DELETED))).toEqual(
+      {
+        id: ID_1,
+        groupId: GROUP_ID,
+        fromUserId: 'user_a',
+        toUserId: 'user_b',
+        amountCents: 1234,
+        currency: 'EUR',
+        paidOn: '2026-02-28',
+        note: 'Rent',
+        createdBy: 'user_a',
+        updatedBy: 'user_b',
+        createdAt: CREATED,
+        updatedAt: CREATED,
+        deletedAt: DELETED,
+      },
+    );
+    expect(
+      mapper.toResponseDtoFromViewModel(viewModel(ID_1, null)).deletedAt,
+    ).toBeNull();
   });
 
   it('maps a page, keeping order and paging metadata', () => {
-    const page = mapper.toPaginated(
+    const page = mapper.toPaginatedResponseDto(
       new PaginatedResult(
         [viewModel(ID_2, null), viewModel(ID_1, DELETED)],
         12,
