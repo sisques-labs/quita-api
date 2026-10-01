@@ -377,6 +377,26 @@ describe('payments persistence and adapters (integration)', () => {
         filter('deletedAt', FilterOperator.GREATER_THAN, '2000-01-01'),
         [4000],
       ],
+      [
+        'IS_NULL on deletedAt (active rows)',
+        { field: 'deletedAt', operator: FilterOperator.IS_NULL },
+        [2500, 1000],
+      ],
+      [
+        'IS_NOT_NULL on deletedAt (soft-deleted rows)',
+        { field: 'deletedAt', operator: FilterOperator.IS_NOT_NULL },
+        [4000],
+      ],
+      [
+        'LIKE with a literal underscore',
+        filter('fromUserId', FilterOperator.LIKE, 'l_c'),
+        [],
+      ],
+      [
+        'LIKE with a literal percent',
+        filter('fromUserId', FilterOperator.LIKE, '%'),
+        [],
+      ],
     ])('translates the %s operator', async (_name, paymentFilter, expected) => {
       const page = await history(groupId, 'alice', [paymentFilter]);
 

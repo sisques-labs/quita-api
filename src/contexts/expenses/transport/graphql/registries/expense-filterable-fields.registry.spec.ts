@@ -43,6 +43,25 @@ describe('expenseFilterableFields', () => {
   describe('with FilterValidationPipe', () => {
     const pipe = new FilterValidationPipe(expenseFilterableFields);
 
+    it.each([FilterOperator.IS_NULL, FilterOperator.IS_NOT_NULL])(
+      'accepts the %s operator without a value',
+      (operator) => {
+        const input = {
+          filters: [{ field: ExpenseQueryableField.DELETED_AT, operator }],
+        };
+
+        expect(pipe.transform(input)).toBe(input);
+      },
+    );
+
+    it('still rejects a null operator on a field outside the whitelist', () => {
+      expect(() =>
+        pipe.transform({
+          filters: [{ field: 'groupId', operator: FilterOperator.IS_NULL }],
+        }),
+      ).toThrow('Unknown filter field: "groupId"');
+    });
+
     it('accepts a member of the category enum', () => {
       const input = {
         filters: [
