@@ -89,8 +89,12 @@ describe('DeleteGroupHandler', () => {
 
     beforeEach(() => {
       vi.useFakeTimers();
-      errorSpy = vi.spyOn(Logger.prototype, 'error').mockImplementation();
-      warnSpy = vi.spyOn(Logger.prototype, 'warn').mockImplementation();
+      errorSpy = vi
+        .spyOn(Logger.prototype, 'error')
+        .mockImplementation(() => undefined);
+      warnSpy = vi
+        .spyOn(Logger.prototype, 'warn')
+        .mockImplementation(() => undefined);
     });
 
     afterEach(() => {
