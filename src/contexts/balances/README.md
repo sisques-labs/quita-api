@@ -48,7 +48,7 @@ and every context is registered in `ContextsModule`.
 
 | Operation | Result |
 |---|---|
-| `balance(groupId): GroupBalance` | Behind `ClerkAuthGuard`; the requester is the authenticated user (`@AuthUser()`), never an input. |
+| `balance(groupId): GroupBalanceResponseDto` | Behind `ClerkAuthGuard`; the requester is the authenticated user (`@AuthUser()`), never an input. |
 
 ## Tests
 
