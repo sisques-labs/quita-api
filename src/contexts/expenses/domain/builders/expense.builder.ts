@@ -8,6 +8,7 @@ import { ExpenseDescriptionValueObject } from '@contexts/expenses/domain/value-o
 import { ExpenseSplitTypeValueObject } from '@contexts/expenses/domain/value-objects/expense-split-type/expense-split-type.value-object';
 import { ExpenseUserIdValueObject } from '@contexts/expenses/domain/value-objects/expense-user-id/expense-user-id.value-object';
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
+import { Injectable } from '@nestjs/common';
 import {
   BaseBuilder,
   DateValueObject,
@@ -18,6 +19,7 @@ import {
  * Hydrates an expense from raw values. It validates formats only: the "not in
  * the future" rule needs `today` and is enforced by `ExpenseDateValueObject.create`.
  */
+@Injectable()
 export class ExpenseBuilder extends BaseBuilder<
   ExpenseAggregate,
   ExpenseViewModel
@@ -85,34 +87,47 @@ export class ExpenseBuilder extends BaseBuilder<
   }
 
   build(): ExpenseAggregate {
-    this.validateWithDefaults();
+    try {
+      this.validateWithDefaults();
 
-    return new ExpenseAggregate({
-      id: new UuidValueObject(this._id),
-      createdAt: new DateValueObject(this._createdAt),
-      updatedAt: new DateValueObject(this._updatedAt),
-      groupId: new UuidValueObject(this._groupId),
-      amount: new ExpenseAmountValueObject(this._amountCents),
-      paidBy: new ExpenseUserIdValueObject(this._paidBy),
-      spentOn: new ExpenseDateValueObject(this._spentOn),
-      description: this.normalizedDescription(),
-      category: this._category
-        ? new ExpenseCategoryValueObject(this._category)
-        : null,
-      splitType: new ExpenseSplitTypeValueObject(this._splitType),
-      createdBy: new ExpenseUserIdValueObject(this._createdBy),
-      updatedBy: new ExpenseUserIdValueObject(
-        this._updatedBy ?? this._createdBy,
-      ),
-      deletedAt: this._deletedAt ? new DateValueObject(this._deletedAt) : null,
-    });
+      return new ExpenseAggregate({
+        id: new UuidValueObject(this._id),
+        createdAt: new DateValueObject(this._createdAt),
+        updatedAt: new DateValueObject(this._updatedAt),
+        groupId: new UuidValueObject(this._groupId),
+        amount: new ExpenseAmountValueObject(this._amountCents),
+        paidBy: new ExpenseUserIdValueObject(this._paidBy),
+        spentOn: new ExpenseDateValueObject(this._spentOn),
+        description: this.normalizedDescription(),
+        category: this._category
+          ? new ExpenseCategoryValueObject(this._category)
+          : null,
+        splitType: new ExpenseSplitTypeValueObject(this._splitType),
+        createdBy: new ExpenseUserIdValueObject(this._createdBy),
+        updatedBy: new ExpenseUserIdValueObject(
+          this._updatedBy ?? this._createdBy,
+        ),
+        deletedAt: this._deletedAt
+          ? new DateValueObject(this._deletedAt)
+          : null,
+      });
+    } finally {
+      this.reset();
+    }
   }
 
   buildViewModel(): ExpenseViewModel {
-    const aggregate = this.build();
-    const primitives = aggregate.toPrimitives();
+    try {
+      const aggregate = this.build();
+      const primitives = aggregate.toPrimitives();
 
-    return new ExpenseViewModel({ ...primitives, currency: EXPENSE_CURRENCY });
+      return new ExpenseViewModel({
+        ...primitives,
+        currency: EXPENSE_CURRENCY,
+      });
+    } finally {
+      this.reset();
+    }
   }
 
   private normalizedDescription(): ExpenseDescriptionValueObject | null {
@@ -120,6 +135,24 @@ export class ExpenseBuilder extends BaseBuilder<
       return null;
     }
     return new ExpenseDescriptionValueObject(this._description);
+  }
+
+  /** Clears the inherited and local fields so a reused instance starts clean. */
+  private reset(): void {
+    // `BaseBuilder` declares these without defaults, so `undefined` is the initial state.
+    this._id = undefined as unknown as string;
+    this._createdAt = undefined as unknown as Date;
+    this._updatedAt = undefined as unknown as Date;
+    this._groupId = '';
+    this._amountCents = 0;
+    this._paidBy = '';
+    this._spentOn = '';
+    this._description = null;
+    this._category = null;
+    this._splitType = ExpenseSplitType.EQUAL;
+    this._createdBy = '';
+    this._updatedBy = null;
+    this._deletedAt = null;
   }
 
   private validateWithDefaults(): void {

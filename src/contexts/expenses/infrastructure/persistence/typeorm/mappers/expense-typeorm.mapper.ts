@@ -6,6 +6,8 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ExpenseTypeormMapper {
+  constructor(private readonly expenseBuilder: ExpenseBuilder) {}
+
   toAggregate(entity: ExpenseEntity): ExpenseAggregate {
     return this.toBuilder(entity).build();
   }
@@ -35,7 +37,7 @@ export class ExpenseTypeormMapper {
   }
 
   private toBuilder(entity: ExpenseEntity): ExpenseBuilder {
-    return new ExpenseBuilder()
+    return this.expenseBuilder
       .withId(entity.id)
       .withGroupId(entity.groupId)
       .withAmountCents(entity.amountCents)
