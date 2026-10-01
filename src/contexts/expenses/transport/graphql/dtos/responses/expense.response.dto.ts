@@ -1,9 +1,10 @@
 import { ExpenseCategory } from '@contexts/expenses/domain/enums/expense-category.enum';
 import { ExpenseSplitType } from '@contexts/expenses/domain/enums/expense-split-type.enum';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { BasePaginatedResultDto } from '@sisques-labs/nestjs-kit/graphql';
 
-@ObjectType('Expense')
-export class ExpenseObject {
+@ObjectType('ExpenseResponseDto')
+export class ExpenseResponseDto {
   @Field(() => ID)
   id!: string;
 
@@ -48,4 +49,10 @@ export class ExpenseObject {
     description: 'Set when the expense was soft-deleted',
   })
   deletedAt!: Date | null;
+}
+
+@ObjectType('PaginatedExpenseResultDto')
+export class PaginatedExpenseResultDto extends BasePaginatedResultDto {
+  @Field(() => [ExpenseResponseDto])
+  items!: ExpenseResponseDto[];
 }
