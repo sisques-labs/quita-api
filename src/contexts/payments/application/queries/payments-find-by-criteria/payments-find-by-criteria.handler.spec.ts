@@ -36,7 +36,13 @@ describe('PaymentsFindByCriteriaHandler', () => {
     repository.findByCriteria.mock.calls[0][0];
 
   beforeEach(() => {
-    repository = { findByCriteria: vi.fn(), findActiveByGroupId: vi.fn() };
+    repository = {
+      findById: vi.fn(),
+      findByCriteria: vi.fn(),
+      findActiveByGroupId: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    };
     assertMember = {
       execute: vi.fn(),
     } as unknown as Mocked<AssertRequesterIsGroupMemberService>;

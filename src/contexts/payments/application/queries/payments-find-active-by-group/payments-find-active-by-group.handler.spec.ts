@@ -11,7 +11,13 @@ describe('PaymentsFindActiveByGroupHandler', () => {
   let handler: PaymentsFindActiveByGroupHandler;
 
   beforeEach(() => {
-    repository = { findByCriteria: vi.fn(), findActiveByGroupId: vi.fn() };
+    repository = {
+      findById: vi.fn(),
+      findByCriteria: vi.fn(),
+      findActiveByGroupId: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    };
     handler = new PaymentsFindActiveByGroupHandler(repository);
   });
 
