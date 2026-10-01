@@ -16,7 +16,8 @@ import { PaymentTypeormReadRepository } from '@contexts/payments/infrastructure/
 import { PaymentTypeormWriteRepository } from '@contexts/payments/infrastructure/persistence/typeorm/repositories/payment-typeorm-write.repository';
 import '@contexts/payments/transport/graphql/enums/payments-registered-enums.graphql';
 import { PaymentGraphQLMapper } from '@contexts/payments/transport/graphql/mappers/payment-graphql.mapper';
-import { PaymentsResolver } from '@contexts/payments/transport/graphql/resolvers/payments.resolver';
+import { PaymentMutationsResolver } from '@contexts/payments/transport/graphql/resolvers/payment-mutations.resolver';
+import { PaymentQueriesResolver } from '@contexts/payments/transport/graphql/resolvers/payment-queries.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -58,7 +59,11 @@ const INFRASTRUCTURE_ADAPTERS = [
   { provide: GROUP_MEMBERS_PORT, useClass: GroupMembersBusAdapter },
 ];
 
-const TRANSPORT_PROVIDERS = [PaymentsResolver, PaymentGraphQLMapper];
+const TRANSPORT_PROVIDERS = [
+  PaymentQueriesResolver,
+  PaymentMutationsResolver,
+  PaymentGraphQLMapper,
+];
 
 /**
  * Reaches group-members only through the bus (see `GroupMembersBusAdapter`),
