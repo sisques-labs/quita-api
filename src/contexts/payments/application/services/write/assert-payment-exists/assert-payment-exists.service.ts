@@ -5,10 +5,14 @@ import {
   PaymentWriteRepository,
 } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
+import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 
 /**
  * Loads a payment for mutation. A payment that belongs to another group is
  * reported as missing, so ids cannot be probed across groups.
+ *
+ * Not `IBaseService` — that interface is single-input, and this assertion
+ * inherently needs two (paymentId + groupId).
  */
 @Injectable()
 export class AssertPaymentExistsService {
@@ -17,10 +21,13 @@ export class AssertPaymentExistsService {
     private readonly repository: PaymentWriteRepository,
   ) {}
 
-  async execute(paymentId: string, groupId: string): Promise<PaymentAggregate> {
-    const payment = await this.repository.findById(paymentId);
-    if (!payment || payment.groupId.value !== groupId) {
-      throw new PaymentNotFoundException(paymentId);
+  async execute(
+    paymentId: UuidValueObject,
+    groupId: UuidValueObject,
+  ): Promise<PaymentAggregate> {
+    const payment = await this.repository.findById(paymentId.value);
+    if (!payment || payment.groupId.value !== groupId.value) {
+      throw new PaymentNotFoundException(paymentId.value);
     }
     return payment;
   }

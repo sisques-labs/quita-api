@@ -1,7 +1,7 @@
 import { DeletePaymentCommand } from '@contexts/payments/application/commands/delete-payment/delete-payment.command';
 import { DeletePaymentHandler } from '@contexts/payments/application/commands/delete-payment/delete-payment.handler';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
@@ -60,7 +60,10 @@ describe('DeletePaymentHandler', () => {
   it('lets another member soft-delete the payment, keeping the row', async () => {
     await handler.execute(command('user_b'));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_b');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_b' }),
+    );
     expect(repository.delete).not.toHaveBeenCalled();
     const saved = repository.save.mock.calls[0][0].toPrimitives();
     expect(saved.deletedAt).toBeInstanceOf(Date);

@@ -1,7 +1,8 @@
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentNotFoundException } from '@contexts/payments/domain/exceptions/payment-not-found.exception';
 import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
+import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
 const ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
@@ -37,23 +38,28 @@ describe('AssertPaymentExistsService', () => {
     const aggregate = payment();
     repository.findById.mockResolvedValue(aggregate);
 
-    await expect(service.execute(ID, GROUP_ID)).resolves.toBe(aggregate);
+    await expect(
+      service.execute(new UuidValueObject(ID), new UuidValueObject(GROUP_ID)),
+    ).resolves.toBe(aggregate);
     expect(repository.findById).toHaveBeenCalledWith(ID);
   });
 
   it('reports a missing payment', async () => {
     repository.findById.mockResolvedValue(null);
 
-    await expect(service.execute(ID, GROUP_ID)).rejects.toThrow(
-      PaymentNotFoundException,
-    );
+    await expect(
+      service.execute(new UuidValueObject(ID), new UuidValueObject(GROUP_ID)),
+    ).rejects.toThrow(PaymentNotFoundException);
   });
 
   it('reports a payment of another group as not found (no cross-group leak)', async () => {
     repository.findById.mockResolvedValue(payment());
 
-    await expect(service.execute(ID, OTHER_GROUP_ID)).rejects.toThrow(
-      PaymentNotFoundException,
-    );
+    await expect(
+      service.execute(
+        new UuidValueObject(ID),
+        new UuidValueObject(OTHER_GROUP_ID),
+      ),
+    ).rejects.toThrow(PaymentNotFoundException);
   });
 });
