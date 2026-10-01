@@ -44,6 +44,15 @@ Table `group_invitation_codes` (migration `1780000000002-CreateGroupInvitationCo
 - Partial `UNIQUE (group_id) WHERE revoked_at IS NULL`
   (`uq_group_invitation_codes_active_group`): one active code per group.
 
+`IGroupInvitationCodeReadRepository` extends
+`IBaseReadRepository<GroupInvitationCodeViewModel>` (plus `findActiveByCode`):
+`findById` and `findByCriteria` are real, while `save` and `delete` are no-ops
+(the write side persists). `findByCriteria` (read and write repositories) is
+persistence-only: revoked rows are included and the whitelist
+(`group-invitation-code-queryable-fields.ts`) is `id`, `groupId`, `code`,
+`createdBy`, `revokedAt`, `createdAt` and `updatedAt`. It is not exposed through
+GraphQL.
+
 The write repository maps PostgreSQL unique violations (`23505`) to domain errors:
 
 | Cause | Error | Handling |

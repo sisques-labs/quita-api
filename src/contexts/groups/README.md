@@ -41,7 +41,13 @@ and both modules are registered in `ContextsModule`.
 
 Table `groups` (migration `1780000000001-CreateGroups`): PK `id`, `name`
 (CHECK not blank), `created_by` (indexed). The read repository queries the
-table directly and does not extend `IBaseReadRepository` (no projection store).
+table directly. `IGroupReadRepository` extends `IBaseReadRepository<GroupViewModel>`
+(plus `findByIds`): `findById` and `findByCriteria` are real, while `save` and
+`delete` are no-ops because there is no projection store (the write side
+persists). `findByCriteria` (read and write repositories) is persistence-only: it
+filters and sorts by `id`, `name`, `createdBy`, `createdAt` and `updatedAt`
+through the shared `group-queryable-fields.ts` whitelist, and is not exposed
+through GraphQL (no queryable-field enum, registry or filter input).
 
 ## Transport (GraphQL only)
 
