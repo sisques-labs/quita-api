@@ -1,5 +1,5 @@
 import { CreateGroupMembershipCommand } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
-import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists.service';
+import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists/assert-group-membership-not-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import {
@@ -32,7 +32,7 @@ export class CreateGroupMembershipHandler
   }
 
   async execute(command: CreateGroupMembershipCommand): Promise<void> {
-    await this.assertNotExists.execute(command.groupId.value);
+    await this.assertNotExists.execute(command.groupId);
 
     const now = new Date();
 

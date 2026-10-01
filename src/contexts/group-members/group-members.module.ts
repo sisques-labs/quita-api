@@ -5,9 +5,9 @@ import { GroupMemberIsMemberHandler } from '@contexts/group-members/application/
 import { GroupMembersFindByGroupIdHandler } from '@contexts/group-members/application/queries/group-members-find-by-group-id/group-members-find-by-group-id.handler';
 import { GroupMembersListHandler } from '@contexts/group-members/application/queries/group-members-list/group-members-list.handler';
 import { GroupMembershipFindGroupIdsByUserHandler } from '@contexts/group-members/application/queries/group-membership-find-group-ids-by-user/group-membership-find-group-ids-by-user.handler';
-import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists.service';
-import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists.service';
-import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists.service';
+import { AssertGroupMembershipViewModelExistsService } from '@contexts/group-members/application/services/read/assert-group-membership-view-model-exists/assert-group-membership-view-model-exists.service';
+import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists/assert-group-membership-exists.service';
+import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists/assert-group-membership-not-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GROUP_MEMBERSHIP_READ_REPOSITORY } from '@contexts/group-members/domain/repositories/read/group-membership-read.repository';
 import { GROUP_MEMBERSHIP_WRITE_REPOSITORY } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
