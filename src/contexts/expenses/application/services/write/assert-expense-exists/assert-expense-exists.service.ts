@@ -5,10 +5,14 @@ import {
   ExpenseWriteRepository,
 } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
+import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 
 /**
  * Loads an expense for mutation. An expense that belongs to another group is
  * reported as missing, so ids cannot be probed across groups.
+ *
+ * Not `IBaseService` — that interface is single-input, and this assertion
+ * inherently needs two (expenseId + groupId).
  */
 @Injectable()
 export class AssertExpenseExistsService {
@@ -17,10 +21,13 @@ export class AssertExpenseExistsService {
     private readonly repository: ExpenseWriteRepository,
   ) {}
 
-  async execute(expenseId: string, groupId: string): Promise<ExpenseAggregate> {
-    const expense = await this.repository.findById(expenseId);
-    if (!expense || expense.groupId.value !== groupId) {
-      throw new ExpenseNotFoundException(expenseId);
+  async execute(
+    expenseId: UuidValueObject,
+    groupId: UuidValueObject,
+  ): Promise<ExpenseAggregate> {
+    const expense = await this.repository.findById(expenseId.value);
+    if (!expense || expense.groupId.value !== groupId.value) {
+      throw new ExpenseNotFoundException(expenseId.value);
     }
     return expense;
   }

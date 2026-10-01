@@ -4,7 +4,12 @@ import {
 } from '@contexts/expenses/application/ports/group-members.port';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
 import { Inject, Injectable } from '@nestjs/common';
+import { StringValueObject, UuidValueObject } from '@sisques-labs/nestjs-kit';
 
+/**
+ * Not `IBaseService` — that interface is single-input, and this assertion
+ * inherently needs two (groupId + requesterId).
+ */
 @Injectable()
 export class AssertRequesterIsGroupMemberService {
   constructor(
@@ -12,10 +17,16 @@ export class AssertRequesterIsGroupMemberService {
     private readonly membersPort: GroupMembersPort,
   ) {}
 
-  async execute(groupId: string, requesterId: string): Promise<void> {
-    const isMember = await this.membersPort.isMember(groupId, requesterId);
+  async execute(
+    groupId: UuidValueObject,
+    requesterId: StringValueObject,
+  ): Promise<void> {
+    const isMember = await this.membersPort.isMember(
+      groupId.value,
+      requesterId.value,
+    );
     if (!isMember) {
-      throw new ExpenseAccessDeniedException(requesterId, groupId);
+      throw new ExpenseAccessDeniedException(requesterId.value, groupId.value);
     }
   }
 }

@@ -1,8 +1,8 @@
 import { EditExpenseCommand } from '@contexts/expenses/application/commands/edit-expense/edit-expense.command';
 import { EditExpenseHandler } from '@contexts/expenses/application/commands/edit-expense/edit-expense.handler';
 import { GroupMembersPort } from '@contexts/expenses/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
@@ -81,8 +81,14 @@ describe('EditExpenseHandler', () => {
   it('lets another member change the amount and records them as editor', async () => {
     await handler.execute(command({ amountCents: 2000 }));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_b');
-    expect(assertExists.execute).toHaveBeenCalledWith(ID, GROUP_ID);
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_b' }),
+    );
+    expect(assertExists.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: ID }),
+      expect.objectContaining({ value: GROUP_ID }),
+    );
     const saved = repository.save.mock.calls[0][0];
     expect(saved.toPrimitives()).toMatchObject({
       amountCents: 2000,

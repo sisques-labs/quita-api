@@ -1,7 +1,7 @@
 import { DeleteExpenseCommand } from '@contexts/expenses/application/commands/delete-expense/delete-expense.command';
 import { DeleteExpenseHandler } from '@contexts/expenses/application/commands/delete-expense/delete-expense.handler';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
@@ -59,7 +59,10 @@ describe('DeleteExpenseHandler', () => {
   it('lets another member soft-delete the expense, keeping the row', async () => {
     await handler.execute(command('user_b'));
 
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_b');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_b' }),
+    );
     expect(repository.delete).not.toHaveBeenCalled();
     const saved = repository.save.mock.calls[0][0].toPrimitives();
     expect(saved.deletedAt).toBeInstanceOf(Date);
