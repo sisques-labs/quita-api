@@ -2,7 +2,7 @@ import { EXPENSES_PORT } from '@contexts/balances/application/ports/expenses.por
 import { GROUP_MEMBERS_PORT } from '@contexts/balances/application/ports/group-members.port';
 import { PAYMENTS_PORT } from '@contexts/balances/application/ports/payments.port';
 import { GroupBalanceHandler } from '@contexts/balances/application/queries/group-balance/group-balance.handler';
-import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 import { ExpensesBusAdapter } from '@contexts/balances/infrastructure/adapters/expenses-bus.adapter';
 import { GroupMembersBusAdapter } from '@contexts/balances/infrastructure/adapters/group-members-bus.adapter';
