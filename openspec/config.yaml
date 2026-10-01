@@ -1,9 +1,9 @@
 schema: spec-driven
 
 context: |
-  Tech stack: NestJS 10, TypeScript (strict), GraphQL (Apollo code-first) + REST, CQRS (@nestjs/cqrs), TypeORM + PostgreSQL, Vitest, pnpm 9.15.4
-  Architecture: DDD + CQRS + Hexagonal (Screaming Architecture). No bounded contexts yet — this is a fresh service template; the first context added defines the pattern every subsequent one follows. Layers: domain / application / infrastructure / transport
-  Testing: Vitest unit (co-located .spec.ts, Mocked<T>) + integration (test/integration/*.integration-spec.ts, real Postgres) + E2E (test/*.e2e-spec.ts, AppModule). Coverage: pnpm test:cov
+  Tech stack: NestJS 11, TypeScript (strict), GraphQL (Apollo code-first; the business contexts are GraphQL-only, REST is limited to health and Swagger), CQRS (@nestjs/cqrs), TypeORM + PostgreSQL, Vitest, pnpm 12 (packageManager pnpm@12.6.0)
+  Architecture: DDD + CQRS + Hexagonal (Screaming Architecture). Six bounded contexts under src/contexts: groups, group-members, group-invitation-codes, expenses, payments, balances. Contexts talk to each other only through consumer-owned ports implemented by bus adapters in infrastructure/adapters; auth is Clerk (ClerkAuthGuard in src/core/auth/infrastructure/clerk). Layers: domain / application / infrastructure / transport
+  Testing: Vitest unit (co-located .spec.ts, Mocked<T>) + integration (test/integration/**/*.integration-spec.ts, real Postgres) + E2E (test/**/*.e2e-spec.ts, AppModule). Coverage: pnpm test:cov
   Style: Prettier + ESLint, Husky + lint-staged. Conventional Commits. No AI attribution in commits.
 
 testing:
