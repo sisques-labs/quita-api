@@ -29,6 +29,7 @@ Invariants live in the aggregate:
 |---|---|---|
 | `CreateGroupMembershipCommand { groupId, ownerId }` | command | Creates the roster with the owner as `OWNER`. Fails if it already exists. |
 | `AddGroupMemberCommand { groupId, userId }` | command | Adds a `MEMBER`; enforces limit and duplicates. |
+| `DeleteGroupMembershipCommand { groupId }` | command | Deletes the roster and its members. Idempotent: succeeds when no roster exists. Used by groups to clean up after a group is deleted (best-effort, retried by the caller). |
 | `GroupMemberIsMemberQuery { groupId, userId }` | query | `boolean`. |
 | `GroupMembersFindByGroupIdQuery { groupId }` | query | Roster view model. Trusted lookup for ports: the caller checks membership itself. |
 | `GroupMembershipFindGroupIdsByUserQuery { userId }` | query | `string[]` of group ids. |

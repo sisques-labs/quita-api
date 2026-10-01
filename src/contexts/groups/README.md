@@ -17,6 +17,7 @@ belongs to it" to `group-members` through a consumer-owned port.
 | Message | Kind | Result |
 |---|---|---|
 | `CreateGroupCommand { name, ownerId }` | command | Saves the group, calls `createMembership` on the port, publishes `GroupCreatedEvent`; returns the group id. If the port fails the group is deleted (compensation) and the original error is rethrown. |
+| `DeleteGroupCommand { groupId }` | command | **Internal only** (no requester, hard delete; dispatched solely by the create-group compensation, never exposed through GraphQL). Deletes the group, then calls `deleteMemberships` best-effort: up to 3 attempts with a 50 ms delay, a single error log after the last failure; the event is published and the id returned either way. A leftover orphan roster is harmless (groups are resolved through `findByIds`) and is not reconciled automatically. Exposing it would need a guard, a requester check, a soft-delete decision and cleanup of invitation codes, expenses and payments. |
 | `GroupFindByIdQuery { groupId, requesterId }` | query | Membership is checked first (non-members get `GroupAccessDeniedException`, so existence is not revealed), then the view model or `GroupNotFoundException`. |
 | `GroupsFindOwnQuery { requesterId }` | query | Only the groups the requester belongs to. |
 
@@ -29,6 +30,7 @@ to import another context. It maps to group-members' public messages only:
 | Port method | group-members message |
 |---|---|
 | `createMembership(groupId, ownerId)` | `CreateGroupMembershipCommand` |
+| `deleteMemberships(groupId)` | `DeleteGroupMembershipCommand` |
 | `isMember(groupId, userId)` | `GroupMemberIsMemberQuery` |
 | `listGroupIdsForUser(userId)` | `GroupMembershipFindGroupIdsByUserQuery` |
 

@@ -4,8 +4,8 @@ evidence_revision: sha256:805884ad856ea2497a56d5c2da0b7446a63886fd38ec76da4118bb
 verdict: pass_with_warnings
 blockers: 0
 critical_findings: 0
-requirements: 22/22
-scenarios: 50/50
+requirements: 23/23
+scenarios: 52/52
 test_command: pnpm test
 test_exit_code: 0
 test_output_hash: sha256:805884ad856ea2497a56d5c2da0b7446a63886fd38ec76da4118bb5e5932ffd0
@@ -32,17 +32,17 @@ Changes seen: `delete-group` feature (`DeleteGroupCommand`/handler, `GroupMember
 | Tasks total | 23 checklist items, 0 unchecked (apply-progress #951 says "28/28" and predates PR #23: it does not mention delete-group) |
 | Tasks complete | 23 |
 | Tasks incomplete | 0 |
-| Spec requirements | 22 (7 capabilities) |
-| Spec scenarios | 50 |
+| Spec requirements | 23 (7 capabilities) |
+| Spec scenarios | 52 |
 
 ### Build & Tests Execution
 | Command | Exit | Result |
 |---|---|---|
 | `pnpm exec eslint "{src,apps,libs,test}/**/*.ts"` (lint script without `--fix`) | 0 | 0 errors; `boundaries` plugin deprecation notices only |
 | `pnpm tsc --noEmit` | 0 | clean |
-| `pnpm test` | 0 | 104 files, 501 passed, 0 failed, 0 skipped (was 101 / 488) |
+| `pnpm test` | 0 | 104 files, 504 passed, 0 failed, 0 skipped (was 101 / 488; re-run after the retry change: 504) |
 | `pnpm gen:topics:check` | 0 | up to date (5 aggregates) |
-| `pnpm test:cov` | 0 | 83.29% stmts / 83.72% branches / 84.11% funcs / 84.06% lines (threshold 80); `delete-group` dir 100% stmts / 50% branches |
+| `pnpm test:cov` | 0 | 83.45% stmts / 83.8% branches / 84.21% funcs / 84.19% lines (threshold 80); `delete-group` dir 100% stmts / 50% branches |
 | `pnpm test:integration` (real Postgres via `pnpm test:db:up`) | 0 | 6 files, 97 passed (was 93; the log line `members unavailable` comes from the intentional compensation test) |
 | `pnpm test:e2e` | 0 | 6 files, 54 passed |
 | `pnpm build` | 0 | nest build OK |
@@ -50,7 +50,7 @@ Changes seen: `delete-group` feature (`DeleteGroupCommand`/handler, `GroupMember
 
 `git status` was clean before and after all runs (no source modified). Generated `dist/` and `coverage/` are git-ignored.
 
-**Coverage**: 84.06% lines / threshold 80% -> Above.
+**Coverage**: 84.19% lines / threshold 80% -> Above.
 
 ### TDD Compliance
 | Check | Result | Details |
@@ -58,7 +58,7 @@ Changes seen: `delete-group` feature (`DeleteGroupCommand`/handler, `GroupMember
 | TDD evidence reported | ⚠️ | Present per PR in apply-progress #951 as narrative (RED = module-not-found, GREEN counts, triangulation); no uniform per-task table and no Safety Net / Refactor columns |
 | All tasks have tests | ✅ | 23/23 tasks map to existing spec files |
 | RED confirmed (tests exist) | ✅ | All cited spec and integration files exist |
-| GREEN confirmed | ✅ | 501 unit, 97 integration, 54 e2e all pass now |
+| GREEN confirmed | ✅ | 504 unit, 97 integration, 54 e2e all pass now |
 | Triangulation adequate | ✅ | New delete-group tests: handler spec (happy path, not found, cleanup failure, invalid id), adapter spec, 2 integration cases each side. Also multi-case tests (Madrid clock 3 cases, balance calculator 500-case property, etc.) |
 | Safety Net for modified files | ➖ | Not reported; only a handful of pre-existing files modified (bootstrap helpers, module wiring) |
 
@@ -67,12 +67,12 @@ The PR #23 / delete-group work has no entry in apply-progress #951 and no checkl
 ### Test Layer Distribution
 | Layer | Tests | Files | Tools |
 |-------|-------|-------|-------|
-| Unit | 501 | 104 | vitest + swc |
+| Unit | 504 | 104 | vitest + swc |
 | Integration | 97 | 6 | vitest + Postgres |
 | E2E | 54 | 6 | vitest + supertest, local JWKS signer |
 
 ### Changed File Coverage (unit-only `pnpm test:cov`)
-The aggregate passes (84.06% lines), but every TypeORM read/write repository and both `*-criteria-query.ts` files report 0% in the unit run (for example expenses criteria query L11-61, expense repos L25-74, payments repos L19-163). They are exercised only by `pnpm test:integration`, which is not part of the coverage gate. Clerk guard: 96.15% lines (uncovered L82).
+The aggregate passes (84.19% lines), but every TypeORM read/write repository and both `*-criteria-query.ts` files report 0% in the unit run (for example expenses criteria query L11-61, expense repos L25-74, payments repos L19-163). They are exercised only by `pnpm test:integration`, which is not part of the coverage gate. Clerk guard: 96.15% lines (uncovered L82).
 
 ### Assertion Quality
 No tautologies, ghost loops or assertion-free tests found. `toBeDefined`/`not.toBeNull` hits (5) are companions of value assertions or are inside a loop over a registry enum with a separate key-set equality check. `toEqual([])` uses all have non-empty companions (for example `balances.integration-spec.ts:155` vs the populated cases, `groups.e2e-spec.ts:76` vs list tests).
@@ -131,12 +131,12 @@ New tests inspected (`delete-group.handler.spec.ts`, `delete-group-membership.ha
 | | Deleted ignored | `balances.integration-spec.ts:158 ignores soft-deleted expenses and payments` (real PG); e2e uses DELETE_EXPENSE/DELETE_PAYMENT | ✅ |
 | balances / Access control | Non-member | e2e `denies the balance of a group to a non-member`; handler spec | ✅ |
 
-Counts re-done from the spec headings: 22 `### Requirement:` and 50 `#### Scenario:` (unchanged; no spec file changed since the previous verification). `delete-group` has NO requirement or scenario, so it is outside this matrix (see WARNING 7).
+Counts re-done from the spec headings: 23 `### Requirement:` and 52 `#### Scenario:` (was 22 / 50: `specs/groups/spec.md:41` adds `Group creation compensation` with 2 scenarios, covered by `group.integration-spec.ts:133` and `:174` and `delete-group.handler.spec.ts`). Group deletion itself stays internal and has no client-facing requirement (WARNING 7 resolved).
 
-**Compliance summary**: 50/50 scenarios compliant. Note: there is no dedicated `group-members` e2e file; the capability is covered through groups and codes e2e, integration, and unit specs.
+**Compliance summary**: 52/52 scenarios compliant (the 2 new `Group creation compensation` scenarios are covered by the group integration suite and the delete-group handler spec). Note: there is no dedicated `group-members` e2e file; the capability is covered through groups and codes e2e, integration, and unit specs.
 
 ### Correctness (Static Evidence)
-All 22 requirements implemented. Every GraphQL resolver class in `src/contexts` carries class-level `@UseGuards(ClerkAuthGuard)` and takes `requesterId` from `@AuthUser()`, never from input (scripted: `rg --files-without-match` over all `*resolver.ts` lists only `ping.resolver.ts`, the pre-existing template placeholder, and `user-id-resolver.ts`, which is not a GraphQL resolver).
+All 23 requirements implemented. Every GraphQL resolver class in `src/contexts` carries class-level `@UseGuards(ClerkAuthGuard)` and takes `requesterId` from `@AuthUser()`, never from input (scripted: `rg --files-without-match` over all `*resolver.ts` lists only `ping.resolver.ts`, the pre-existing template placeholder, and `user-id-resolver.ts`, which is not a GraphQL resolver).
 
 **delete-group exposure**: NOT exposed through GraphQL. `groups.resolver.ts` has only `createGroup`, `group`, `groups`; `DeleteGroupCommand` is dispatched from exactly one place, `create-group.handler.ts:75` (compensation). No unguarded or non-member-checked path to delete a group exists today. `DeleteGroupHandler` itself performs no requester or membership check (`delete-group.handler.ts:37-58`; the command has only `groupId`), so the safety rests on it staying internal.
 
@@ -171,11 +171,13 @@ All 22 requirements implemented. Every GraphQL resolver class in `src/contexts` 
 1. (still open) Stale docs. `openspec/config.yaml:4` says "NestJS 10 ... pnpm 9.15.4" but `package.json` has `@nestjs/core 11.2.6`, `packageManager pnpm@12.6.0` (and `devEngines >=11`, which makes pnpm print a mismatch warning on every command). `README.md:22-26` still says "Add bounded contexts under src/contexts" and does not mention the six contexts, Clerk auth or new env vars; the README auth row (L37) still describes only Sisques Account.
 2. (still open) New env vars `CLERK_JWKS_URL`, `CLERK_ISSUER`, `CLERK_AUTHORIZED_PARTIES`, `APP_TIMEZONE` are not referenced in any non-src file (`git grep` found none outside src/test/openspec); `.env.example` was not readable by the verifier (permission denied), but git grep over tracked files shows no hit, so it appears undocumented.
 3. (still open) Clerk guard `clerk-auth.guard.ts:72-79` (re-read: `typeof authorizedParty === 'string' &&` at L75): `azp` is only enforced when present. With `CLERK_AUTHORIZED_PARTIES` configured, a validly signed token without `azp` is accepted. Matches the design text ("optional azp") and the implementation is documented, but it weakens the party allow-list.
-4. (still open) Coverage gate is satisfied only by unit tests (84.06% lines); all TypeORM repositories and criteria-query translators show 0% in `pnpm test:cov` and rely on integration runs that the gate does not include. A regression in integration-only code is invisible to the threshold.
+4. (still open) Coverage gate is satisfied only by unit tests (84.19% lines); all TypeORM repositories and criteria-query translators show 0% in `pnpm test:cov` and rely on integration runs that the gate does not include. A regression in integration-only code is invisible to the threshold.
 5. (still open, slightly wider) Strict TDD evidence is partial: several integration and e2e suites were written after the wiring (passed first run, per apply-progress), and apply-progress has no uniform TDD Cycle table (no Safety Net or Refactor columns).
 6. (still open) Apply-progress counts "28/28" tasks while tasks.md has 23 checklist items (23 checked, 0 unchecked); bookkeeping mismatch only.
-7. (NEW) Spec/design coverage gap for `delete-group`. `specs/groups/spec.md` has no requirement or scenario for deleting a group (rg for delete in specs/groups and specs/group-members: no hits); proposal.md, tasks.md and README.md do not mention it either; the only artifact text is design decision #2 (`design.md:20`) describing it as compensation. The implemented behavior (`DeleteGroupCommand`, `GroupDeletedEvent`, `deleteMemberships` port method) is therefore unspecified. Either add a requirement (internal compensation only, or user-facing delete with member/owner rules) or record it as an intentional non-spec internal capability in the change artifacts; add the PR #23 work to tasks.md/apply-progress.
-8. (NEW) Best-effort cleanup can leave an orphan roster. `delete-group.handler.ts:40-52`: the group row is deleted first, then `deleteMemberships` failure is caught and only logged (`logger.error`), the handler still publishes the event and returns success. Result: a roster (`group_memberships` + members) for a non-existent group may remain, with no retry or reconciliation job. This is covered by `delete-group.handler.spec.ts:82` and `group.integration-spec.ts:174` but the handler docstring (L16-18, "Deletes the group and its associated memberships") and design #2 do not state the best-effort semantics. Impact is low today: an orphan roster is not reachable through the API (`groups-find-own.handler.ts:30-38` fetches groups by the roster's ids with `findByIds`, which returns nothing for a missing group row, and every other handler asserts the group first), but the stale rows (and the user's slot) stay in the database.
+7. (RESOLVED) Spec/design coverage gap for `delete-group`. `specs/groups/spec.md` has no requirement or scenario for deleting a group (rg for delete in specs/groups and specs/group-members: no hits); proposal.md, tasks.md and README.md do not mention it either; the only artifact text is design decision #2 (`design.md:20`) describing it as compensation. The implemented behavior (`DeleteGroupCommand`, `GroupDeletedEvent`, `deleteMemberships` port method) is therefore unspecified. Either add a requirement (internal compensation only, or user-facing delete with member/owner rules) or record it as an intentional non-spec internal capability in the change artifacts; add the PR #23 work to tasks.md/apply-progress.
+   Resolution: requirement `Group creation compensation` added (`specs/groups/spec.md:41`, 2 scenarios, no client-facing deletion); internal status and semantics recorded in design decision #2 (`design.md:20`) and `src/contexts/groups/README.md:20`. tasks.md/apply-progress bookkeeping is unchanged.
+8. (MITIGATED) Best-effort cleanup can leave an orphan roster. `delete-group.handler.ts:40-52`: the group row is deleted first, then `deleteMemberships` failure is caught and only logged (`logger.error`), the handler still publishes the event and returns success. Result: a roster (`group_memberships` + members) for a non-existent group may remain, with no retry or reconciliation job. This is covered by `delete-group.handler.spec.ts:82` and `group.integration-spec.ts:174` but the handler docstring (L16-18, "Deletes the group and its associated memberships") and design #2 do not state the best-effort semantics. Impact is low today: an orphan roster is not reachable through the API (`groups-find-own.handler.ts:30-38` fetches groups by the roster's ids with `findByIds`, which returns nothing for a missing group row, and every other handler asserts the group first), but the stale rows (and the user's slot) stay in the database.
+   Mitigation: `deleteMemberships` is now retried up to 3 attempts in total with a 50 ms delay (`delete-group.handler.ts:16-17,75-96`), one warn per retry and a single error log with attempt count and group id after the last failure; semantics and the accepted orphan-roster trade-off are documented in the handler docstring (`delete-group.handler.ts:20-38`), design decision #2 (`design.md:20`) and the groups README. No automatic reconciliation (deliberate); the Kafka inbound consumer alternative is recorded as Deferred in the design.
 
 **SUGGESTION** (1-6 still open):
 1. Guard does not validate `aud`; Clerk session tokens carry none by default, so acceptable, but consider an optional audience setting and `clockTolerance`.
@@ -184,8 +186,9 @@ All 22 requirements implemented. Every GraphQL resolver class in `src/contexts` 
 4. `pnpm lint` script uses `--fix`, so it can mutate files during verification; consider a `lint:check` script.
 5. `boundaries/element-types` plugin logs a legacy `${...}` template syntax deprecation; migrate to `{{...}}`.
 6. Add a dedicated `group-members` e2e (non-member list denied) and merge integration coverage into the gate.
-7. (NEW) `DeleteGroupCommand` carries no `requesterId` and `DeleteGroupHandler` has no membership/ownership check, and it hard-deletes (not soft, unlike decision #7) without touching expenses, payments or codes of the group. Safe while only `create-group.handler.ts:75` dispatches it; if it is ever exposed through GraphQL it needs a guard, a requester check, a spec requirement and a cascade or soft-delete decision. Consider a comment in the command marking it internal.
+7. (RESOLVED) `DeleteGroupCommand` carries no `requesterId` and `DeleteGroupHandler` has no membership/ownership check, and it hard-deletes (not soft, unlike decision #7) without touching expenses, payments or codes of the group. Safe while only `create-group.handler.ts:75` dispatches it; if it is ever exposed through GraphQL it needs a guard, a requester check, a spec requirement and a cascade or soft-delete decision. Consider a comment in the command marking it internal.
+   Resolution: marked `INTERNAL ONLY` with the exposure prerequisites in `delete-group.command.ts:8-16`, in design decision #2 (`design.md:20`) and in `src/contexts/groups/README.md:20`.
 
 ### Verdict
 PASS WITH WARNINGS
-All 23 tasks done, 22/22 requirements and 50/50 scenarios covered by passing tests on the new tip; lint, tsc, unit (501), integration (97), e2e (54), coverage (84.06%), topics check, build and migration up/down all green; all handlers registered; delete-group is internal only. 0 CRITICAL, 8 WARNING (6 carried over + delete-group spec gap + best-effort orphan roster), 7 SUGGESTION.
+All 23 tasks done, 23/23 requirements and 52/52 scenarios covered by passing tests on the new tip; lint, tsc, unit (504), integration (97), e2e (54), coverage (84.19%), topics check, build and migration up/down all green; all handlers registered; delete-group is internal only. 0 CRITICAL, 6 WARNING (carried over; former WARNING 7 resolved, WARNING 8 mitigated), 6 SUGGESTION open (SUGGESTION 7 resolved).
