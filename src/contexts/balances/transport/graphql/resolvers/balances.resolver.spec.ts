@@ -19,16 +19,16 @@ describe('BalancesResolver', () => {
 
   it('reads the balance on behalf of the authenticated user, never of input', async () => {
     queryBus.execute.mockResolvedValue(
-      new GroupBalanceViewModel(
-        GROUP_ID,
-        'EUR',
-        false,
-        [
+      new GroupBalanceViewModel({
+        groupId: GROUP_ID,
+        currency: 'EUR',
+        settled: false,
+        memberBalances: [
           { userId: 'user_a', netCents: 500 },
           { userId: 'user_b', netCents: -500 },
         ],
-        [{ fromUserId: 'user_b', toUserId: 'user_a', amountCents: 500 }],
-      ),
+        debts: [{ fromUserId: 'user_b', toUserId: 'user_a', amountCents: 500 }],
+      }),
     );
 
     const result = await resolver.balance(GROUP_ID, { userId: 'user_b' });
