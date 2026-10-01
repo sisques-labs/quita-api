@@ -7,16 +7,16 @@ describe('GroupBalanceGraphQLMapper', () => {
   const mapper = new GroupBalanceGraphQLMapper();
 
   it('maps a balance with a debt', () => {
-    const viewModel = new GroupBalanceViewModel(
-      GROUP_ID,
-      'EUR',
-      false,
-      [
+    const viewModel = new GroupBalanceViewModel({
+      groupId: GROUP_ID,
+      currency: 'EUR',
+      settled: false,
+      memberBalances: [
         { userId: 'user_a', netCents: 500 },
         { userId: 'user_b', netCents: -500 },
       ],
-      [{ fromUserId: 'user_b', toUserId: 'user_a', amountCents: 500 }],
-    );
+      debts: [{ fromUserId: 'user_b', toUserId: 'user_a', amountCents: 500 }],
+    });
 
     expect(mapper.toObject(viewModel)).toEqual({
       groupId: GROUP_ID,
@@ -31,16 +31,16 @@ describe('GroupBalanceGraphQLMapper', () => {
   });
 
   it('maps a settled balance without debts', () => {
-    const viewModel = new GroupBalanceViewModel(
-      GROUP_ID,
-      'EUR',
-      true,
-      [
+    const viewModel = new GroupBalanceViewModel({
+      groupId: GROUP_ID,
+      currency: 'EUR',
+      settled: true,
+      memberBalances: [
         { userId: 'user_a', netCents: 0 },
         { userId: 'user_b', netCents: 0 },
       ],
-      [],
-    );
+      debts: [],
+    });
 
     const object = mapper.toObject(viewModel);
 

@@ -64,12 +64,12 @@ export class GroupBalanceHandler implements IQueryHandler<
       payments,
     });
 
-    return new GroupBalanceViewModel(
+    return new GroupBalanceViewModel({
       groupId,
-      CURRENCY,
-      result.settled,
-      result.memberBalances,
-      result.debts,
-    );
+      currency: CURRENCY,
+      settled: result.settled,
+      memberBalances: result.memberBalances,
+      debts: result.debts,
+    });
   }
 }
