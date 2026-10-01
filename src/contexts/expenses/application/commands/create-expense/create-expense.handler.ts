@@ -1,4 +1,5 @@
 import { CreateExpenseCommand } from '@contexts/expenses/application/commands/create-expense/create-expense.command';
+import { MIN_MEMBERS } from '@contexts/expenses/application/constants/min-members.constant';
 import {
   GROUP_MEMBERS_PORT,
   GroupMembersPort,
@@ -17,9 +18,6 @@ import { CLOCK, ClockPort } from '@core/clock/domain/clock.port';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { BaseCommandHandler, UuidValueObject } from '@sisques-labs/nestjs-kit';
-
-/** Members a group needs before its first expense (payer plus the other side of the split). */
-const MIN_MEMBERS = 2;
 
 @CommandHandler(CreateExpenseCommand)
 export class CreateExpenseHandler

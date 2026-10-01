@@ -1,7 +1,5 @@
-import {
-  EXPENSE_CURRENCY,
-  ExpenseAggregate,
-} from '@contexts/expenses/domain/aggregates/expense.aggregate';
+import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
+import { EXPENSE_CURRENCY } from '@contexts/expenses/domain/constants/expense-currency.constant';
 import { ExpenseSplitType } from '@contexts/expenses/domain/enums/expense-split-type.enum';
 import { ExpenseAmountValueObject } from '@contexts/expenses/domain/value-objects/expense-amount/expense-amount.value-object';
 import { ExpenseCategoryValueObject } from '@contexts/expenses/domain/value-objects/expense-category/expense-category.value-object';

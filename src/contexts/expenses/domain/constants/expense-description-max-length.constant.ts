@@ -1,0 +1,1 @@
+export const EXPENSE_DESCRIPTION_MAX_LENGTH = 200;

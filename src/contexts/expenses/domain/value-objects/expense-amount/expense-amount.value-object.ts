@@ -1,7 +1,5 @@
+import { EXPENSE_AMOUNT_MAX_CENTS } from '@contexts/expenses/domain/constants/expense-amount-max-cents.constant';
 import { NumberValueObject } from '@sisques-labs/nestjs-kit';
-
-/** Largest value of the Postgres `integer` column that stores the cents. */
-export const EXPENSE_AMOUNT_MAX_CENTS = 2147483647;
 
 /** Positive integer amount in EUR cents. */
 export class ExpenseAmountValueObject extends NumberValueObject {
