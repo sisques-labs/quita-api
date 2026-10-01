@@ -2,7 +2,7 @@ import { createE2EApp, E2EContext } from '../helpers/app-bootstrap';
 import { truncateAll } from '../helpers/db-reset';
 
 const CREATE_GROUP = `
-  mutation CreateGroup($input: CreateGroupInput!) {
+  mutation CreateGroup($input: GroupCreateRequestDto!) {
     createGroup(input: $input) { success message id }
   }
 `;
