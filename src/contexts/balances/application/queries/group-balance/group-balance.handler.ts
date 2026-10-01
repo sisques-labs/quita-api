@@ -12,12 +12,11 @@ import {
 } from '@contexts/balances/application/ports/payments.port';
 import { GroupBalanceQuery } from '@contexts/balances/application/queries/group-balance/group-balance.query';
 import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member.service';
+import { BALANCE_CURRENCY } from '@contexts/balances/domain/constants/balance-currency.constant';
 import { GroupBalanceCalculator } from '@contexts/balances/domain/services/group-balance/group-balance.service';
 import { GroupBalanceViewModel } from '@contexts/balances/domain/view-models/group-balance.view-model';
 import { Inject, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-const CURRENCY = 'EUR';
 
 /**
  * Computes a group's balance on read from its active expenses and payments.
@@ -66,7 +65,7 @@ export class GroupBalanceHandler implements IQueryHandler<
 
     return new GroupBalanceViewModel({
       groupId,
-      currency: CURRENCY,
+      currency: BALANCE_CURRENCY,
       settled: result.settled,
       memberBalances: result.memberBalances,
       debts: result.debts,
