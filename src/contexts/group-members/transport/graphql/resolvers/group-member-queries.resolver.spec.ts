@@ -3,19 +3,19 @@ import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMemberAccessDeniedException } from '@contexts/group-members/domain/exceptions/group-member-access-denied.exception';
 import { GroupMemberGraphQLMapper } from '@contexts/group-members/transport/graphql/mappers/group-member-graphql.mapper';
-import { GroupMembersResolver } from '@contexts/group-members/transport/graphql/resolvers/group-members.resolver';
+import { GroupMemberQueriesResolver } from '@contexts/group-members/transport/graphql/resolvers/group-member-queries.resolver';
 import { QueryBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
-describe('GroupMembersResolver', () => {
+describe('GroupMemberQueriesResolver', () => {
   let queryBus: Mocked<QueryBus>;
-  let resolver: GroupMembersResolver;
+  let resolver: GroupMemberQueriesResolver;
 
   beforeEach(() => {
     queryBus = { execute: vi.fn() } as unknown as Mocked<QueryBus>;
-    resolver = new GroupMembersResolver(
+    resolver = new GroupMemberQueriesResolver(
       queryBus,
       new GroupMemberGraphQLMapper(),
     );

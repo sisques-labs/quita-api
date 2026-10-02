@@ -14,7 +14,8 @@ import { GroupTypeormMapper } from '@contexts/groups/infrastructure/persistence/
 import { GroupTypeormReadRepository } from '@contexts/groups/infrastructure/persistence/typeorm/repositories/group-typeorm-read.repository';
 import { GroupTypeormWriteRepository } from '@contexts/groups/infrastructure/persistence/typeorm/repositories/group-typeorm-write.repository';
 import { GroupGraphQLMapper } from '@contexts/groups/transport/graphql/mappers/group-graphql.mapper';
-import { GroupsResolver } from '@contexts/groups/transport/graphql/resolvers/groups.resolver';
+import { GroupMutationsResolver } from '@contexts/groups/transport/graphql/resolvers/group-mutations.resolver';
+import { GroupQueriesResolver } from '@contexts/groups/transport/graphql/resolvers/group-queries.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -48,7 +49,11 @@ const INFRASTRUCTURE_ADAPTERS = [
   { provide: GROUP_MEMBERSHIP_PORT, useClass: GroupMembershipBusAdapter },
 ];
 
-const TRANSPORT_PROVIDERS = [GroupsResolver, GroupGraphQLMapper];
+const TRANSPORT_PROVIDERS = [
+  GroupQueriesResolver,
+  GroupMutationsResolver,
+  GroupGraphQLMapper,
+];
 
 /**
  * Reaches group-members only through the bus (see `GroupMembershipBusAdapter`),

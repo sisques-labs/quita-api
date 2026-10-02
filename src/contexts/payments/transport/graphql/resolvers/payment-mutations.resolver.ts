@@ -1,37 +1,26 @@
 import { CreatePaymentCommand } from '@contexts/payments/application/commands/create-payment/create-payment.command';
 import { DeletePaymentCommand } from '@contexts/payments/application/commands/delete-payment/delete-payment.command';
 import { EditPaymentCommand } from '@contexts/payments/application/commands/edit-payment/edit-payment.command';
-import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.query';
-import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
 import { PaymentCreateRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-create.request.dto';
 import { PaymentDeleteRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-delete.request.dto';
 import { PaymentEditRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payment-edit.request.dto';
-import { PaymentsFindByCriteriaRequestDto } from '@contexts/payments/transport/graphql/dtos/requests/payments-find-by-criteria.request.dto';
-import { PaymentGraphQLMapper } from '@contexts/payments/transport/graphql/mappers/payment-graphql.mapper';
-import { PaginatedPaymentResultDto } from '@contexts/payments/transport/graphql/dtos/responses/payment.response.dto';
-import { PaymentResponseDto } from '@contexts/payments/transport/graphql/dtos/responses/payment.response.dto';
-import { paymentFilterableFields } from '@contexts/payments/transport/graphql/registries/payment-filterable-fields.registry';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Criteria, PaginatedResult } from '@sisques-labs/nestjs-kit';
+import { CommandBus } from '@nestjs/cqrs';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import {
-  FilterValidationPipe,
   MutationResponseDto,
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => PaymentResponseDto)
+@Resolver()
 @UseGuards(ClerkAuthGuard)
-export class PaymentsResolver {
-  private readonly logger = new Logger(PaymentsResolver.name);
+export class PaymentMutationsResolver {
+  private readonly logger = new Logger(PaymentMutationsResolver.name);
 
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-    private readonly mapper: PaymentGraphQLMapper,
     private readonly mutationResponseMapper: MutationResponseGraphQLMapper,
   ) {}
 
@@ -125,40 +114,5 @@ export class PaymentsResolver {
       message: 'Payment deleted successfully',
       id,
     });
-  }
-
-  @Query(() => PaginatedPaymentResultDto, {
-    name: 'payments',
-    description:
-      "A group's payment history, soft-deleted rows included, newest date first. Members only.",
-  })
-  async payments(
-    @Args('groupId', { type: () => ID }) groupId: string,
-    @Args(
-      'criteria',
-      { type: () => PaymentsFindByCriteriaRequestDto, nullable: true },
-      new FilterValidationPipe(paymentFilterableFields),
-    )
-    criteria: PaymentsFindByCriteriaRequestDto | undefined,
-    @AuthUser() user: AuthUser,
-  ): Promise<PaginatedPaymentResultDto> {
-    this.logger.log(`payments group=${groupId} requester=${user.userId}`);
-
-    const result = await this.queryBus.execute<
-      PaymentsFindByCriteriaQuery,
-      PaginatedResult<PaymentViewModel>
-    >(
-      new PaymentsFindByCriteriaQuery({
-        groupId,
-        requesterId: user.userId,
-        criteria: new Criteria(
-          criteria?.filters,
-          criteria?.sorts,
-          criteria?.pagination,
-        ),
-      }),
-    );
-
-    return this.mapper.toPaginatedResponseDto(result);
   }
 }

@@ -15,10 +15,12 @@ import {
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => GroupInvitationCodeResponseDto)
+@Resolver()
 @UseGuards(ClerkAuthGuard)
-export class GroupInvitationCodesResolver {
-  private readonly logger = new Logger(GroupInvitationCodesResolver.name);
+export class GroupInvitationCodeMutationsResolver {
+  private readonly logger = new Logger(
+    GroupInvitationCodeMutationsResolver.name,
+  );
 
   constructor(
     private readonly commandBus: CommandBus,

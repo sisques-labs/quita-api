@@ -15,7 +15,8 @@ import { ExpenseTypeormReadRepository } from '@contexts/expenses/infrastructure/
 import { ExpenseTypeormWriteRepository } from '@contexts/expenses/infrastructure/persistence/typeorm/repositories/expense-typeorm-write.repository';
 import '@contexts/expenses/transport/graphql/enums/expenses-registered-enums.graphql';
 import { ExpenseGraphQLMapper } from '@contexts/expenses/transport/graphql/mappers/expense-graphql.mapper';
-import { ExpensesResolver } from '@contexts/expenses/transport/graphql/resolvers/expenses.resolver';
+import { ExpenseMutationsResolver } from '@contexts/expenses/transport/graphql/resolvers/expense-mutations.resolver';
+import { ExpenseQueriesResolver } from '@contexts/expenses/transport/graphql/resolvers/expense-queries.resolver';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -55,7 +56,11 @@ const INFRASTRUCTURE_ADAPTERS = [
   { provide: GROUP_MEMBERS_PORT, useClass: GroupMembersBusAdapter },
 ];
 
-const TRANSPORT_PROVIDERS = [ExpensesResolver, ExpenseGraphQLMapper];
+const TRANSPORT_PROVIDERS = [
+  ExpenseQueriesResolver,
+  ExpenseMutationsResolver,
+  ExpenseGraphQLMapper,
+];
 
 /**
  * Reaches group-members only through the bus (see `GroupMembersBusAdapter`),
