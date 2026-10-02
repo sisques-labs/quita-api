@@ -1,5 +1,5 @@
 import { AddGroupMemberCommand } from '@contexts/group-members/application/commands/add-group-member/add-group-member.command';
-import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists.service';
+import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists/assert-group-membership-exists.service';
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
 import { GroupMember } from '@contexts/group-members/domain/entities/group-member';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
@@ -29,7 +29,7 @@ export class AddGroupMemberHandler
   }
 
   async execute(command: AddGroupMemberCommand): Promise<void> {
-    const aggregate = await this.assertExists.execute(command.groupId.value);
+    const aggregate = await this.assertExists.execute(command.groupId);
 
     const groupMember = new GroupMember(
       command.userId,

@@ -1,7 +1,7 @@
 import { DEFAULT_SORTS } from '@contexts/expenses/application/constants/default-sorts.constant';
 import { GROUP_FIELD } from '@contexts/expenses/application/constants/group-field.constant';
 import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import {
   EXPENSE_READ_REPOSITORY,
   ExpenseReadRepository,
@@ -40,8 +40,8 @@ export class ExpensesFindByCriteriaHandler implements IQueryHandler<
       `Listing expenses of group ${query.groupId.value} for ${query.requesterId.value}`,
     );
     await this.assertRequesterIsMember.execute(
-      query.groupId.value,
-      query.requesterId.value,
+      query.groupId,
+      query.requesterId,
     );
 
     const { filters, sorts, pagination } = query.criteria;

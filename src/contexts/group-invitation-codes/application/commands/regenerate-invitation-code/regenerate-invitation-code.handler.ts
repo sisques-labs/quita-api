@@ -4,7 +4,7 @@ import {
   InvitationCodeGeneratorPort,
 } from '@contexts/group-invitation-codes/application/ports/invitation-code-generator.port';
 import { withCodeCollisionRetry } from '@contexts/group-invitation-codes/application/helpers/with-code-collision-retry';
-import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/group-invitation-codes/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { GroupInvitationCodeBuilder } from '@contexts/group-invitation-codes/domain/builders/group-invitation-code.builder';
 import {
@@ -42,8 +42,8 @@ export class RegenerateInvitationCodeHandler
 
   async execute(command: RegenerateInvitationCodeCommand): Promise<string> {
     await this.assertRequesterIsMember.execute(
-      command.groupId.value,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const previous = await this.repository.findActiveByGroupId(

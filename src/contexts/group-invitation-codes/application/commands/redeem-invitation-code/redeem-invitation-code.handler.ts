@@ -3,7 +3,7 @@ import {
   GROUP_MEMBERS_PORT,
   GroupMembersPort,
 } from '@contexts/group-invitation-codes/application/ports/group-members.port';
-import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists.service';
+import { AssertActiveInvitationCodeExistsService } from '@contexts/group-invitation-codes/application/services/read/assert-active-invitation-code-exists/assert-active-invitation-code-exists.service';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -26,7 +26,7 @@ export class RedeemInvitationCodeHandler implements ICommandHandler<
   ) {}
 
   async execute(command: RedeemInvitationCodeCommand): Promise<string> {
-    const { groupId } = await this.assertCodeExists.execute(command.code.value);
+    const { groupId } = await this.assertCodeExists.execute(command.code);
 
     const result = await this.membersPort.addMember(
       groupId,

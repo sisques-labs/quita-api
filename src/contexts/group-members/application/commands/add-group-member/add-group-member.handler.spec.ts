@@ -1,6 +1,6 @@
 import { AddGroupMemberCommand } from '@contexts/group-members/application/commands/add-group-member/add-group-member.command';
 import { AddGroupMemberHandler } from '@contexts/group-members/application/commands/add-group-member/add-group-member.handler';
-import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists.service';
+import { AssertGroupMembershipExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-exists/assert-group-membership-exists.service';
 import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/group-membership.builder';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipFullException } from '@contexts/group-members/domain/exceptions/group-membership-full.exception';

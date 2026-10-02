@@ -1,6 +1,6 @@
 import { PaymentsFindByCriteriaHandler } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.handler';
 import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/queries/payments-find-by-criteria/payments-find-by-criteria.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentAccessDeniedException } from '@contexts/payments/domain/exceptions/payment-access-denied.exception';
 import { PaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
@@ -69,7 +69,10 @@ describe('PaymentsFindByCriteriaHandler', () => {
       true,
       false,
     ]);
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_a');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_a' }),
+    );
   });
 
   it('always scopes the query to the group with an equality filter', async () => {

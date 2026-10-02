@@ -1,7 +1,7 @@
 import { GroupFindByIdHandler } from '@contexts/groups/application/queries/group-find-by-id/group-find-by-id.handler';
 import { GroupFindByIdQuery } from '@contexts/groups/application/queries/group-find-by-id/group-find-by-id.query';
-import { AssertGroupViewModelExistsService } from '@contexts/groups/application/services/read/assert-group-view-model-exists.service';
-import { AssertRequesterIsGroupMemberService } from '@contexts/groups/application/services/read/assert-requester-is-group-member.service';
+import { AssertGroupViewModelExistsService } from '@contexts/groups/application/services/read/assert-group-view-model-exists/assert-group-view-model-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/groups/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupAccessDeniedException } from '@contexts/groups/domain/exceptions/group-access-denied.exception';
 import { GroupNotFoundException } from '@contexts/groups/domain/exceptions/group-not-found.exception';
@@ -37,7 +37,10 @@ describe('GroupFindByIdHandler', () => {
     );
 
     expect(result).toBe(viewModel);
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_owner');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_owner' }),
+    );
   });
 
   it('denies a non-member without loading the group', async () => {

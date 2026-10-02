@@ -3,8 +3,8 @@ import {
   GROUP_MEMBERS_PORT,
   GroupMembersPort,
 } from '@contexts/payments/application/ports/group-members.port';
-import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member.service';
-import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import { PaymentPartyNotMemberException } from '@contexts/payments/domain/exceptions/payment-party-not-member.exception';
 import {
@@ -40,13 +40,13 @@ export class EditPaymentHandler
   async execute(command: EditPaymentCommand): Promise<string> {
     const groupId = command.groupId.value;
     await this.assertRequesterIsMember.execute(
-      groupId,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const payment = await this.assertPaymentExists.execute(
-      command.paymentId.value,
-      groupId,
+      command.paymentId,
+      command.groupId,
     );
 
     const { fromUserId, toUserId } = command.changes;

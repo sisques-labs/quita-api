@@ -3,7 +3,7 @@ import { GroupMembersPort } from '@contexts/balances/application/ports/group-mem
 import { PaymentsPort } from '@contexts/balances/application/ports/payments.port';
 import { GroupBalanceHandler } from '@contexts/balances/application/queries/group-balance/group-balance.handler';
 import { GroupBalanceQuery } from '@contexts/balances/application/queries/group-balance/group-balance.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/balances/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { BalanceSplitType } from '@contexts/balances/domain/enums/balance-split-type.enum';
 import { BalanceAccessDeniedException } from '@contexts/balances/domain/exceptions/balance-access-denied.exception';
 import { GroupNotReadyException } from '@contexts/balances/domain/exceptions/group-not-ready.exception';

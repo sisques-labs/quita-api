@@ -1,6 +1,6 @@
 import { CreateGroupMembershipCommand } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.command';
 import { CreateGroupMembershipHandler } from '@contexts/group-members/application/commands/create-group-membership/create-group-membership.handler';
-import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists.service';
+import { AssertGroupMembershipNotExistsService } from '@contexts/group-members/application/services/write/assert-group-membership-not-exists/assert-group-membership-not-exists.service';
 import { GroupMembershipAggregate } from '@contexts/group-members/domain/aggregates/group-membership.aggregate';
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipAlreadyExistsException } from '@contexts/group-members/domain/exceptions/group-membership-already-exists.exception';
@@ -38,7 +38,9 @@ describe('CreateGroupMembershipHandler', () => {
     );
 
     expect(assertNotExists.execute).toHaveBeenCalledWith(
-      '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
+      expect.objectContaining({
+        value: '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11',
+      }),
     );
     const saved = repository.save.mock.calls[0][0] as GroupMembershipAggregate;
     const primitives = saved.toPrimitives();

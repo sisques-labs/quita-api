@@ -1,6 +1,6 @@
 import { DeleteExpenseCommand } from '@contexts/expenses/application/commands/delete-expense/delete-expense.command';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
-import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
+import { AssertExpenseExistsService } from '@contexts/expenses/application/services/write/assert-expense-exists/assert-expense-exists.service';
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import {
   EXPENSE_WRITE_REPOSITORY,
@@ -29,15 +29,14 @@ export class DeleteExpenseHandler
   }
 
   async execute(command: DeleteExpenseCommand): Promise<string> {
-    const groupId = command.groupId.value;
     await this.assertRequesterIsMember.execute(
-      groupId,
-      command.requesterId.value,
+      command.groupId,
+      command.requesterId,
     );
 
     const expense = await this.assertExpenseExists.execute(
-      command.expenseId.value,
-      groupId,
+      command.expenseId,
+      command.groupId,
     );
     expense.delete(command.requesterId.value, new Date());
 

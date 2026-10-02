@@ -1,6 +1,6 @@
 import { ExpensesFindByCriteriaHandler } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.handler';
 import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.query';
-import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member.service';
+import { AssertRequesterIsGroupMemberService } from '@contexts/expenses/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
 import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptions/expense-access-denied.exception';
 import { ExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
@@ -68,7 +68,10 @@ describe('ExpensesFindByCriteriaHandler', () => {
       true,
       false,
     ]);
-    expect(assertMember.execute).toHaveBeenCalledWith(GROUP_ID, 'user_a');
+    expect(assertMember.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ value: GROUP_ID }),
+      expect.objectContaining({ value: 'user_a' }),
+    );
   });
 
   it('always scopes the query to the group with an equality filter', async () => {
