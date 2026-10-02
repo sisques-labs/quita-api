@@ -1,10 +1,10 @@
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
-import { GroupObject } from '@contexts/groups/transport/graphql/objects/group.object';
+import { GroupResponseDto } from '@contexts/groups/transport/graphql/dtos/responses/group.response.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GroupGraphQLMapper {
-  toObject(viewModel: GroupViewModel): GroupObject {
+  toResponseDtoFromViewModel(viewModel: GroupViewModel): GroupResponseDto {
     return {
       id: viewModel.id,
       name: viewModel.name,
@@ -13,7 +13,11 @@ export class GroupGraphQLMapper {
     };
   }
 
-  toObjects(viewModels: GroupViewModel[]): GroupObject[] {
-    return viewModels.map((viewModel) => this.toObject(viewModel));
+  toResponseDtosFromViewModels(
+    viewModels: GroupViewModel[],
+  ): GroupResponseDto[] {
+    return viewModels.map((viewModel) =>
+      this.toResponseDtoFromViewModel(viewModel),
+    );
   }
 }

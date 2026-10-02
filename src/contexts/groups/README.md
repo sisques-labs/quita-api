@@ -56,9 +56,9 @@ authenticated user (`@AuthUser()`), never an input.
 
 | Operation | Result |
 |---|---|
-| `createGroup(input: { name }): MutationResponseDto` | `id` of the new group. |
-| `group(id: ID!): Group` | Members only. |
-| `groups: [Group!]!` | Groups the caller belongs to. |
+| `createGroup(input: GroupCreateRequestDto): MutationResponseDto` | `id` of the new group. |
+| `group(id: ID!): GroupResponseDto` | Members only. |
+| `groups: [GroupResponseDto!]!` | Groups the caller belongs to. |
 
 This context defines no GraphQL enums, so it has no registered-enums file.
 

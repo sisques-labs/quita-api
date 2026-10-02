@@ -1,12 +1,12 @@
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
-import { ExpenseObject } from '@contexts/expenses/transport/graphql/objects/expense.object';
-import { PaginatedExpenseResultObject } from '@contexts/expenses/transport/graphql/objects/paginated-expense-result.object';
+import { ExpenseResponseDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
+import { PaginatedExpenseResultDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
 import { Injectable } from '@nestjs/common';
 import { PaginatedResult } from '@sisques-labs/nestjs-kit';
 
 @Injectable()
 export class ExpenseGraphQLMapper {
-  toObject(viewModel: ExpenseViewModel): ExpenseObject {
+  toResponseDtoFromViewModel(viewModel: ExpenseViewModel): ExpenseResponseDto {
     return {
       id: viewModel.id,
       groupId: viewModel.groupId,
@@ -25,11 +25,11 @@ export class ExpenseGraphQLMapper {
     };
   }
 
-  toPaginated(
+  toPaginatedResponseDto(
     result: PaginatedResult<ExpenseViewModel>,
-  ): PaginatedExpenseResultObject {
+  ): PaginatedExpenseResultDto {
     return {
-      items: result.items.map((item) => this.toObject(item)),
+      items: result.items.map((item) => this.toResponseDtoFromViewModel(item)),
       total: result.total,
       page: result.page,
       perPage: result.perPage,

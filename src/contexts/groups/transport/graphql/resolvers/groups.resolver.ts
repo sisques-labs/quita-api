@@ -2,9 +2,9 @@ import { CreateGroupCommand } from '@contexts/groups/application/commands/create
 import { GroupFindByIdQuery } from '@contexts/groups/application/queries/group-find-by-id/group-find-by-id.query';
 import { GroupsFindOwnQuery } from '@contexts/groups/application/queries/groups-find-own/groups-find-own.query';
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
-import { CreateGroupInput } from '@contexts/groups/transport/graphql/dtos/create-group.input';
+import { GroupCreateRequestDto } from '@contexts/groups/transport/graphql/dtos/requests/group-create.request.dto';
 import { GroupGraphQLMapper } from '@contexts/groups/transport/graphql/mappers/group-graphql.mapper';
-import { GroupObject } from '@contexts/groups/transport/graphql/objects/group.object';
+import { GroupResponseDto } from '@contexts/groups/transport/graphql/dtos/responses/group.response.dto';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
 import { Logger, UseGuards } from '@nestjs/common';
@@ -15,7 +15,7 @@ import {
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => GroupObject)
+@Resolver(() => GroupResponseDto)
 @UseGuards(ClerkAuthGuard)
 export class GroupsResolver {
   private readonly logger = new Logger(GroupsResolver.name);
@@ -32,7 +32,7 @@ export class GroupsResolver {
     description: 'Creates a group; the caller becomes its first member.',
   })
   async createGroup(
-    @Args('input') input: CreateGroupInput,
+    @Args('input') input: GroupCreateRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(`createGroup requester=${user.userId}`);
@@ -48,14 +48,14 @@ export class GroupsResolver {
     });
   }
 
-  @Query(() => GroupObject, {
+  @Query(() => GroupResponseDto, {
     name: 'group',
     description: 'A group by id; the caller must belong to it.',
   })
   async group(
     @Args('id', { type: () => ID }) id: string,
     @AuthUser() user: AuthUser,
-  ): Promise<GroupObject> {
+  ): Promise<GroupResponseDto> {
     this.logger.log(`group id=${id} requester=${user.userId}`);
 
     const viewModel = await this.queryBus.execute<
@@ -63,14 +63,14 @@ export class GroupsResolver {
       GroupViewModel
     >(new GroupFindByIdQuery({ groupId: id, requesterId: user.userId }));
 
-    return this.mapper.toObject(viewModel);
+    return this.mapper.toResponseDtoFromViewModel(viewModel);
   }
 
-  @Query(() => [GroupObject], {
+  @Query(() => [GroupResponseDto], {
     name: 'groups',
     description: 'The groups the caller belongs to.',
   })
-  async groups(@AuthUser() user: AuthUser): Promise<GroupObject[]> {
+  async groups(@AuthUser() user: AuthUser): Promise<GroupResponseDto[]> {
     this.logger.log(`groups requester=${user.userId}`);
 
     const viewModels = await this.queryBus.execute<
@@ -78,6 +78,6 @@ export class GroupsResolver {
       GroupViewModel[]
     >(new GroupsFindOwnQuery({ requesterId: user.userId }));
 
-    return this.mapper.toObjects(viewModels);
+    return this.mapper.toResponseDtosFromViewModels(viewModels);
   }
 }

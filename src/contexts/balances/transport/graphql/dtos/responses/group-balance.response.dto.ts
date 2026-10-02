@@ -1,7 +1,7 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
-@ObjectType('MemberBalance')
-export class MemberBalanceObject {
+@ObjectType('MemberBalanceResponseDto')
+export class MemberBalanceResponseDto {
   @Field(() => String)
   userId!: string;
 
@@ -12,8 +12,8 @@ export class MemberBalanceObject {
   netCents!: number;
 }
 
-@ObjectType('BalanceDebt')
-export class BalanceDebtObject {
+@ObjectType('BalanceDebtResponseDto')
+export class BalanceDebtResponseDto {
   @Field(() => String, { description: 'The member who owes' })
   fromUserId!: string;
 
@@ -24,8 +24,8 @@ export class BalanceDebtObject {
   amountCents!: number;
 }
 
-@ObjectType('GroupBalance')
-export class GroupBalanceObject {
+@ObjectType('GroupBalanceResponseDto')
+export class GroupBalanceResponseDto {
   @Field(() => ID)
   groupId!: string;
 
@@ -35,12 +35,12 @@ export class GroupBalanceObject {
   @Field(() => Boolean, { description: 'True when nobody owes anything' })
   settled!: boolean;
 
-  @Field(() => [MemberBalanceObject])
-  memberBalances!: MemberBalanceObject[];
+  @Field(() => [MemberBalanceResponseDto])
+  memberBalances!: MemberBalanceResponseDto[];
 
-  @Field(() => [BalanceDebtObject], {
+  @Field(() => [BalanceDebtResponseDto], {
     description:
       'Empty when settled; otherwise a single debt between the two members',
   })
-  debts!: BalanceDebtObject[];
+  debts!: BalanceDebtResponseDto[];
 }

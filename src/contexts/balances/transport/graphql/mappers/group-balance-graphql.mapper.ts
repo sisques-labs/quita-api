@@ -1,10 +1,12 @@
 import { GroupBalanceViewModel } from '@contexts/balances/domain/view-models/group-balance.view-model';
-import { GroupBalanceObject } from '@contexts/balances/transport/graphql/objects/group-balance.object';
+import { GroupBalanceResponseDto } from '@contexts/balances/transport/graphql/dtos/responses/group-balance.response.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GroupBalanceGraphQLMapper {
-  toObject(viewModel: GroupBalanceViewModel): GroupBalanceObject {
+  toResponseDtoFromViewModel(
+    viewModel: GroupBalanceViewModel,
+  ): GroupBalanceResponseDto {
     return {
       groupId: viewModel.groupId,
       currency: viewModel.currency,

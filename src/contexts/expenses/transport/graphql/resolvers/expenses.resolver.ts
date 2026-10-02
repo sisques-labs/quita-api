@@ -3,15 +3,13 @@ import { DeleteExpenseCommand } from '@contexts/expenses/application/commands/de
 import { EditExpenseCommand } from '@contexts/expenses/application/commands/edit-expense/edit-expense.command';
 import { ExpensesFindByCriteriaQuery } from '@contexts/expenses/application/queries/expenses-find-by-criteria/expenses-find-by-criteria.query';
 import { ExpenseViewModel } from '@contexts/expenses/domain/view-models/expense.view-model';
-import {
-  CreateExpenseInput,
-  DeleteExpenseInput,
-  EditExpenseInput,
-} from '@contexts/expenses/transport/graphql/dtos/expense.inputs';
+import { ExpenseCreateRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-create.request.dto';
+import { ExpenseDeleteRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-delete.request.dto';
+import { ExpenseEditRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expense-edit.request.dto';
 import { ExpensesFindByCriteriaRequestDto } from '@contexts/expenses/transport/graphql/dtos/requests/expenses-find-by-criteria.request.dto';
 import { ExpenseGraphQLMapper } from '@contexts/expenses/transport/graphql/mappers/expense-graphql.mapper';
-import { ExpenseObject } from '@contexts/expenses/transport/graphql/objects/expense.object';
-import { PaginatedExpenseResultObject } from '@contexts/expenses/transport/graphql/objects/paginated-expense-result.object';
+import { ExpenseResponseDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
+import { PaginatedExpenseResultDto } from '@contexts/expenses/transport/graphql/dtos/responses/expense.response.dto';
 import { expenseFilterableFields } from '@contexts/expenses/transport/graphql/registries/expense-filterable-fields.registry';
 import { AuthUser } from '@core/auth/infrastructure/clerk/auth-user.decorator';
 import { ClerkAuthGuard } from '@core/auth/infrastructure/clerk/clerk-auth.guard';
@@ -25,7 +23,7 @@ import {
   MutationResponseGraphQLMapper,
 } from '@sisques-labs/nestjs-kit/graphql';
 
-@Resolver(() => ExpenseObject)
+@Resolver(() => ExpenseResponseDto)
 @UseGuards(ClerkAuthGuard)
 export class ExpensesResolver {
   private readonly logger = new Logger(ExpensesResolver.name);
@@ -42,7 +40,7 @@ export class ExpensesResolver {
     description: 'Records an expense in a group the caller belongs to.',
   })
   async createExpense(
-    @Args('input') input: CreateExpenseInput,
+    @Args('input') input: ExpenseCreateRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -74,7 +72,7 @@ export class ExpensesResolver {
     description: 'Edits an active expense; any member of the group may do so.',
   })
   async editExpense(
-    @Args('input') input: EditExpenseInput,
+    @Args('input') input: ExpenseEditRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -108,7 +106,7 @@ export class ExpensesResolver {
       'Soft-deletes an active expense; any member of the group may do so.',
   })
   async deleteExpense(
-    @Args('input') input: DeleteExpenseInput,
+    @Args('input') input: ExpenseDeleteRequestDto,
     @AuthUser() user: AuthUser,
   ): Promise<MutationResponseDto> {
     this.logger.log(
@@ -130,7 +128,7 @@ export class ExpensesResolver {
     });
   }
 
-  @Query(() => PaginatedExpenseResultObject, {
+  @Query(() => PaginatedExpenseResultDto, {
     name: 'expenses',
     description:
       "A group's expense history, soft-deleted rows included, newest date first. Members only.",
@@ -144,7 +142,7 @@ export class ExpensesResolver {
     )
     criteria: ExpensesFindByCriteriaRequestDto | undefined,
     @AuthUser() user: AuthUser,
-  ): Promise<PaginatedExpenseResultObject> {
+  ): Promise<PaginatedExpenseResultDto> {
     this.logger.log(`expenses group=${groupId} requester=${user.userId}`);
 
     const result = await this.queryBus.execute<
@@ -162,6 +160,6 @@ export class ExpensesResolver {
       }),
     );
 
-    return this.mapper.toPaginated(result);
+    return this.mapper.toPaginatedResponseDto(result);
   }
 }

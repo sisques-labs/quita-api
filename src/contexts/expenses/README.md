@@ -71,10 +71,10 @@ authenticated user (`@AuthUser()`), never an input.
 
 | Operation | Result |
 |---|---|
-| `createExpense(input: CreateExpenseInput)` | `MutationResponseDto` with the expense id |
-| `editExpense(input: EditExpenseInput)` | `MutationResponseDto`; omitted fields are kept, `null` clears `description` and `category` |
-| `deleteExpense(input: DeleteExpenseInput)` | `MutationResponseDto` |
-| `expenses(groupId, criteria): PaginatedExpenseResult` | History with `deletedAt` set on deleted rows |
+| `createExpense(input: ExpenseCreateRequestDto)` | `MutationResponseDto` with the expense id |
+| `editExpense(input: ExpenseEditRequestDto)` | `MutationResponseDto`; omitted fields are kept, `null` clears `description` and `category` |
+| `deleteExpense(input: ExpenseDeleteRequestDto)` | `MutationResponseDto` |
+| `expenses(groupId, criteria): PaginatedExpenseResultDto` | History with `deletedAt` set on deleted rows |
 
 Find-by-criteria follows the architecture skill's Criteria pattern:
 

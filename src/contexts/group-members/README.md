@@ -60,7 +60,7 @@ primitives without the optimistic-lock `version`.
 
 ## Transport (GraphQL only)
 
-`groupMembers(groupId: ID!): [GroupMember!]!` behind `ClerkAuthGuard`; the
+`groupMembers(groupId: ID!): [GroupMemberResponseDto!]!` behind `ClerkAuthGuard`; the
 requester is always the authenticated user, never an input.
 
 ## Tests

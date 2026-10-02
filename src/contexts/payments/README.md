@@ -57,10 +57,10 @@ authenticated user, never an input.
 
 | Operation | Result |
 |---|---|
-| `createPayment(input)` | `MutationResponseDto` with the payment id |
-| `editPayment(input)` | `MutationResponseDto`; omitted fields are kept, `null` clears `note` |
-| `deletePayment(input)` | `MutationResponseDto` |
-| `payments(groupId, criteria): PaginatedPaymentResult` | History with `deletedAt` set on deleted rows |
+| `createPayment(input: PaymentCreateRequestDto)` | `MutationResponseDto` with the payment id |
+| `editPayment(input: PaymentEditRequestDto)` | `MutationResponseDto`; omitted fields are kept, `null` clears `note` |
+| `deletePayment(input: PaymentDeleteRequestDto)` | `MutationResponseDto` |
+| `payments(groupId, criteria): PaginatedPaymentResultDto` | History with `deletedAt` set on deleted rows |
 
 Find-by-criteria follows the architecture skill's Criteria pattern:
 `PaymentQueryableField` (`id`, `fromUserId`, `toUserId`, `paidOn`,
