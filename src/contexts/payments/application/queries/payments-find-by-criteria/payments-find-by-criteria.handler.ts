@@ -4,7 +4,7 @@ import { PaymentsFindByCriteriaQuery } from '@contexts/payments/application/quer
 import { AssertRequesterIsGroupMemberService } from '@contexts/payments/application/services/read/assert-requester-is-group-member/assert-requester-is-group-member.service';
 import {
   PAYMENT_READ_REPOSITORY,
-  PaymentReadRepository,
+  IPaymentReadRepository,
 } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
 import { Inject, Logger } from '@nestjs/common';
@@ -30,7 +30,7 @@ export class PaymentsFindByCriteriaHandler implements IQueryHandler<
   constructor(
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     @Inject(PAYMENT_READ_REPOSITORY)
-    private readonly repository: PaymentReadRepository,
+    private readonly repository: IPaymentReadRepository,
   ) {}
 
   async execute(

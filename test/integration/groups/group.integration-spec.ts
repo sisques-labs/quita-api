@@ -1,4 +1,11 @@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  Criteria,
+  Filter,
+  FilterOperator,
+  Sort,
+  SortDirection,
+} from '@sisques-labs/nestjs-kit';
 
 import { DeleteGroupMembershipCommand } from '../../../src/contexts/group-members/application/commands/delete-group-membership/delete-group-membership.command';
 import { GroupMemberIsMemberQuery } from '../../../src/contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
@@ -12,8 +19,12 @@ import { GroupBuilder } from '../../../src/contexts/groups/domain/builders/group
 import { GroupAccessDeniedException } from '../../../src/contexts/groups/domain/exceptions/group-access-denied.exception';
 import { GroupNotFoundException } from '../../../src/contexts/groups/domain/exceptions/group-not-found.exception';
 import {
+  GROUP_READ_REPOSITORY,
+  IGroupReadRepository,
+} from '../../../src/contexts/groups/domain/repositories/read/group-read.repository';
+import {
   GROUP_WRITE_REPOSITORY,
-  GroupWriteRepository,
+  IGroupWriteRepository,
 } from '../../../src/contexts/groups/domain/repositories/write/group-write.repository';
 import { GroupsModule } from '../../../src/contexts/groups/groups.module';
 import { truncateAll } from '../../helpers/db-reset';
@@ -28,7 +39,8 @@ describe('groups persistence and membership adapter (integration)', () => {
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let repository: GroupWriteRepository;
+  let repository: IGroupWriteRepository;
+  let readRepository: IGroupReadRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({
@@ -37,6 +49,7 @@ describe('groups persistence and membership adapter (integration)', () => {
     commands = ctx.module.get(CommandBus);
     queries = ctx.module.get(QueryBus);
     repository = ctx.module.get(GROUP_WRITE_REPOSITORY);
+    readRepository = ctx.module.get(GROUP_READ_REPOSITORY);
   });
 
   afterAll(async () => {
@@ -200,5 +213,107 @@ describe('groups persistence and membership adapter (integration)', () => {
     await repository.delete(aggregate.id.value);
     await expect(repository.findById(aggregate.id.value)).resolves.toBeNull();
     await expect(groupCount()).resolves.toBe(0);
+  });
+
+  describe('read repository base contract', () => {
+    it('finds a group by id and returns null when unknown', async () => {
+      const groupId = await createGroup('Home', 'alice');
+
+      await expect(readRepository.findById(groupId)).resolves.toMatchObject({
+        id: groupId,
+        name: 'Home',
+        createdBy: 'alice',
+      });
+      await expect(readRepository.findById(UNKNOWN_GROUP)).resolves.toBeNull();
+    });
+
+    it('treats save and delete as no-ops: the write side owns persistence', async () => {
+      const groupId = await createGroup('Home', 'alice');
+      const viewModel = (await readRepository.findById(groupId))!;
+
+      await expect(readRepository.save(viewModel)).resolves.toBeUndefined();
+      await expect(readRepository.delete(groupId)).resolves.toBeUndefined();
+
+      await expect(groupCount()).resolves.toBe(1);
+    });
+  });
+
+  describe.each([
+    {
+      side: 'read',
+      find: (criteria: Criteria) => readRepository.findByCriteria(criteria),
+      idOf: (item: { id: unknown }) => item.id as string,
+    },
+    {
+      side: 'write',
+      find: (criteria: Criteria) => repository.findByCriteria(criteria),
+      idOf: (item: { id: unknown }) => (item.id as { value: string }).value,
+    },
+  ])('findByCriteria on the $side repository', ({ find, idOf }) => {
+    let home: string;
+    let trip: string;
+    let work: string;
+
+    beforeEach(async () => {
+      home = await createGroup('Home', 'alice');
+      trip = await createGroup('Trip', 'bob');
+      work = await createGroup('Work', 'alice');
+    });
+
+    const filter = (
+      field: string,
+      operator: FilterOperator,
+      value: unknown,
+    ): Filter => ({ field, operator, value }) as Filter;
+
+    const sort = (field: string, direction: SortDirection): Sort =>
+      ({ field, direction }) as Sort;
+
+    const run = (
+      filters: Filter[] = [],
+      sorts: Sort[] = [],
+      pagination = { page: 1, perPage: 50 },
+    ) => find(new Criteria(filters, sorts, pagination));
+
+    it('filters by a whitelisted column', async () => {
+      const page = await run([
+        filter('createdBy', FilterOperator.EQUALS, 'alice'),
+      ]);
+
+      expect(page.items.map(idOf).sort()).toEqual([home, work].sort());
+      expect(page.total).toBe(2);
+    });
+
+    it('sorts by a whitelisted column', async () => {
+      const page = await run([], [sort('name', SortDirection.DESC)]);
+
+      expect(page.items.map(idOf)).toEqual([work, trip, home]);
+    });
+
+    it('defaults to oldest first', async () => {
+      const page = await run();
+
+      expect(page.items.map(idOf)).toEqual([home, trip, work]);
+    });
+
+    it('paginates and reports the total', async () => {
+      const second = await run([], [sort('name', SortDirection.ASC)], {
+        page: 2,
+        perPage: 2,
+      });
+
+      expect(second.items.map(idOf)).toEqual([work]);
+      expect(second.total).toBe(3);
+      expect(second.page).toBe(2);
+    });
+
+    it('rejects a field outside the whitelist', async () => {
+      await expect(
+        run([filter('name; DROP TABLE groups', FilterOperator.EQUALS, 'x')]),
+      ).rejects.toThrow(/not queryable/);
+      await expect(
+        run([], [sort('version', SortDirection.ASC)]),
+      ).rejects.toThrow(/not queryable/);
+    });
   });
 });

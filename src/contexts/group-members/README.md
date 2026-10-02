@@ -49,8 +49,14 @@ throws `GroupMembershipConcurrencyException` when no row matched, so two
 concurrent joins can never exceed the limit. A new roster is saved with
 version `0` (inserted as `1`).
 
-The read repository queries the same tables directly; it does not extend
-`IBaseReadRepository` because there is no separate projection store.
+The read repository queries the same tables directly.
+`IGroupMembershipReadRepository` extends
+`IBaseReadRepository<GroupMembershipViewModel>`: `findById(id)` takes the group
+id (the roster id is the group id) and delegates to `findByGroupId`;
+`findByCriteria` throws because a roster is addressed by group id and never
+searched by criteria; `save` and `delete` are no-ops (no projection store, the
+write side persists). `GroupMembershipViewModel` is built from the roster
+primitives without the optimistic-lock `version`.
 
 ## Transport (GraphQL only)
 

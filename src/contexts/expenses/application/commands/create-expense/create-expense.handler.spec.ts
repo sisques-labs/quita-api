@@ -7,7 +7,7 @@ import { ExpenseAccessDeniedException } from '@contexts/expenses/domain/exceptio
 import { ExpenseDateInFutureException } from '@contexts/expenses/domain/exceptions/expense-date-in-future.exception';
 import { ExpensePayerNotMemberException } from '@contexts/expenses/domain/exceptions/expense-payer-not-member.exception';
 import { GroupNotReadyException } from '@contexts/expenses/domain/exceptions/group-not-ready.exception';
-import { ExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
+import { IExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { ClockPort } from '@core/clock/domain/clock.port';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
@@ -25,7 +25,7 @@ const input = (overrides: Record<string, unknown> = {}) => ({
 });
 
 describe('CreateExpenseHandler', () => {
-  let repository: Mocked<ExpenseWriteRepository>;
+  let repository: Mocked<IExpenseWriteRepository>;
   let membersPort: Mocked<GroupMembersPort>;
   let assertMember: Mocked<AssertRequesterIsGroupMemberService>;
   let clock: Mocked<ClockPort>;

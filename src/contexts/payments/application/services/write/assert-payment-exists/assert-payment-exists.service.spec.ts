@@ -1,7 +1,7 @@
 import { AssertPaymentExistsService } from '@contexts/payments/application/services/write/assert-payment-exists/assert-payment-exists.service';
 import { PaymentBuilder } from '@contexts/payments/domain/builders/payment.builder';
 import { PaymentNotFoundException } from '@contexts/payments/domain/exceptions/payment-not-found.exception';
-import { PaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
+import { IPaymentWriteRepository } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 import { Mocked } from 'vitest';
 
@@ -21,7 +21,7 @@ const payment = () =>
     .build();
 
 describe('AssertPaymentExistsService', () => {
-  let repository: Mocked<PaymentWriteRepository>;
+  let repository: Mocked<IPaymentWriteRepository>;
   let service: AssertPaymentExistsService;
 
   beforeEach(() => {

@@ -1,17 +1,23 @@
 import { ExpensesFindActiveByGroupHandler } from '@contexts/expenses/application/queries/expenses-find-active-by-group/expenses-find-active-by-group.handler';
 import { ExpensesFindActiveByGroupQuery } from '@contexts/expenses/application/queries/expenses-find-active-by-group/expenses-find-active-by-group.query';
 import { ExpenseBuilder } from '@contexts/expenses/domain/builders/expense.builder';
-import { ExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
+import { IExpenseReadRepository } from '@contexts/expenses/domain/repositories/read/expense-read.repository';
 import { Mocked } from 'vitest';
 
 const GROUP_ID = '5d1c8f0a-3f55-4b6a-8a27-3a8d3b0d7e22';
 
 describe('ExpensesFindActiveByGroupHandler', () => {
-  let repository: Mocked<ExpenseReadRepository>;
+  let repository: Mocked<IExpenseReadRepository>;
   let handler: ExpensesFindActiveByGroupHandler;
 
   beforeEach(() => {
-    repository = { findByCriteria: vi.fn(), findActiveByGroupId: vi.fn() };
+    repository = {
+      findById: vi.fn(),
+      findByCriteria: vi.fn(),
+      findActiveByGroupId: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    };
     handler = new ExpensesFindActiveByGroupHandler(repository);
   });
 

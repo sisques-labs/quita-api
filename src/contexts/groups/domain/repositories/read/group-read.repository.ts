@@ -1,15 +1,14 @@
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
+import { IBaseReadRepository } from '@sisques-labs/nestjs-kit';
 
 export const GROUP_READ_REPOSITORY = Symbol('GROUP_READ_REPOSITORY');
 
-// TODO: Review if this needs to extend IBaseReadRepository
-
 /**
- * Query-only view over the `groups` table. It deliberately does not extend
- * `IBaseReadRepository`: there is no separate projection store, so the base
- * `save` / `delete` / `findByCriteria` would have no meaning here.
+ * Query view over the `groups` table. There is no separate projection store,
+ * so `save` / `delete` are no-ops (the write side persists). `findByCriteria`
+ * is persistence-only: it filters and sorts by the view-model scalar columns
+ * and is not exposed through GraphQL.
  */
-export interface GroupReadRepository {
-  findById(id: string): Promise<GroupViewModel | null>;
+export interface IGroupReadRepository extends IBaseReadRepository<GroupViewModel> {
   findByIds(ids: string[]): Promise<GroupViewModel[]>;
 }

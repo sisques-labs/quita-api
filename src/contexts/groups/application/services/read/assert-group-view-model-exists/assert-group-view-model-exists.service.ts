@@ -1,7 +1,7 @@
 import { GroupNotFoundException } from '@contexts/groups/domain/exceptions/group-not-found.exception';
 import {
   GROUP_READ_REPOSITORY,
-  GroupReadRepository,
+  IGroupReadRepository,
 } from '@contexts/groups/domain/repositories/read/group-read.repository';
 import { GroupViewModel } from '@contexts/groups/domain/view-models/group.view-model';
 import { Inject, Injectable } from '@nestjs/common';
@@ -14,7 +14,7 @@ export class AssertGroupViewModelExistsService implements IBaseService<
 > {
   constructor(
     @Inject(GROUP_READ_REPOSITORY)
-    private readonly repository: GroupReadRepository,
+    private readonly repository: IGroupReadRepository,
   ) {}
 
   async execute(groupId: UuidValueObject): Promise<GroupViewModel> {

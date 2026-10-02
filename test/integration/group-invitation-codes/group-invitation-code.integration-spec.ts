@@ -1,4 +1,11 @@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  Criteria,
+  Filter,
+  FilterOperator,
+  Sort,
+  SortDirection,
+} from '@sisques-labs/nestjs-kit';
 
 import { GroupMemberIsMemberQuery } from '../../../src/contexts/group-members/application/queries/group-member-is-member/group-member-is-member.query';
 import { GroupMembersListQuery } from '../../../src/contexts/group-members/application/queries/group-members-list/group-members-list.query';
@@ -15,8 +22,12 @@ import { GroupInvitationAccessDeniedException } from '../../../src/contexts/grou
 import { InvitationCodeCollisionException } from '../../../src/contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
 import { InvitationCodeInvalidException } from '../../../src/contexts/group-invitation-codes/domain/exceptions/invitation-code-invalid.exception';
 import {
+  GROUP_INVITATION_CODE_READ_REPOSITORY,
+  IGroupInvitationCodeReadRepository,
+} from '../../../src/contexts/group-invitation-codes/domain/repositories/read/group-invitation-code-read.repository';
+import {
   GROUP_INVITATION_CODE_WRITE_REPOSITORY,
-  GroupInvitationCodeWriteRepository,
+  IGroupInvitationCodeWriteRepository,
 } from '../../../src/contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupInvitationCodesModule } from '../../../src/contexts/group-invitation-codes/group-invitation-codes.module';
 import { truncateAll } from '../../helpers/db-reset';
@@ -32,7 +43,8 @@ describe('group invitation codes persistence and adapters (integration)', () => 
   let ctx: IntegrationContext;
   let commands: CommandBus;
   let queries: QueryBus;
-  let repository: GroupInvitationCodeWriteRepository;
+  let repository: IGroupInvitationCodeWriteRepository;
+  let readRepository: IGroupInvitationCodeReadRepository;
 
   beforeAll(async () => {
     ctx = await createIntegrationModule({
@@ -41,6 +53,7 @@ describe('group invitation codes persistence and adapters (integration)', () => 
     commands = ctx.module.get(CommandBus);
     queries = ctx.module.get(QueryBus);
     repository = ctx.module.get(GROUP_INVITATION_CODE_WRITE_REPOSITORY);
+    readRepository = ctx.module.get(GROUP_INVITATION_CODE_READ_REPOSITORY);
   });
 
   afterAll(async () => {
@@ -259,5 +272,140 @@ describe('group invitation codes persistence and adapters (integration)', () => 
 
     expect(new Set(codes).size).toBe(1);
     await expect(activeRows(groupId)).resolves.toEqual([{ code: codes[0] }]);
+  });
+
+  describe('read repository base contract', () => {
+    const UNKNOWN_ID = '9d1c2b3a-4e5f-4a6b-8c7d-0e1f2a3b4c5d';
+
+    const idOfCode = async (code: string): Promise<string> =>
+      (
+        await ctx.dataSource.query(
+          'SELECT id FROM group_invitation_codes WHERE code = $1',
+          [code],
+        )
+      )[0].id;
+
+    it('finds a code by id, revoked or not, and returns null when unknown', async () => {
+      const groupId = await createGroup('alice');
+      const old = await generate(groupId, 'alice');
+      const fresh = await regenerate(groupId, 'alice');
+
+      const revoked = await readRepository.findById(await idOfCode(old));
+      expect(revoked).toMatchObject({ groupId, code: old });
+      expect(revoked?.revokedAt).toBeInstanceOf(Date);
+      const active = await readRepository.findById(await idOfCode(fresh));
+      expect(active).toMatchObject({ groupId, code: fresh, revokedAt: null });
+      await expect(readRepository.findById(UNKNOWN_ID)).resolves.toBeNull();
+    });
+
+    it('treats save and delete as no-ops: the write side owns persistence', async () => {
+      const groupId = await createGroup('alice');
+      const code = await generate(groupId, 'alice');
+      const id = await idOfCode(code);
+      const viewModel = (await readRepository.findById(id))!;
+
+      await expect(readRepository.save(viewModel)).resolves.toBeUndefined();
+      await expect(readRepository.delete(id)).resolves.toBeUndefined();
+
+      await expect(activeRows(groupId)).resolves.toEqual([{ code }]);
+    });
+  });
+
+  describe.each([
+    {
+      side: 'read',
+      find: (criteria: Criteria) => readRepository.findByCriteria(criteria),
+      codeOf: (item: { code: unknown }) => item.code as string,
+    },
+    {
+      side: 'write',
+      find: (criteria: Criteria) => repository.findByCriteria(criteria),
+      codeOf: (item: { code: unknown }) =>
+        (item.code as { value: string }).value,
+    },
+  ])('findByCriteria on the $side repository', ({ find, codeOf }) => {
+    let groupA: string;
+    let groupB: string;
+    let revoked: string;
+    let active: string;
+    let other: string;
+
+    beforeEach(async () => {
+      groupA = await createGroup('alice');
+      groupB = await createGroup('bob');
+      revoked = await generate(groupA, 'alice');
+      active = await regenerate(groupA, 'alice');
+      other = await generate(groupB, 'bob');
+    });
+
+    const filter = (
+      field: string,
+      operator: FilterOperator,
+      value: unknown,
+    ): Filter => ({ field, operator, value }) as Filter;
+
+    const sort = (field: string, direction: SortDirection): Sort =>
+      ({ field, direction }) as Sort;
+
+    const run = (
+      filters: Filter[] = [],
+      sorts: Sort[] = [],
+      pagination = { page: 1, perPage: 50 },
+    ) => find(new Criteria(filters, sorts, pagination));
+
+    it('filters by group and includes revoked codes', async () => {
+      const page = await run([
+        filter('groupId', FilterOperator.EQUALS, groupA),
+      ]);
+
+      expect(page.items.map(codeOf).sort()).toEqual([active, revoked].sort());
+      expect(page.total).toBe(2);
+    });
+
+    it('filters by code', async () => {
+      const page = await run([filter('code', FilterOperator.EQUALS, other)]);
+
+      expect(page.items.map(codeOf)).toEqual([other]);
+    });
+
+    it('sorts by a whitelisted column', async () => {
+      const page = await run([], [sort('code', SortDirection.DESC)]);
+
+      expect(page.items.map(codeOf)).toEqual(
+        [revoked, active, other].sort().reverse(),
+      );
+    });
+
+    it('defaults to oldest first', async () => {
+      const page = await run();
+
+      expect(page.items.map(codeOf)).toEqual([revoked, active, other]);
+    });
+
+    it('paginates and reports the total', async () => {
+      const second = await run([], [sort('code', SortDirection.ASC)], {
+        page: 2,
+        perPage: 2,
+      });
+
+      expect(second.items).toHaveLength(1);
+      expect(second.total).toBe(3);
+      expect(second.page).toBe(2);
+    });
+
+    it('rejects a field outside the whitelist', async () => {
+      await expect(
+        run([
+          filter(
+            'code; DROP TABLE group_invitation_codes',
+            FilterOperator.EQUALS,
+            'x',
+          ),
+        ]),
+      ).rejects.toThrow(/not queryable/);
+      await expect(run([], [sort('nope', SortDirection.ASC)])).rejects.toThrow(
+        /not queryable/,
+      );
+    });
   });
 });

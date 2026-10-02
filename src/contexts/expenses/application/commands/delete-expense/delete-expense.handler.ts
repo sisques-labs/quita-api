@@ -4,7 +4,7 @@ import { AssertExpenseExistsService } from '@contexts/expenses/application/servi
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
 import {
   EXPENSE_WRITE_REPOSITORY,
-  ExpenseWriteRepository,
+  IExpenseWriteRepository,
 } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -20,7 +20,7 @@ export class DeleteExpenseHandler
 
   constructor(
     @Inject(EXPENSE_WRITE_REPOSITORY)
-    private readonly repository: ExpenseWriteRepository,
+    private readonly repository: IExpenseWriteRepository,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     private readonly assertExpenseExists: AssertExpenseExistsService,
     eventBus: EventBus,

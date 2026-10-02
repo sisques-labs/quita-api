@@ -3,4 +3,4 @@ import { IBaseWriteRepository } from '@sisques-labs/nestjs-kit';
 
 export const EXPENSE_WRITE_REPOSITORY = Symbol('EXPENSE_WRITE_REPOSITORY');
 
-export type ExpenseWriteRepository = IBaseWriteRepository<ExpenseAggregate>;
+export type IExpenseWriteRepository = IBaseWriteRepository<ExpenseAggregate>;

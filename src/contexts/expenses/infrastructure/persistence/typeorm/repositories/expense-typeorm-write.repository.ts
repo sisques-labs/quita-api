@@ -1,5 +1,5 @@
 import { ExpenseAggregate } from '@contexts/expenses/domain/aggregates/expense.aggregate';
-import { ExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
+import { IExpenseWriteRepository } from '@contexts/expenses/domain/repositories/write/expense-write.repository';
 import { ExpenseEntity } from '@contexts/expenses/infrastructure/persistence/typeorm/entities/expense.entity';
 import { ExpenseTypeormMapper } from '@contexts/expenses/infrastructure/persistence/typeorm/mappers/expense-typeorm.mapper';
 import {
@@ -20,7 +20,7 @@ import { DataSource } from 'typeorm';
 @Injectable()
 export class ExpenseTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements ExpenseWriteRepository
+  implements IExpenseWriteRepository
 {
   private readonly repoLogger = new Logger(ExpenseTypeormWriteRepository.name);
 

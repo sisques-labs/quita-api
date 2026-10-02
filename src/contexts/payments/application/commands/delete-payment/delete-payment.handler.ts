@@ -4,7 +4,7 @@ import { AssertPaymentExistsService } from '@contexts/payments/application/servi
 import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.aggregate';
 import {
   PAYMENT_WRITE_REPOSITORY,
-  PaymentWriteRepository,
+  IPaymentWriteRepository,
 } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -20,7 +20,7 @@ export class DeletePaymentHandler
 
   constructor(
     @Inject(PAYMENT_WRITE_REPOSITORY)
-    private readonly repository: PaymentWriteRepository,
+    private readonly repository: IPaymentWriteRepository,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,
     private readonly assertPaymentExists: AssertPaymentExistsService,
     eventBus: EventBus,

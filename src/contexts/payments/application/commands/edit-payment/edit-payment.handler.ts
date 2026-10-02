@@ -9,7 +9,7 @@ import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.a
 import { PaymentPartyNotMemberException } from '@contexts/payments/domain/exceptions/payment-party-not-member.exception';
 import {
   PAYMENT_WRITE_REPOSITORY,
-  PaymentWriteRepository,
+  IPaymentWriteRepository,
 } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { CLOCK, ClockPort } from '@core/clock/domain/clock.port';
 import { Inject, Logger } from '@nestjs/common';
@@ -26,7 +26,7 @@ export class EditPaymentHandler
 
   constructor(
     @Inject(PAYMENT_WRITE_REPOSITORY)
-    private readonly repository: PaymentWriteRepository,
+    private readonly repository: IPaymentWriteRepository,
     @Inject(GROUP_MEMBERS_PORT)
     private readonly membersPort: GroupMembersPort,
     private readonly assertRequesterIsMember: AssertRequesterIsGroupMemberService,

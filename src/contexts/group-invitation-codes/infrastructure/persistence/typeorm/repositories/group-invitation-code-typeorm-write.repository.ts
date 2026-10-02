@@ -1,9 +1,13 @@
 import { GroupInvitationCodeAggregate } from '@contexts/group-invitation-codes/domain/aggregates/group-invitation-code.aggregate';
 import { ActiveInvitationCodeConflictException } from '@contexts/group-invitation-codes/domain/exceptions/active-invitation-code-conflict.exception';
 import { InvitationCodeCollisionException } from '@contexts/group-invitation-codes/domain/exceptions/invitation-code-collision.exception';
-import { GroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
+import { IGroupInvitationCodeWriteRepository } from '@contexts/group-invitation-codes/domain/repositories/write/group-invitation-code-write.repository';
 import { GroupInvitationCodeEntity } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/entities/group-invitation-code.entity';
 import { GroupInvitationCodeTypeormMapper } from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/mappers/group-invitation-code-typeorm.mapper';
+import {
+  assertQueryableFields,
+  GROUP_INVITATION_CODE_ALIAS,
+} from '@contexts/group-invitation-codes/infrastructure/persistence/typeorm/repositories/group-invitation-code-queryable-fields';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
@@ -15,24 +19,13 @@ import {
 import { applyCriteriaToQueryBuilder } from '@sisques-labs/nestjs-kit/typeorm';
 import { DataSource, IsNull, QueryFailedError } from 'typeorm';
 
-/** Columns a caller may filter or sort by. */
-const CRITERIA_FIELDS: ReadonlySet<string> = new Set([
-  'id',
-  'groupId',
-  'code',
-  'createdBy',
-  'revokedAt',
-  'createdAt',
-  'updatedAt',
-]);
-
 const UNIQUE_VIOLATION = '23505';
 const CODE_CONSTRAINT = 'uq_group_invitation_codes_code';
 
 @Injectable()
 export class GroupInvitationCodeTypeormWriteRepository
   extends BaseDatabaseRepository
-  implements GroupInvitationCodeWriteRepository
+  implements IGroupInvitationCodeWriteRepository
 {
   private readonly repoLogger = new Logger(
     GroupInvitationCodeTypeormWriteRepository.name,
@@ -64,20 +57,14 @@ export class GroupInvitationCodeTypeormWriteRepository
   async findByCriteria(
     criteria: Criteria,
   ): Promise<PaginatedResult<GroupInvitationCodeAggregate>> {
-    const fields = [...criteria.filters, ...criteria.sorts].map((c) => c.field);
-    const unknown = fields.find((field) => !CRITERIA_FIELDS.has(field));
-    if (unknown) {
-      throw new Error(
-        `Field "${unknown}" is not queryable on invitation codes`,
-      );
-    }
+    assertQueryableFields(criteria);
 
     const { page, limit, skip } = await this.calculatePagination(criteria);
     const qb = this.dataSource
       .getRepository(GroupInvitationCodeEntity)
-      .createQueryBuilder('code');
+      .createQueryBuilder(GROUP_INVITATION_CODE_ALIAS);
     applyCriteriaToQueryBuilder(qb, criteria, {
-      alias: 'code',
+      alias: GROUP_INVITATION_CODE_ALIAS,
       defaultSort: { field: 'createdAt', direction: SortDirection.ASC },
     });
     const [rows, total] = await qb.skip(skip).take(limit).getManyAndCount();

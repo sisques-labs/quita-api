@@ -4,7 +4,7 @@ import { GroupMembershipCreatedEvent } from '@contexts/group-members/domain/even
 import { GroupMemberAlreadyExistsException } from '@contexts/group-members/domain/exceptions/group-member-already-exists.exception';
 import { GroupMembershipFullException } from '@contexts/group-members/domain/exceptions/group-membership-full.exception';
 import { IGroupMembership } from '@contexts/group-members/domain/interfaces/group-membership.interface';
-import { GroupMembershipPrimitives } from '@contexts/group-members/domain/primitives/group-membership.primitives';
+import { IGroupMembershipPrimitives } from '@contexts/group-members/domain/primitives/group-membership.primitives';
 import { GroupMembershipCapacityValueObject } from '@contexts/group-members/domain/value-objects/group-membership-capacity/group-membership-capacity.value-object';
 import { BaseAggregate, NumberValueObject } from '@sisques-labs/nestjs-kit';
 
@@ -66,7 +66,7 @@ export class GroupMembershipAggregate extends BaseAggregate {
     return this._version;
   }
 
-  toPrimitives(): GroupMembershipPrimitives {
+  toPrimitives(): IGroupMembershipPrimitives {
     return {
       id: this.id.value,
       capacity: this._capacity.value,

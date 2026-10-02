@@ -7,7 +7,7 @@ import { GroupAggregate } from '@contexts/groups/domain/aggregates/group.aggrega
 import { GroupBuilder } from '@contexts/groups/domain/builders/group.builder';
 import { GroupDeletedEvent } from '@contexts/groups/domain/events/group-deleted/group-deleted.event';
 import { GroupNotFoundException } from '@contexts/groups/domain/exceptions/group-not-found.exception';
-import { GroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
+import { IGroupWriteRepository } from '@contexts/groups/domain/repositories/write/group-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { Mocked, MockInstance } from 'vitest';
@@ -15,7 +15,7 @@ import { Mocked, MockInstance } from 'vitest';
 const GROUP_ID = '0b6f6b0e-6f0e-4d8a-9d0a-7d6f2f3a1c11';
 
 describe('DeleteGroupHandler', () => {
-  let repository: Mocked<GroupWriteRepository>;
+  let repository: Mocked<IGroupWriteRepository>;
   let assertGroupExistsService: Mocked<AssertGroupExistsService>;
   let membershipPort: Mocked<GroupMembershipPort>;
   let eventBus: Mocked<EventBus>;
@@ -31,7 +31,7 @@ describe('DeleteGroupHandler', () => {
       .build();
     repository = {
       delete: vi.fn(),
-    } as unknown as Mocked<GroupWriteRepository>;
+    } as unknown as Mocked<IGroupWriteRepository>;
     assertGroupExistsService = {
       execute: vi.fn().mockResolvedValue(group),
     } as unknown as Mocked<AssertGroupExistsService>;

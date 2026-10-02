@@ -1,4 +1,4 @@
-import { PaymentPrimitives } from '@contexts/payments/domain/primitives/payment.primitives';
+import { IPaymentPrimitives } from '@contexts/payments/domain/primitives/payment.primitives';
 import { BaseViewModel } from '@sisques-labs/nestjs-kit';
 
 /** Read-side projection of a payment; soft-deleted rows carry `deletedAt`. */
@@ -14,7 +14,7 @@ export class PaymentViewModel extends BaseViewModel {
   readonly updatedBy: string;
   readonly deletedAt: Date | null;
 
-  constructor(props: PaymentPrimitives) {
+  constructor(props: IPaymentPrimitives) {
     super(props.id, props.createdAt, props.updatedAt);
     this.groupId = props.groupId;
     this.fromUserId = props.fromUserId;

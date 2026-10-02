@@ -1,4 +1,4 @@
-import { GroupPrimitives } from '@contexts/groups/domain/primitives/group.primitives';
+import { IGroupPrimitives } from '@contexts/groups/domain/primitives/group.primitives';
 import { IBaseEventData } from '@sisques-labs/nestjs-kit';
 
-export type IGroupEventData = GroupPrimitives & IBaseEventData;
+export type IGroupEventData = IGroupPrimitives & IBaseEventData;

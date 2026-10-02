@@ -2,7 +2,7 @@ import { PaymentAggregate } from '@contexts/payments/domain/aggregates/payment.a
 import { PaymentNotFoundException } from '@contexts/payments/domain/exceptions/payment-not-found.exception';
 import {
   PAYMENT_WRITE_REPOSITORY,
-  PaymentWriteRepository,
+  IPaymentWriteRepository,
 } from '@contexts/payments/domain/repositories/write/payment-write.repository';
 import { Inject, Injectable } from '@nestjs/common';
 import { UuidValueObject } from '@sisques-labs/nestjs-kit';
@@ -18,7 +18,7 @@ import { UuidValueObject } from '@sisques-labs/nestjs-kit';
 export class AssertPaymentExistsService {
   constructor(
     @Inject(PAYMENT_WRITE_REPOSITORY)
-    private readonly repository: PaymentWriteRepository,
+    private readonly repository: IPaymentWriteRepository,
   ) {}
 
   async execute(

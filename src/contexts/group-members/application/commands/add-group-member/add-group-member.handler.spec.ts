@@ -5,7 +5,7 @@ import { GroupMembershipBuilder } from '@contexts/group-members/domain/builders/
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import { GroupMembershipFullException } from '@contexts/group-members/domain/exceptions/group-membership-full.exception';
 import { GroupMembershipNotFoundException } from '@contexts/group-members/domain/exceptions/group-membership-not-found.exception';
-import { GroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
+import { IGroupMembershipWriteRepository } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { EventBus } from '@nestjs/cqrs';
 import { Mocked } from 'vitest';
 
@@ -19,7 +19,7 @@ const roster = () =>
     .build();
 
 describe('AddGroupMemberHandler', () => {
-  let repository: Mocked<GroupMembershipWriteRepository>;
+  let repository: Mocked<IGroupMembershipWriteRepository>;
   let assertExists: Mocked<AssertGroupMembershipExistsService>;
   let eventBus: Mocked<EventBus>;
   let handler: AddGroupMemberHandler;
@@ -27,7 +27,7 @@ describe('AddGroupMemberHandler', () => {
   beforeEach(() => {
     repository = {
       save: vi.fn(),
-    } as unknown as Mocked<GroupMembershipWriteRepository>;
+    } as unknown as Mocked<IGroupMembershipWriteRepository>;
     assertExists = {
       execute: vi.fn(),
     } as unknown as Mocked<AssertGroupMembershipExistsService>;

@@ -1,4 +1,4 @@
-import { PaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
+import { IPaymentReadRepository } from '@contexts/payments/domain/repositories/read/payment-read.repository';
 import { PaymentViewModel } from '@contexts/payments/domain/view-models/payment.view-model';
 import { PaymentEntity } from '@contexts/payments/infrastructure/persistence/typeorm/entities/payment.entity';
 import { PaymentTypeormMapper } from '@contexts/payments/infrastructure/persistence/typeorm/mappers/payment-typeorm.mapper';
@@ -20,13 +20,20 @@ import { DataSource, IsNull } from 'typeorm';
 @Injectable()
 export class PaymentTypeormReadRepository
   extends BaseDatabaseRepository
-  implements PaymentReadRepository
+  implements IPaymentReadRepository
 {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mapper: PaymentTypeormMapper,
   ) {
     super();
+  }
+
+  async findById(id: string): Promise<PaymentViewModel | null> {
+    const row = await this.dataSource
+      .getRepository(PaymentEntity)
+      .findOneBy({ id });
+    return row ? this.mapper.toViewModel(row) : null;
   }
 
   async findByCriteria(
@@ -60,5 +67,13 @@ export class PaymentTypeormReadRepository
       .getRepository(PaymentEntity)
       .find({ where: { groupId, deletedAt: IsNull() } });
     return rows.map((row) => this.mapper.toViewModel(row));
+  }
+
+  async save(_viewModel: PaymentViewModel): Promise<void> {
+    // read-side projection — write side handles persistence
+  }
+
+  async delete(_id: string): Promise<void> {
+    // read-side projection — write side handles persistence
   }
 }

@@ -5,7 +5,7 @@ import { GroupMember } from '@contexts/group-members/domain/entities/group-membe
 import { GroupMemberRole } from '@contexts/group-members/domain/enums/group-member-role.enum';
 import {
   GROUP_MEMBERSHIP_WRITE_REPOSITORY,
-  GroupMembershipWriteRepository,
+  IGroupMembershipWriteRepository,
 } from '@contexts/group-members/domain/repositories/write/group-membership-write.repository';
 import { GroupMemberRoleValueObject } from '@contexts/group-members/domain/value-objects/group-member-role/group-member-role.value-object';
 import { Inject, Logger } from '@nestjs/common';
@@ -21,7 +21,7 @@ export class AddGroupMemberHandler
 
   constructor(
     @Inject(GROUP_MEMBERSHIP_WRITE_REPOSITORY)
-    private readonly repository: GroupMembershipWriteRepository,
+    private readonly repository: IGroupMembershipWriteRepository,
     private readonly assertExists: AssertGroupMembershipExistsService,
     eventBus: EventBus,
   ) {
